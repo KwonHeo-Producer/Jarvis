@@ -13,11 +13,7 @@ RUN python -m ensurepip && \
     pip install --no-cache-dir -r requirements.txt
 
 # 애플리케이션 파일 복사
-COPY app.py .
-COPY search_module.py .
-COPY logoe.png .
-COPY style.css .
-COPY script.js .
+COPY . .
 
-# 애플리케이션 실행
-CMD ["streamlit", "run", "app.py", "--server.port=8080", "--server.address=0.0.0.0"]
+# Command to run the application
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
