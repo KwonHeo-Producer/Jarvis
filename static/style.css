@@ -1,60 +1,89 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #000000;
-    color: #FFFFFF
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
 }
 
 .logo-container {
     text-align: center;
     margin-top: 20px;
 }
+
 .logo-image {
     width: 200px;  /* 원하는 너비로 조절 */
     height: auto;  /* 비율을 유지하며 높이 자동 조절 */
 }
 
-.logo-image h1 {
-    text-align: center;
+.logo-container h1 {
     color: #d2d2d2;
-    display: block;
+    margin: 10px 0; /* 위쪽과 아래쪽 여백을 동일하게 설정 */
 }
 
 #chat-container {
     width: 80%;
-    margin: 0 auto;
+    max-width: 800px; /* 최대 너비 설정 */
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 요소들 사이의 간격 설정 */
 }
+
 #messages {
     border: 1px solid #ddd;
     padding: 10px;
     height: 300px;
-    overflow-y: scroll;
+    overflow-y: auto;
+    background-color: #333; /* 메시지 영역의 배경색 추가 */
+    border-radius: 8px; /* 테두리 둥글게 하기 */
+    color: #FFF; /* 메시지 텍스트 색상 */
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* 메시지 간의 간격 */
 }
+
 #user-input {
-    width: 80%;
     padding: 10px;
+    width: calc(100% - 120px); /* 버튼과 여백을 고려한 너비 조정 */
+    box-sizing: border-box; /* 패딩을 포함한 너비 계산 */
+    border-radius: 4px; /* 입력 필드의 모서리 둥글게 하기 */
+    border: 1px solid #ccc; /* 테두리 색상 조정 */
+    margin-right: 10px; /* 버튼과 간격 설정 */
 }
+
 #send-button {
     padding: 10px;
+    width: 100px;
+    background-color: #6f42c1; /* 보라색 */
+    color: #FFF; /* 버튼 텍스트 색상 */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    align-self: flex-end;
+}
+
+#send-button:hover {
+    background-color: #5a32a3; /* 다크 보라색 */
 }
 
 .message {
     border-radius: 10px;
     padding: 10px;
-    margin: 5px;
     word-wrap: break-word;
+    max-width: 80%; /* 최대 너비 설정 */
+    align-self: flex-start; /* 메시지를 왼쪽 정렬 */
 }
+
 .user-message {
     background-color: #d1c4e9;
     color: #000;
-    align-self: flex-end;
+    align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
     margin-left: auto;
-    max-width: auto;
-    width: fit-content;
 }
+
 .assistant-message {
     background-color: #e0f7fa;
     color: #000;
-    align-self: flex-start;
-    max-width: auto;
 }
-
