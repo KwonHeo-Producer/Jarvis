@@ -7,15 +7,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoContainer = document.querySelector('.logo-container');
 
     let isFirstMessageSent = false;
-    let scrollPosition = 0;
 
     const sendMessage = async () => {
         console.log('sendMessage called');
         const prompt = userInput.value;
         if (prompt) {
-            // Save current scroll position
-            scrollPosition = messagesDiv.scrollTop;
-
             // Append user message to messagesDiv
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = '';
@@ -40,8 +36,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
 
-            // Restore scroll position
-            messagesDiv.scrollTop = scrollPosition;
+            // Scroll to the bottom of the messagesDiv
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             // Display chat container and hide logo if it's the first message
             if (!isFirstMessageSent) {
@@ -61,8 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
             sendMessage();
         }
     });
-    
-    // Scroll to bottom when input is focused
+
+    // Handle window resize events
+    window.addEventListener('resize', () => {
+        // Check if the keyboard is open and adjust scroll position
+        if (document.activeElement === userInput) {
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+    });
+
+    // Ensure that messagesDiv scrolls to bottom on input focus
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
