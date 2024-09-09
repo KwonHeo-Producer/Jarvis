@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
@@ -9,7 +8,6 @@ document.addEventListener('DOMContentLoaded', () => {
     let isFirstMessageSent = false;
 
     const sendMessage = async () => {
-        console.log('sendMessage called');
         const prompt = userInput.value;
         if (prompt) {
             // Append user message to messagesDiv
@@ -43,6 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isFirstMessageSent) {
                 logoContainer.style.display = 'none';
                 chatContainer.style.display = 'flex';
+                messagesDiv.classList.add('expanded'); // 메시지 박스 크기 변경
                 isFirstMessageSent = true;
             }
         }
@@ -51,7 +50,6 @@ document.addEventListener('DOMContentLoaded', () => {
     sendButton.addEventListener('click', sendMessage);
 
     userInput.addEventListener('keydown', (event) => {
-        console.log('Key pressed:', event.key);
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault(); // Prevent default Enter action (new line)
             sendMessage();
@@ -60,7 +58,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Handle window resize events
     window.addEventListener('resize', () => {
-        // Check if the keyboard is open and adjust scroll position
         if (document.activeElement === userInput) {
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
