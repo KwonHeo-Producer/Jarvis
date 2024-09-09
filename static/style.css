@@ -42,11 +42,11 @@ body {
     gap: 10px; /* 요소들 사이의 간격 설정 */
 }
 
-/* 메시지 영역 스타일 */
+/* 초기 메시지 박스 크기 */
 #messages {
     border: 1px solid #ddd;
     padding: 10px;
-    height: calc(100vh - 120px); /* 메시지 영역의 높이를 입력 필드와 버튼을 제외한 나머지 공간으로 설정 */
+    height: 400px; /* 처음 화면에서의 기본 높이 */
     overflow-y: auto;
     background-color: #333; /* 메시지 영역의 배경색 추가 */
     border-radius: 8px; /* 테두리 둥글게 하기 */
@@ -54,14 +54,21 @@ body {
     display: flex;
     flex-direction: column;
     gap: 5px; /* 메시지 간의 간격 */
+    transition: height 0.3s; /* 높이 변경 시 부드러운 전환 */
+}
+
+/* 메시지 박스 크기가 변경된 상태 */
+#messages.expanded {
+    height: calc(100vh - 120px); /* 입력 후 두 번째 화면에서의 높이 */
 }
 
 /* 입력 필드와 버튼을 페이지 하단에 고정시키는 스타일 */
 #input-container {
     position: fixed;
     bottom: 0;
-    left: 0;
-    width: 100%; /* 입력 필드와 버튼이 페이지의 전체 너비를 차지하도록 설정 */
+    left: 50%;
+    transform: translateX(-50%); /* 가로 중앙 정렬 */
+    width: 800px; /* 입력 필드와 버튼이 페이지의 전체 너비를 차지하도록 설정 */
     background-color: #000; /* 배경색 설정 (필요에 따라 조정) */
     padding: 10px; /* 여백 설정 (필요에 따라 조정) */
     box-shadow: 0 -2px 5px rgba(0,0,0,0.5); /* 상단 그림자 추가 (선택 사항) */
