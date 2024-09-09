@@ -1,15 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM fully loaded and parsed');
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
+    const fileInput = document.getElementById('file-input');
     const messagesDiv = document.getElementById('messages');
     const chatContainer = document.getElementById('chat-container');
-    const logoContainer = document.querySelector('.logo-container');
-
-    let isFirstMessageSent = false;
 
     const sendMessage = async () => {
-        console.log('sendMessage called');
         const prompt = userInput.value;
         if (prompt) {
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
@@ -35,23 +31,40 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
 
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            if (!isFirstMessageSent) {
-                logoContainer.style.display = 'none';
-                chatContainer.style.display = 'flex'; // 메시지 박스만 표시
-                isFirstMessageSent = true;
-            }
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // 스크롤을 아래로 이동
         }
     };
 
-    sendButton.addEventListener('click', sendMessage);
+    const handleFileUpload = () => {
+        const file = fileInput.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                messagesDiv.innerHTML += `<div class="message user-message"><img src="${reader.result}" alt="Image" class="uploaded-image"></div>`;
+                fileInput.value = ''; // 파일 입력 필드 초기화
+                messagesDiv.scrollTop = messagesDiv.scrollHeight; // 스크롤을 아래로 이동
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+    sendButton.addEventListener('click', () => {
+        sendMessage();
+        handleFileUpload();
+    });
 
     userInput.addEventListener('keydown', (event) => {
-        console.log('Key pressed:', event.key);
         if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // 기본 Enter 동작 방지 (줄바꿈 방지)
+            event.preventDefault();
             sendMessage();
+            handleFileUpload();
         }
+    });
+
+    fileInput.addEventListener('change', handleFileUpload);
+
+    // 입력창에 포커스가 가면 자동으로 스크롤을 아래로 이동
+    userInput.addEventListener('focus', () => {
+        chatContainer.scrollTop = chatContainer.scrollHeight;
     });
 });
