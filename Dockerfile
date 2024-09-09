@@ -22,7 +22,7 @@ WORKDIR /app
 # Build stage에서 필요한 파일 복사
 COPY --from=build /app /app
 
-# 애플리케이션 파일 복사
+# 애플리케이션 파일 복사 (이전 단계에서 복사되지 않은 파일만)
 COPY . .
 
 # Command to run the application
