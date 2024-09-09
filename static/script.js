@@ -3,18 +3,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
-    const mainPage = document.getElementById('main-page');
+    const chatContainer = document.getElementById('chat-container');
+    const logoContainer = document.querySelector('.logo-container');
 
-    // 메시지 전송 함수
+    let isFirstMessageSent = false;
+
     const sendMessage = async () => {
         console.log('sendMessage called');
         const prompt = userInput.value;
         if (prompt) {
-            // 사용자 메시지 표시
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = '';
 
-            // 서버에 요청
             try {
                 const response = await fetch('/process_message', {
                     method: 'POST',
@@ -25,7 +25,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 const data = await response.json();
 
-                // AI 응답 표시
                 if (data.response) {
                     messagesDiv.innerHTML += `<div class="message assistant-message">${data.response}</div>`;
                 } else if (data.error) {
@@ -36,18 +35,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
 
-            // 스크롤 아래로 이동
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // 첫 입력 후 메인 페이지 숨기기
-            mainPage.style.display = 'none';
+            if (!isFirstMessageSent) {
+                logoContainer.style.display = 'none';
+                chatContainer.style.display = 'flex'; // 메시지 박스만 표시
+                isFirstMessageSent = true;
+            }
         }
     };
 
-    // 전송 버튼 클릭 이벤트
     sendButton.addEventListener('click', sendMessage);
 
-    // Enter 키를 눌렀을 때 메시지 전송
     userInput.addEventListener('keydown', (event) => {
         console.log('Key pressed:', event.key);
         if (event.key === 'Enter' && !event.shiftKey) {
