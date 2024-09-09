@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
+    const mainPage = document.getElementById('main-page');
 
     // 메시지 전송 함수
     const sendMessage = async () => {
@@ -37,6 +38,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // 스크롤 아래로 이동
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // 첫 입력 후 메인 페이지 숨기기
+            mainPage.style.display = 'none';
         }
     };
 
@@ -49,6 +53,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (event.key === 'Enter' && !event.shiftKey) {
             event.preventDefault(); // 기본 Enter 동작 방지 (줄바꿈 방지)
             sendMessage();
+        }
+    });
+});
+
         }
     });
 });
