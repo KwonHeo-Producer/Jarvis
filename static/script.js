@@ -7,11 +7,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const logoContainer = document.querySelector('.logo-container');
 
     let isFirstMessageSent = false;
+    let scrollPosition = 0;
 
     const sendMessage = async () => {
         console.log('sendMessage called');
         const prompt = userInput.value;
         if (prompt) {
+            // Save current scroll position
+            scrollPosition = messagesDiv.scrollTop;
+
+            // Append user message to messagesDiv
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = '';
 
@@ -35,11 +40,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
 
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            // Restore scroll position
+            messagesDiv.scrollTop = scrollPosition;
 
+            // Display chat container and hide logo if it's the first message
             if (!isFirstMessageSent) {
                 logoContainer.style.display = 'none';
-                chatContainer.style.display = 'flex'; // 메시지 박스만 표시
+                chatContainer.style.display = 'flex';
                 isFirstMessageSent = true;
             }
         }
@@ -50,8 +57,13 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.addEventListener('keydown', (event) => {
         console.log('Key pressed:', event.key);
         if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // 기본 Enter 동작 방지 (줄바꿈 방지)
+            event.preventDefault(); // Prevent default Enter action (new line)
             sendMessage();
         }
+    });
+    
+    // Scroll to bottom when input is focused
+    userInput.addEventListener('focus', () => {
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 });
