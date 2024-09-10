@@ -2,7 +2,6 @@ from fastapi import FastAPI, Request
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
-from service.stock.stock_service import process_stock_request
 from chain_service import initialize_chat_chain  # 랭체인 관련 기능 임포트
 
 # 환경 변수 로드
