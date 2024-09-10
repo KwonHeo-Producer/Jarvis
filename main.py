@@ -24,11 +24,6 @@ async def process_message(request: Request):
     prompt = data.get("prompt")
 
     if prompt:
-        # 주가 요청 처리
-        stock_response = process_stock_request(prompt)
-        if stock_response:
-            return stock_response
-
         # 챗봇 대화 체인을 통해 응답 생성
         chain = initialize_chat_chain()
         response_content = chain.run(prompt)
