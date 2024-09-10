@@ -128,7 +128,7 @@ body {
     #chat-container {
         width: 95%; /* 모바일에서는 너비를 좀 더 넓게 조정 */
     }
-    
+
     #input-container {
         width: 95%;
     }
@@ -136,10 +136,10 @@ body {
     #send-button {
         width: 80px;
     }
-    
+
     #user-input {
         font-size: 16px; /* 모바일에서 글꼴 크기 조정 */
-    }    
+    }
 }
 
 /* PC 환경에서의 스타일 */
