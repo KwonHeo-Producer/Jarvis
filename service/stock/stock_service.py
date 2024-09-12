@@ -75,13 +75,8 @@ class GoogleSheetsService:
                     # 챗봇 대화 체인을 통해 응답 생성
                     response_content = self.chain.run(chatbot_input)
 
-                    # 응답에서 숫자와 주식 이름만 추출하여 포맷
-                    match = re.search(r'(\d+\.\d+)', response_content)
-                    if match:
-                        response_number = match.group(1)
-                        formatted_response = f"{stock_name}의 현재 주가는 {response_number} 입니다."
-                    else:
-                        formatted_response = f"{stock_name}의 현재 주가는 알 수 없습니다."
+                    # 응답 포맷을 B1의 값에 주식 이름과 함께 숫자를 추가
+                    formatted_response = f"{stock_name}의 현재 주가는 {chatbot_input}"
 
                     return {
                         "response": formatted_response,
