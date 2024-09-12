@@ -39,8 +39,13 @@ async def process_message(request: Request):
 
     if prompt:
         try:
-            response = sheets_service.process_message(prompt)
-            return response
+            # 일반 대화 처리
+            if "의 현재 주가는?" in prompt:
+                response = sheets_service.process_message(prompt)
+                return response
+            else:
+                return {"response": "일반 대화 처리 중입니다.", "status": "success"}
+
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     return {"error": "No prompt provided"}
