@@ -1,15 +1,17 @@
 import re
-from chain_service import initialize_chat_chain
 import os
 import json
+from chain_service import initialize_chat_chain
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
+
 
 class GoogleSheetsService:
     def __init__(self, spreadsheet_id: str, sheet_name: str):
         self.spreadsheet_id = spreadsheet_id
         self.sheet_name = sheet_name
         self.service = self._initialize_service()
+        self.chain = initialize_chat_chain()  # LangChain 대화 체인 초기화
 
     def _initialize_service(self):
         # 환경 변수에서 JSON 인증 정보를 가져오기
@@ -50,9 +52,6 @@ class GoogleSheetsService:
         return values[0][0] if values else None
 
     def process_message(self, prompt: str):
-        # LangChain 대화 체인 초기화
-        chain = initialize_chat_chain()
-
         # 특정 패턴이 포함된 경우에만 Google Sheets에 기록
         pattern = re.compile(r'^(.*)의 현재 주가는(?: 얼마야\?)?(?:\?)?$', re.UNICODE)
         match = pattern.match(prompt)
@@ -74,7 +73,7 @@ class GoogleSheetsService:
 
                 if chatbot_input:
                     # 챗봇 대화 체인을 통해 응답 생성
-                    response_content = chain.run(chatbot_input)
+                    response_content = self.chain.run(chatbot_input)
 
                     # 응답에서 숫자와 주식 이름만 추출하여 포맷
                     match = re.search(r'(\d+\.\d+)', response_content)
@@ -93,14 +92,14 @@ class GoogleSheetsService:
                     return {"error": "B1 셀에 챗봇 입력이 없습니다."}
 
             except Exception as e:
-                return {"error": f"Error processing stock message: {str(e)}"}
+                raise Exception(f"Error processing message: {str(e)}")
         else:
             # 주식 관련 패턴이 아닌 경우 일반 대화 처리
             try:
-                response_content = chain.run(prompt)
+                response_content = self.chain.run(prompt)
                 return {
                     "response": response_content,
                     "status": "success"
                 }
             except Exception as e:
-                return {"error": f"Error processing general message: {str(e)}"}
+                raise Exception(f"Error processing general message: {str(e)}")
