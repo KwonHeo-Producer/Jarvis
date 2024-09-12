@@ -12,6 +12,7 @@ class GoogleSheetsService:
         self.sheet_name = sheet_name
         self.service = self._initialize_service()
         self.chain = initialize_chat_chain()  # LangChain 대화 체인 초기화
+        self.tickers = self._load_tickers()
 
     def _initialize_service(self):
         # 환경 변수에서 JSON 인증 정보를 가져오기
@@ -72,6 +73,7 @@ class GoogleSheetsService:
 
         if match:
             stock_name = match.group(1).strip()  # 주식 이름 추출
+            ticker_symbol = self._get_ticker_from_name(stock_name)
 
             try:
                 # A1 셀에 주식 이름 기록
@@ -90,7 +92,7 @@ class GoogleSheetsService:
                     response_content = self.chain.run(chatbot_input)
 
                     # 응답 포맷을 B1의 값에 주식 이름과 함께 숫자를 추가
-                    formatted_response = f"{stock_name} {chatbot_input}"
+                    formatted_response = f"{stock_name}{chatbot_input}"
 
                     return {
                         "response": formatted_response,
