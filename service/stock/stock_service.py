@@ -30,8 +30,11 @@ class GoogleSheetsService:
         return service
 
     def _load_tickers(self):
+        # JSON 파일 경로 설정
+        json_file_path = os.path.join(os.path.dirname(__file__), 'service', 'stock', 'stock_tickers.json')
+        
         # JSON 파일에서 주식 티커를 로드
-        with open('stock_tickers.json', 'r', encoding='utf-8') as file:
+        with open(json_file_path, 'r', encoding='utf-8') as file:
             tickers = json.load(file)
         return tickers
 
