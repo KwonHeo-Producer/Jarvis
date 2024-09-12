@@ -51,7 +51,7 @@ class GoogleSheetsService:
         values = result.get('values', [])
         return values[0][0] if values else None
 
-    def process_message(self, prompt: str):
+   def process_message(self, prompt: str):
     # 특정 패턴이 포함된 경우에만 Google Sheets에 기록
     pattern = re.compile(r'^(.*)의 현재 주가는(?: 얼마야\?)?(?:\?)?$', re.UNICODE)
     match = pattern.match(prompt)
@@ -76,21 +76,10 @@ class GoogleSheetsService:
             change_percentage = self.get_cell_value(cell_range=range_change_percentage)
 
             if current_price and change_percentage:
-                # 챗봇 대화 체인을 통해 응답 생성
-                response_content = self.chain.run(prompt)
-
-                # 응답에서 숫자와 주식 이름만 추출하여 포맷
-                response_number_match = re.search(r'(\d+\.\d+)', response_content)
-                if response_number_match:
-                    response_number = response_number_match.group(1)
-                    formatted_response = (
-                        f"{stock_name}의 현재 주가는 {current_price} 입니다. "
-                        f"전날 대비 변동률은 {change_percentage} 입니다."
-                    )
-                else:
-                    formatted_response = (
-                        f"{stock_name}의 현재 정보는 알 수 없습니다."
-                    )
+                formatted_response = (
+                    f"{stock_name}의 현재 주가는 {current_price} 입니다. "
+                    f"전날 대비 등락률은 {change_percentage} 입니다."
+                )
 
                 return {
                     "response": formatted_response,
@@ -112,4 +101,5 @@ class GoogleSheetsService:
             }
         except Exception as e:
             raise Exception(f"Error processing general message: {str(e)}")
+
 
