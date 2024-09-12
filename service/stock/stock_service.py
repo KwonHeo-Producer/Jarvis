@@ -1,10 +1,10 @@
 import re
-from chain_service import initialize_chat_chain
-import os
 import json
+import requests
+from chain_service import initialize_chat_chain
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
-
+import os
 
 class GoogleSheetsService:
     def __init__(self, spreadsheet_id: str, sheet_name: str):
@@ -20,7 +20,6 @@ class GoogleSheetsService:
         creds = Credentials.from_service_account_info(service_account_info)
         service = build('sheets', 'v4', credentials=creds)
         return service
-
 
     def update_cell(self, cell_range: str, value: str):
         sheet = self.service.spreadsheets()
@@ -45,7 +44,6 @@ class GoogleSheetsService:
         return values[0][0] if values else None
 
     def process_message(self, prompt: str):
-        # 특정 패턴이 포함된 경우에만 Google Sheets에 기록
         pattern = re.compile(r'^(.*)의 현재 주가는(?: 얼마야\?)?(?:\?)?$', re.UNICODE)
         match = pattern.match(prompt)
 
@@ -89,3 +87,23 @@ class GoogleSheetsService:
                 raise Exception(f"Error processing message: {str(e)}")
         else:
             return {"error": "입력 메시지가 유효한 패턴이 아닙니다."}
+
+class GeminiService:
+    def __init__(self, api_key: str):
+        self.api_key = api_key
+
+    def get_response(self, prompt: str):
+        headers = {
+            'Authorization': f'Bearer {self.api_key}',
+            'Content-Type': 'application/json'
+        }
+        data = {
+            'prompt': prompt,
+            'max_tokens': 150
+        }
+        response = requests.post('https://api.gemini.com/v1/text/generate', headers=headers, json=data)
+        response_data = response.json()
+        return {
+            'response': response_data.get('text', 'No response from Gemini API'),
+            'status': 'success'
+        }
