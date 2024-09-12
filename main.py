@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Request, HTTPException
-from fastapi.responses import HTMLResponse
+from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from service.stock.stock_service import GoogleSheetsService
@@ -39,12 +39,14 @@ async def process_message(request: Request):
 
     if prompt:
         try:
-            # 일반 대화 처리
+            # 특정 패턴이 포함된 경우에만 Google Sheets 코드 실행
             if "의 현재 주가는?" in prompt:
                 response = sheets_service.process_message(prompt)
                 return response
-            else:
-                return {"response": "일반 대화 처리 중입니다.", "status": "success"}
+            
+            # 일반적인 대화는 별도로 처리
+            # 예: 아래는 임시로 설정한 챗봇 응답입니다.
+            return {"response": f"챗봇의 응답: '{prompt}'에 대한 일반적인 대화 처리 중입니다.", "status": "success"}
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
