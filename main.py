@@ -49,12 +49,8 @@ async def process_message(request: Request):
             # 주식 관련 질문이 처리된 경우
             if 'response' in sheets_response:
                 return {"response": sheets_response['response']}
-            elif 'error' in sheets_response:
-                raise HTTPException(status_code=500, detail=sheets_response['error']}
-            
-            # 주식 관련 패턴이 아닌 경우 기본 대화 처리
-            response = chat_chain.run(prompt)
-            return {"response": response}
+            else response = chat_chain.run(prompt)
+                return {"response": response}
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     return {"error": "No prompt provided"}
