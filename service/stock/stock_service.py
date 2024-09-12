@@ -80,7 +80,7 @@ class GoogleSheetsService:
                 range_user_message = f'{self.sheet_name}!A1'
                 result_user_message = self.update_cell(
                     cell_range=range_user_message,
-                    value=stock_name
+                    value=ticker_symbol
                 )
 
                 # B1 셀에서 챗봇의 입력을 읽기
