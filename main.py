@@ -43,11 +43,19 @@ async def process_message(request: Request):
 
     if prompt:
         try:
-            # LangChain을 사용하여 메시지를 처리합니다.
-            response = chat_chain.run(prompt)  # LangChain의 ConversationChain을 사용하여 응답 생성
-            # Google Sheets에 결과를 기록합니다.
-            sheets_service.process_message(prompt)
+            # Google Sheets에서 주식 관련 처리를 시도합니다.
+            sheets_response = sheets_service.process_message(prompt)
+            
+            # 주식 관련 질문이 처리된 경우
+            if 'response' in sheets_response:
+                return {"response": sheets_response['response']}
+            elif 'error' in sheets_response:
+                raise HTTPException(status_code=500, detail=sheets_response['error']}
+            
+            # 주식 관련 패턴이 아닌 경우 기본 대화 처리
+            response = chat_chain.run(prompt)
             return {"response": response}
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     return {"error": "No prompt provided"}
+
