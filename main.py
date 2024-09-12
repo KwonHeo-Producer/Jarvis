@@ -5,6 +5,8 @@ from dotenv import load_dotenv
 from service.stock.stock_service import GoogleSheetsService
 from pydantic import BaseModel
 import os
+import json
+import requests
 
 # 환경 변수 로드
 load_dotenv('env/data.env')
@@ -23,6 +25,10 @@ sheets_service = GoogleSheetsService(
     spreadsheet_id=SPREADSHEET_ID,
     sheet_name=SHEET_NAME
 )
+
+# Gemini API 설정
+GEMINI_API_URL = os.getenv("GEMINI_API_URL")  # Gemini API URL
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")  # Gemini API Key
 
 @app.get("/", response_class=HTMLResponse)
 async def read_index():
@@ -44,10 +50,25 @@ async def process_message(request: Request):
                 response = sheets_service.process_message(prompt)
                 return response
             
-            # 일반적인 대화는 별도로 처리
-            # 예: 아래는 임시로 설정한 챗봇 응답입니다.
-            return {"response": f"챗봇의 응답: '{prompt}'에 대한 일반적인 대화 처리 중입니다.", "status": "success"}
+            # Gemini API로 대화 처리
+            gemini_response = process_with_gemini(prompt)
+            return gemini_response
 
         except Exception as e:
             raise HTTPException(status_code=500, detail=str(e))
     return {"error": "No prompt provided"}
+
+def process_with_gemini(prompt: str) -> dict:
+    headers = {
+        "Authorization": f"Bearer {GEMINI_API_KEY}",
+        "Content-Type": "application/json"
+    }
+    payload = {
+        "prompt": prompt
+    }
+    response = requests.post(GEMINI_API_URL, headers=headers, json=payload)
+    
+    if response.status_code == 200:
+        return response.json()
+    else:
+        raise HTTPException(status_code=response.status_code, detail="Error from Gemini API")
