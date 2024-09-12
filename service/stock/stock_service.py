@@ -51,7 +51,8 @@ class GoogleSheetsService:
         values = result.get('values', [])
         return values[0][0] if values else None
 
-   def process_message(self, prompt: str):
+def process_message(self, prompt: str):
+    # 특정 패턴이 포함된 경우에만 Google Sheets에 기록
     pattern = re.compile(r'^(.*)의 현재 주가는(?: 얼마야\?)?(?:\?)?$', re.UNICODE)
     match = pattern.match(prompt)
 
@@ -72,7 +73,7 @@ class GoogleSheetsService:
 
             if chatbot_input:
                 # 챗봇 대화 체인을 통해 응답 생성
-                response_content = self.chain.run(chatbot_input)
+                response_content = chatbot_input
 
                 return {
                     "response": response_content,
@@ -83,8 +84,9 @@ class GoogleSheetsService:
                 return {"error": "B1 셀에 챗봇 입력이 없습니다."}
 
         except Exception as e:
-            return {"error": f"Error processing message: {str(e)}"}
+            raise Exception(f"Error processing message: {str(e)}")
     else:
+        # 주식 관련 패턴이 아닌 경우 일반 대화 처리
         try:
             response_content = self.chain.run(prompt)
             return {
@@ -92,4 +94,4 @@ class GoogleSheetsService:
                 "status": "success"
             }
         except Exception as e:
-            return {"error": f"Error processing general message: {str(e)}"}
+            raise Exception(f"Error processing general message: {str(e)}")
