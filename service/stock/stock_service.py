@@ -86,24 +86,5 @@ class GoogleSheetsService:
             except Exception as e:
                 raise Exception(f"Error processing message: {str(e)}")
         else:
-            return {"error": "입력 메시지가 유효한 패턴이 아닙니다."}
-
-class GeminiService:
-    def __init__(self, api_key: str):
-        self.api_key = api_key
-
-    def get_response(self, prompt: str):
-        headers = {
-            'Authorization': f'Bearer {self.api_key}',
-            'Content-Type': 'application/json'
-        }
-        data = {
-            'prompt': prompt,
-            'max_tokens': 150
-        }
-        response = requests.post('https://api.gemini.com/v1/text/generate', headers=headers, json=data)
-        response_data = response.json()
-        return {
-            'response': response_data.get('text', 'No response from Gemini API'),
-            'status': 'success'
-        }
+            return {'response': response_data.get('text', 'No response from Gemini API'),
+            'status': 'success'}
