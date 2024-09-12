@@ -5,6 +5,7 @@ import json
 from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 
+
 class GoogleSheetsService:
     def __init__(self, spreadsheet_id: str, sheet_name: str):
         self.spreadsheet_id = spreadsheet_id
@@ -19,6 +20,7 @@ class GoogleSheetsService:
         creds = Credentials.from_service_account_info(service_account_info)
         service = build('sheets', 'v4', credentials=creds)
         return service
+
 
     def update_cell(self, cell_range: str, value: str):
         sheet = self.service.spreadsheets()
