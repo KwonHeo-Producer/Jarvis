@@ -29,6 +29,17 @@ class GoogleSheetsService:
         service = build('sheets', 'v4', credentials=creds)
         return service
 
+    def _load_tickers(self):
+        # JSON 파일에서 주식 티커를 로드
+        with open('stock_tickers.json', 'r', encoding='utf-8') as file:
+            tickers = json.load(file)
+        return tickers
+
+    def _get_ticker_from_name(self, stock_name: str):
+        # 주식 이름을 티커 심볼로 변환
+        return self.tickers.get(stock_name, stock_name)  # 주식 이름이 없으면 원래 이름 반환
+        
+    
     def update_cell(self, cell_range: str, value: str):
         sheet = self.service.spreadsheets()
         body = {
@@ -76,7 +87,7 @@ class GoogleSheetsService:
                     response_content = self.chain.run(chatbot_input)
 
                     # 응답 포맷을 B1의 값에 주식 이름과 함께 숫자를 추가
-                    formatted_response = f"{stock_name}의 현재 주가는 {chatbot_input}"
+                    formatted_response = f"{stock_name} {chatbot_input}"
 
                     return {
                         "response": formatted_response,
