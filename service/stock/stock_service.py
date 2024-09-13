@@ -19,12 +19,12 @@ class GoogleSheetsService:
         credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
         if not credentials_json:
             raise ValueError("Environment variable 'GOOGLE_APPLICATION_CREDENTIALS_JSON' is not set or is empty.")
-        
+
         try:
             service_account_info = json.loads(credentials_json)
         except json.JSONDecodeError as e:
             raise ValueError("Error decoding JSON from 'GOOGLE_APPLICATION_CREDENTIALS_JSON': " + str(e))
-        
+
         # 서비스 계정으로부터 자격 증명 생성
         creds = Credentials.from_service_account_info(service_account_info)
         service = build('sheets', 'v4', credentials=creds)
@@ -33,7 +33,7 @@ class GoogleSheetsService:
     def _load_tickers(self):
         # JSON 파일 경로 설정
         json_file_path = 'service/stock/stock_tickers.json'
-        
+
         # JSON 파일에서 주식 티커를 로드
         with open(json_file_path, 'r', encoding='utf-8') as file:
             tickers = json.load(file)
@@ -42,8 +42,8 @@ class GoogleSheetsService:
     def _get_ticker_from_name(self, stock_name: str):
         # 주식 이름을 티커 심볼로 변환
         return self.tickers.get(stock_name, stock_name)  # 주식 이름이 없으면 원래 이름 반환
-        
-    
+
+
     def update_cell(self, cell_range: str, value: str):
         sheet = self.service.spreadsheets()
         body = {
@@ -56,7 +56,6 @@ class GoogleSheetsService:
             body=body
         ).execute()
         return result
-
     def get_cell_value(self, cell_range: str):
         sheet = self.service.spreadsheets()
         result = sheet.values().get(
@@ -65,7 +64,6 @@ class GoogleSheetsService:
         ).execute()
         values = result.get('values', [])
         return values[0][0] if values else None
-
     def process_message(self, prompt: str):
         # 특정 패턴이 포함된 경우에만 Google Sheets에 기록
         pattern = re.compile(r'^(.*)의 현재 주가는(?: 얼마야\?)?(?:\?)?$', re.UNICODE)
@@ -86,7 +84,6 @@ class GoogleSheetsService:
                 # B1 셀에서 챗봇의 입력을 읽기
                 range_chatbot_input = f'{self.sheet_name}!B1'
                 chatbot_input = self.get_cell_value(cell_range=range_chatbot_input)
-
                 if chatbot_input:
                     # 챗봇 대화 체인을 통해 응답 생성
                     response_content = self.chain.run(chatbot_input)
@@ -101,7 +98,6 @@ class GoogleSheetsService:
                     }
                 else:
                     return {"error": "B1 셀에 챗봇 입력이 없습니다."}
-
             except Exception as e:
                 raise Exception(f"Error processing message: {str(e)}")
         else:
