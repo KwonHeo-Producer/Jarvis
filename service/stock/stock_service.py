@@ -9,6 +9,19 @@ class GoogleSheetsService:
         self.service = initialize_google_sheets_service()  # 구글 시트 서비스 초기화
         self.chain = initialize_chat_chain()  # LangChain 대화 체인 초기화
 
+    def _load_tickers(self):
+        # JSON 파일 경로 설정
+        json_file_path = 'service/stock/stock_tickers.json'
+        
+        # JSON 파일에서 주식 티커를 로드
+        with open(json_file_path, 'r', encoding='utf-8') as file:
+            tickers = json.load(file)
+        return tickers
+
+    def _get_ticker_from_name(self, stock_name: str):
+        # 주식 이름을 티커 심볼로 변환
+        return self.tickers.get(stock_name, stock_name)  # 주식 이름이 없으면 원래 이름 반환
+
     def update_cell(self, cell_range: str, value: str):
         sheet = self.service.spreadsheets()
         body = {
