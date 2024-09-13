@@ -41,20 +41,19 @@ async def process_message(request: Request):
     data = await request.json()
     prompt = data.get("prompt")
 
-    if not prompt:
-        raise HTTPException(status_code=400, detail="No prompt provided")
+    if prompt:
+        try:
+            # Google Sheets에서 주식 관련 처리를 시도합니다.
+            sheets_response = sheets_service.process_message(prompt)
 
-    try:
-        # Google Sheets에서 주식 관련 처리를 시도합니다.
-        sheets_response = sheets_service.process_message(prompt)
-        
-        # 주식 관련 질문이 처리된 경우
-        if 'response' in sheets_response:
-            return {"response": sheets_response['response']}
-        
-        # 주식 관련 패턴이 아닌 경우 기본 대화 처리
-        response = chat_chain.run(prompt)
-        return {"response": response}
+            # 주식 관련 질문이 처리된 경우
+            if 'response' in sheets_response:
+                return {"response": sheets_response['response']}
+            else response = chat_chain.run(prompt)
+                return {"response": response}
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=str(e))
+    return {"error": "No prompt provided"}
     
     except Exception as e:
         # 모든 예외를 포괄적으로 처리합니다.
