@@ -1,16 +1,34 @@
 import re
+import os
 import json
-from service.google_sheets_auth import GoogleSheetsAuth  # 모듈 임포트
 from chain_service import initialize_chat_chain
+from google.oauth2.service_account import Credentials
+from googleapiclient.discovery import build
+
 
 class GoogleSheetsService:
     def __init__(self, spreadsheet_id: str, sheet_name: str):
         self.spreadsheet_id = spreadsheet_id
         self.sheet_name = sheet_name
-        self.auth = GoogleSheetsAuth()  # 인증 모듈 사용
-        self.service = self.auth.service
+        self.service = self._initialize_service()
         self.chain = initialize_chat_chain()  # LangChain 대화 체인 초기화
         self.tickers = self._load_tickers()
+
+    def _initialize_service(self):
+        # 환경 변수에서 JSON 인증 정보를 가져오기
+        credentials_json = os.getenv('GOOGLE_APPLICATION_CREDENTIALS_JSON')
+        if not credentials_json:
+            raise ValueError("Environment variable 'GOOGLE_APPLICATION_CREDENTIALS_JSON' is not set or is empty.")
+        
+        try:
+            service_account_info = json.loads(credentials_json)
+        except json.JSONDecodeError as e:
+            raise ValueError("Error decoding JSON from 'GOOGLE_APPLICATION_CREDENTIALS_JSON': " + str(e))
+        
+        # 서비스 계정으로부터 자격 증명 생성
+        creds = Credentials.from_service_account_info(service_account_info)
+        service = build('sheets', 'v4', credentials=creds)
+        return service
 
     def _load_tickers(self):
         # JSON 파일 경로 설정
@@ -25,6 +43,7 @@ class GoogleSheetsService:
         # 주식 이름을 티커 심볼로 변환
         return self.tickers.get(stock_name, stock_name)  # 주식 이름이 없으면 원래 이름 반환
         
+    
     def update_cell(self, cell_range: str, value: str):
         sheet = self.service.spreadsheets()
         body = {
