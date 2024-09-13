@@ -9,6 +9,7 @@ class GoogleSheetsService:
         self.sheet_name = sheet_name
         self.service = initialize_google_sheets_service()  # 구글 시트 서비스 초기화
         self.chain = initialize_chat_chain()  # LangChain 대화 체인 초기화
+        self.tickers = self._load_tickers()
 
     def _load_tickers(self):
         # JSON 파일 경로 설정
