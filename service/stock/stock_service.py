@@ -71,7 +71,7 @@ class GoogleSheetsService:
                     response_content = self.chain.run(chatbot_input)
 
                     # 응답 포맷을 B1의 값에 주식 이름과 함께 주식 가격을 추가
-                    formatted_response = f"{stock_name}의 현재 주가는 {chatbot_input}"
+                    formatted_response = f"{stock_name}{chatbot_input}"
 
                     return {
                         "response": formatted_response,
