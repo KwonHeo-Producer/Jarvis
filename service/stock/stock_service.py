@@ -1,6 +1,6 @@
 import re
 import json
-from google_sheets_auth import GoogleSheetsAuth  # 모듈 임포트
+from service.google_sheets_auth import GoogleSheetsAuth  # 모듈 임포트
 from chain_service import initialize_chat_chain
 
 class GoogleSheetsService:
