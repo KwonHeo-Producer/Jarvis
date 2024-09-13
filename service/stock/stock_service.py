@@ -1,13 +1,14 @@
 import re
 import json
-from service.google_sheets_auth import initialize_google_sheets_service
+from google_sheets_auth import GoogleSheetsAuth  # 모듈 임포트
 from chain_service import initialize_chat_chain
 
 class GoogleSheetsService:
     def __init__(self, spreadsheet_id: str, sheet_name: str):
         self.spreadsheet_id = spreadsheet_id
         self.sheet_name = sheet_name
-        self.service = initialize_google_sheets_service()  # 구글 시트 서비스 초기화
+        self.auth = GoogleSheetsAuth()  # 인증 모듈 사용
+        self.service = self.auth.service
         self.chain = initialize_chat_chain()  # LangChain 대화 체인 초기화
         self.tickers = self._load_tickers()
 
@@ -23,7 +24,7 @@ class GoogleSheetsService:
     def _get_ticker_from_name(self, stock_name: str):
         # 주식 이름을 티커 심볼로 변환
         return self.tickers.get(stock_name, stock_name)  # 주식 이름이 없으면 원래 이름 반환
-
+        
     def update_cell(self, cell_range: str, value: str):
         sheet = self.service.spreadsheets()
         body = {
@@ -53,13 +54,14 @@ class GoogleSheetsService:
 
         if match:
             stock_name = match.group(1).strip()  # 주식 이름 추출
+            ticker_symbol = self._get_ticker_from_name(stock_name)
 
             try:
                 # A1 셀에 주식 이름 기록
                 range_user_message = f'{self.sheet_name}!A1'
                 result_user_message = self.update_cell(
                     cell_range=range_user_message,
-                    value=stock_name
+                    value=ticker_symbol
                 )
 
                 # B1 셀에서 챗봇의 입력을 읽기
@@ -71,7 +73,7 @@ class GoogleSheetsService:
                     response_content = self.chain.run(chatbot_input)
 
                     # 응답 포맷을 B1의 값에 주식 이름과 함께 숫자를 추가
-                    formatted_response = f"{stock_name}의 현재 주가는 {chatbot_input}"
+                    formatted_response = f"{stock_name}{chatbot_input}"
 
                     return {
                         "response": formatted_response,
