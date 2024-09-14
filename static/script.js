@@ -1,4 +1,4 @@
-#script.js
+//script.js
 document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
