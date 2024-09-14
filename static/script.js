@@ -82,6 +82,9 @@ document.addEventListener('DOMContentLoaded', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
+    // 입력창의 내용을 수정할 때마다 높이 조정
+    userInput.addEventListener('input', adjustTextareaHeight);
+
     // Function to adjust the height of the textarea
     function adjustTextareaHeight() {
         userInput.style.height = 'auto'; // Reset height
