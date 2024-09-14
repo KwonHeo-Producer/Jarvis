@@ -7,6 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isFirstMessageSent = false;
 
+    // Function to adjust the height of the textarea
+    const adjustTextareaHeight = () => {
+        // Reset the height to 'auto' to allow the textarea to shrink if necessary
+        userInput.style.height = 'auto';
+        // Set the height to the scroll height of the textarea
+        userInput.style.height = `${userInput.scrollHeight}px`;
+    };
+
     const sendMessage = async () => {
         const prompt = userInput.value;
         if (prompt) {
@@ -76,4 +84,7 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
+
+    // Adjust the textarea height initially
+    adjustTextareaHeight();
 });
