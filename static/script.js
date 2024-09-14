@@ -20,6 +20,8 @@ document.addEventListener('DOMContentLoaded', () => {
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = '';
 
+            const sessionId = sessionStorage.getItem('sessionId'); // 세션 ID를 가져옴
+
             try {
                 const response = await fetch('/process_message', {
                     method: 'POST',
