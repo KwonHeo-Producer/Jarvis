@@ -6,10 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatContainer = document.getElementById('chat-container');
     const logoContainer = document.querySelector('.logo-container');
 
-    // 새로고침 시마다 세션 ID를 초기화합니다.
-    localStorage.removeItem('sessionId'); // 이전 세션 ID 삭제
+    // 세션 ID를 sessionStorage에 저장하도록 변경
+    sessionStorage.removeItem('sessionId'); // 이전 세션 ID 삭제
     const sessionId = uuidv4(); // 새로운 UUID 생성
-    localStorage.setItem('sessionId', sessionId); // 새로 생성한 UUID 저장
+    sessionStorage.setItem('sessionId', sessionId); // 새로 생성한 UUID 저장
 
     let isFirstMessageSent = false;
 
@@ -55,13 +55,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendButton.addEventListener('click', sendMessage);
 
-    userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // Prevent default Enter action (new line)
-            sendMessage();
+   userInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            if (event.shiftKey) {
+                // Shift + Enter는 줄바꿈
+                event.preventDefault();
+                userInput.value += '\n';
+                adjustTextareaHeight();
+            } else {
+                // Enter만 눌렀을 때 메시지 전송
+                event.preventDefault();
+                sendMessage();
+            }
         }
     });
-
+    
     // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
@@ -73,6 +81,12 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
+
+    // Function to adjust the height of the textarea
+    function adjustTextareaHeight() {
+        userInput.style.height = 'auto'; // Reset height
+        userInput.style.height = `${userInput.scrollHeight}px`; // Set new height
+    }
 
     // Function to generate a UUID
     function uuidv4() {
