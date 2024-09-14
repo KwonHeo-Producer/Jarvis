@@ -1,3 +1,4 @@
+#script.js
 document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
@@ -5,12 +6,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatContainer = document.getElementById('chat-container');
     const logoContainer = document.querySelector('.logo-container');
 
-    // Generate a new session ID or use the existing one
-    let sessionId = localStorage.getItem('sessionId');
-    if (!sessionId) {
-        sessionId = uuidv4(); // Generate a new UUID if none exists
-        localStorage.setItem('sessionId', sessionId);
-    }
+    // 새로고침 시마다 세션 ID를 초기화합니다.
+    localStorage.removeItem('sessionId'); // 이전 세션 ID 삭제
+    const sessionId = uuidv4(); // 새로운 UUID 생성
+    localStorage.setItem('sessionId', sessionId); // 새로 생성한 UUID 저장
 
     let isFirstMessageSent = false;
 
