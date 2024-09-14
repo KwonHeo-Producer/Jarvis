@@ -7,22 +7,25 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let isFirstMessageSent = false;
 
+    // Detect if the device is mobile
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
     // Function to adjust the height of the textarea
     const adjustTextareaHeight = () => {
-        // Reset the height to 'auto' to allow the textarea to shrink if necessary
-        userInput.style.height = 'auto';
-        // Set the height to the scroll height of the textarea
-        userInput.style.height = `${userInput.scrollHeight}px`;
+        userInput.style.height = 'auto'; // Reset the height to allow shrinking if necessary
+        userInput.style.height = `${userInput.scrollHeight}px`; // Set height based on scroll height
     };
 
+    // Function to send the message
     const sendMessage = async () => {
-        const prompt = userInput.value;
+        const prompt = userInput.value.trim();
         if (prompt) {
             // Append user message to messagesDiv
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
-            userInput.value = '';
+            userInput.value = ''; // Clear the input field
 
             try {
+                // Fetch the response from the server
                 const response = await fetch('/process_message', {
                     method: 'POST',
                     headers: {
@@ -49,42 +52,52 @@ document.addEventListener('DOMContentLoaded', () => {
             if (!isFirstMessageSent) {
                 logoContainer.style.display = 'none';
                 chatContainer.style.display = 'flex';
-                messagesDiv.classList.add('expanded'); // 메시지 박스 크기 변경
+                messagesDiv.classList.add('expanded'); // Expand the message box
                 isFirstMessageSent = true;
             }
         }
     };
 
+    // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
 
+    // Event listener for the Enter key in the textarea
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
-            if (event.shiftKey) {
-                event.preventDefault();
-                userInput.value += '\n';
-                adjustTextareaHeight();
+            if (isMobile) {
+                // Mobile devices: Enter key is for line break
+                event.preventDefault(); // Prevent default Enter behavior
+                userInput.value += '\n'; // Add a newline
+                adjustTextareaHeight(); // Adjust height after adding newline
             } else {
-                event.preventDefault();
-                sendMessage();
+                // Desktop devices: Enter key sends the message
+                if (event.shiftKey) {
+                    event.preventDefault(); // Prevent default Enter behavior
+                    userInput.value += '\n'; // Add a newline
+                    adjustTextareaHeight(); // Adjust height after adding newline
+                } else {
+                    event.preventDefault(); // Prevent default Enter behavior
+                    sendMessage(); // Send the message
+                }
             }
         }
     });
 
-    // 입력창의 내용을 수정할 때마다 높이 조정
+    // Event listener for input changes to adjust textarea height
     userInput.addEventListener('input', adjustTextareaHeight);
 
     // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom on resize if input is focused
         }
     });
 
-    // Ensure that messagesDiv scrolls to bottom on input focus
+    // Ensure messagesDiv scrolls to bottom on input focus
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-    // Adjust the textarea height initially
+    // Initial adjustment of textarea height
     adjustTextareaHeight();
 });
