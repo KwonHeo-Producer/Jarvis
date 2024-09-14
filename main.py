@@ -50,8 +50,7 @@ async def process_message(request: Request):
     if not prompt:
         raise HTTPException(status_code=400, detail="No prompt provided")
 
-    if session_id not in sessions:
-        sessions[session_id] = chat_chain
+    chat_chain = initialize_chat_chain()
 
     try:
         # Google Sheets에서 주식 관련 처리를 시도합니다.
