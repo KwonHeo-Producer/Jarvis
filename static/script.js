@@ -15,11 +15,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
         if (prompt) {
-            // Append user message to messagesDiv
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = '';
-
-            const sessionId = sessionStorage.getItem('sessionId'); // 세션 ID를 가져옴
 
             try {
                 const response = await fetch('/process_message', {
@@ -27,7 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ prompt, session_id: sessionId }) // Include session_id
+                    body: JSON.stringify({ prompt, session_id: sessionId })
                 });
                 const data = await response.json();
 
@@ -36,19 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (data.error) {
                     messagesDiv.innerHTML += `<div class="message assistant-message">${data.error}</div>`;
                 }
+
+                // Save the new session_id if needed
+                sessionStorage.setItem('sessionId', data.session_id);
+
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
 
-            // Scroll to the bottom of the messagesDiv
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
-            // Display chat container and hide logo if it's the first message
             if (!isFirstMessageSent) {
                 logoContainer.style.display = 'none';
                 chatContainer.style.display = 'flex';
-                messagesDiv.classList.add('expanded'); // 메시지 박스 크기 변경
+                messagesDiv.classList.add('expanded');
                 isFirstMessageSent = true;
             }
         }
@@ -59,47 +58,33 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             if (event.shiftKey) {
-                // Shift + Enter는 줄바꿈
                 event.preventDefault();
                 userInput.value += '\n';
                 adjustTextareaHeight();
             } else {
-                // Enter만 눌렀을 때 메시지 전송
                 event.preventDefault();
                 sendMessage();
             }
         }
     });
 
-    // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
         }
     });
 
-    // Ensure that messagesDiv scrolls to bottom on input focus
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-    // 입력창의 내용을 수정할 때마다 높이 조정
     userInput.addEventListener('input', adjustTextareaHeight);
 
-    // Function to adjust the height of the textarea
     function adjustTextareaHeight() {
-        // Reset the height to auto to calculate the new height
-        userInput.style.height = 'auto';
-
-        // Get the height of the send button
         const buttonHeight = sendButton.offsetHeight;
-
-        // Adjust the height of the textarea to match the send button's height
-        // Adding some margin for padding or border, adjust if needed
         userInput.style.height = `${buttonHeight}px`;
     }
 
-    // Function to generate a UUID
     function uuidv4() {
         return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
