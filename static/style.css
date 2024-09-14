@@ -71,9 +71,16 @@ body {
     background-color: #222; /* 배경색 설정 (필요에 따라 조정) */
     padding: 10px; /* 여백 설정 (필요에 따라 조정) */
     display: flex;
-    gap: 10px;
     align-items: center; /* 입력 필드와 버튼을 수직 중앙에 맞춤 */
+    gap: 10px; /* 요소들 사이의 간격 설정 */
     z-index: 1000; /* 요소가 다른 요소 위에 보이도록 설정 */
+}
+
+/* 입력 필드 및 버튼 래퍼 */
+#input-wrapper {
+    display: flex;
+    flex: 1; /* 입력 필드가 가능한 한 많이 차지하도록 설정 */
+    position: relative; /* 버튼을 입력 필드 안에 위치시키기 위한 설정 */
 }
 
 /* 입력 필드 스타일 */
@@ -92,6 +99,8 @@ body {
 
 /* 버튼 스타일 */
 #send-button {
+    position: absolute;
+    right: 0;
     padding: 10px;
     width: 100px; /* 버튼 너비 조정 */
     background-color: #6f42c1; /* 보라색 */
