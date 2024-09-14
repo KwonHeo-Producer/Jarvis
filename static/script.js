@@ -5,10 +5,17 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatContainer = document.getElementById('chat-container');
     const logoContainer = document.querySelector('.logo-container');
 
+    // Generate a new session ID or use the existing one
+    let sessionId = localStorage.getItem('sessionId');
+    if (!sessionId) {
+        sessionId = uuidv4(); // Generate a new UUID if none exists
+        localStorage.setItem('sessionId', sessionId);
+    }
+
     let isFirstMessageSent = false;
 
     const sendMessage = async () => {
-        const prompt = userInput.value;
+        const prompt = userInput.value.trim();
         if (prompt) {
             // Append user message to messagesDiv
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
@@ -20,7 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     headers: {
                         'Content-Type': 'application/json'
                     },
-                    body: JSON.stringify({ prompt })
+                    body: JSON.stringify({ prompt, session_id: sessionId }) // Include session_id
                 });
                 const data = await response.json();
 
@@ -67,4 +74,12 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
+
+    // Function to generate a UUID
+    function uuidv4() {
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+            var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+            return v.toString(16);
+        });
+    }
 });
