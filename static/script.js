@@ -5,12 +5,11 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatContainer = document.getElementById('chat-container');
     const logoContainer = document.querySelector('.logo-container');
 
-    // 세션 ID를 sessionStorage에 저장하도록 변경
-    sessionStorage.removeItem('sessionId'); // 이전 세션 ID 삭제
-    const sessionId = uuidv4(); // 새로운 UUID 생성
-    sessionStorage.setItem('sessionId', sessionId); // 새로 생성한 UUID 저장
-
-    let isFirstMessageSent = false;
+    let sessionId = sessionStorage.getItem('sessionId');
+    if (!sessionId) {
+        sessionId = uuidv4();
+        sessionStorage.setItem('sessionId', sessionId);
+    }
 
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
@@ -33,10 +32,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 } else if (data.error) {
                     messagesDiv.innerHTML += `<div class="message assistant-message">${data.error}</div>`;
                 }
-
-                // Save the new session_id if needed
-                sessionStorage.setItem('sessionId', data.session_id);
-
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
@@ -81,8 +76,8 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.addEventListener('input', adjustTextareaHeight);
 
     function adjustTextareaHeight() {
-        const buttonHeight = sendButton.offsetHeight;
-        userInput.style.height = `${buttonHeight}px`;
+        userInput.style.height = 'auto';
+        userInput.style.height = `${userInput.scrollHeight}px`;
     }
 
     function uuidv4() {
@@ -90,5 +85,23 @@ document.addEventListener('DOMContentLoaded', () => {
             var r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
             return v.toString(16);
         });
+    }
+});
+
+window.addEventListener('beforeunload', async () => {
+    try {
+        const sessionId = sessionStorage.getItem('sessionId');
+        if (sessionId) {
+            await fetch('/end_session', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ session_id: sessionId })
+            });
+            sessionStorage.removeItem('sessionId');
+        }
+    } catch (error) {
+        console.error('Error ending session:', error);
     }
 });
