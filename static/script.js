@@ -50,9 +50,15 @@ document.addEventListener('DOMContentLoaded', () => {
     sendButton.addEventListener('click', sendMessage);
 
     userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter' && !event.shiftKey) {
-            event.preventDefault(); // Prevent default Enter action (new line)
-            sendMessage();
+        if (event.key === 'Enter') {
+            if (event.shiftKey) {
+                event.preventDefault();
+                userInput.value += '\n';
+                adjustTextareaHeight();
+            } else {
+                event.preventDefault();
+                sendMessage();
+            }
         }
     });
 
