@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 입력창의 내용을 수정할 때마다 높이 조정
+    userInput.addEventListener('input', adjustTextareaHeight);
+
     // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
