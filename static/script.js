@@ -1,4 +1,3 @@
-//script.js
 document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
@@ -57,7 +56,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendButton.addEventListener('click', sendMessage);
 
-   userInput.addEventListener('keydown', (event) => {
+    userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             if (event.shiftKey) {
                 // Shift + Enter는 줄바꿈
@@ -71,7 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-    
+
     // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
@@ -89,8 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to adjust the height of the textarea
     function adjustTextareaHeight() {
-        userInput.style.height = 'auto'; // Reset height
-        userInput.style.height = `${userInput.scrollHeight}px`; // Set new height
+        // Reset the height to auto to calculate the new height
+        userInput.style.height = 'auto';
+
+        // Get the height of the send button
+        const buttonHeight = sendButton.offsetHeight;
+
+        // Adjust the height of the textarea to match the send button's height
+        // Adding some margin for padding or border, adjust if needed
+        userInput.style.height = `${buttonHeight}px`;
     }
 
     // Function to generate a UUID
