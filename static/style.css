@@ -88,6 +88,7 @@ body {
 
 /* 입력 필드 스타일 */
 #user-input {
+    align-content: center;
     width: 750px;
     padding-inline-start: 10px;
     border-radius: 15px; /* 입력 필드의 모서리 둥글게 하기 */
@@ -168,7 +169,7 @@ code.hljs {
 
 /* 주석 스타일 */
 .hljs-comment {
-    color: #75715e;
+    color: #909090;
 }
 
 /* 구문 및 태그 스타일 */
@@ -184,18 +185,28 @@ code.hljs {
 }
 
 /* 속성, 문서 태그, 키워드, 메타 데이터 스타일 */
-.hljs-attribute,
-.hljs-doctag,
-.hljs-keyword,
+.hljs-attribute {
+    color: #00A67D;
+}
+.hljs-keyword {
+    color: #f92672;
+}
 .hljs-meta .hljs-keyword,
+.hljs-doctag,
 .hljs-name,
 .hljs-selector-tag {
+    color: #ffffff;
+}
+.hljs-selector-ID {
     font-weight: 700; /* 굵게 표시 */
+    color: #f92672;
 }
 
 /* 삭제, 숫자, 인용, 클래스, 아이디, 문자열, 템플릿 태그, 타입 스타일 */
+.hljs-number {
+    color: #ae81ff;
+}
 .hljs-deletion,
-.hljs-number,
 .hljs-quote,
 .hljs-selector-class,
 .hljs-selector-id,
@@ -239,7 +250,7 @@ code.hljs {
 
 /* 메타 데이터 스타일 */
 .hljs-meta {
-    color: #1f7199;
+    color: #05db17;
 }
 
 /* 메타 데이터 문자열 스타일 */
