@@ -39,6 +39,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Append the server's response to messagesDiv
                 messagesDiv.innerHTML += `<div class="message assistant-message">${text}</div>`;
+
+                // Apply syntax highlighting
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                });
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
