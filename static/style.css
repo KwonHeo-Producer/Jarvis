@@ -182,17 +182,15 @@ code.hljs {
 .hljs-attribute {
     color: #00A67D;
 }
-.hljs-keyword {
-    color: #f92672;
-}
 .hljs-meta .hljs-keyword,
 .hljs-doctag,
 .hljs-name,
 .hljs-selector-tag {
     color: #ffffff;
 }
-.hljs-selector-ID {
-    font-weight: 700; /* 굵게 표시 */
+.hljs-keyword,
+.hljs-selector-ID,
+.hljs-tag .hljs-attr {
     color: #f92672;
 }
 
