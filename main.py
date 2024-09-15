@@ -5,7 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from pydantic import BaseModel
 import os
-from starlette.middleware.sessions import SessionMiddleware
+from starlette_session import SessionMiddleware
 from service.stock.stock_service import GoogleSheetsService
 from chain_service import initialize_chat_chain  # chain_service 모듈에서 initialize_chat_chain을 가져옵니다.
 
@@ -22,7 +22,7 @@ app.add_middleware(
     cookie_params={
         "max_age": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
         "expires": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
-        "http_only": True,  # 클라이언트 측 JavaScript에서 쿠키에 접근할 수 없도록 설정
+        "https_only": True,  # 클라이언트 측 JavaScript에서 쿠키에 접근할 수 없도록 설정
         "secure": True,  # HTTPS를 사용하는 경우에만 쿠키가 전송되도록 설정
     }
 )
