@@ -33,13 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
                     },
                     body: JSON.stringify({ prompt })
                 });
-                const data = await response.json();
 
-                if (data.response) {
-                    messagesDiv.innerHTML += `<div class="message assistant-message">${data.response}</div>`;
-                } else if (data.error) {
-                    messagesDiv.innerHTML += `<div class="message assistant-message">${data.error}</div>`;
-                }
+                // Get the response as text (HTML)
+                const text = await response.text();
+
+                // Append the server's response to messagesDiv
+                messagesDiv.innerHTML += `<div class="message assistant-message">${text}</div>`;
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
