@@ -88,19 +88,16 @@ body {
 
 /* 입력 필드 스타일 */
 #user-input {
-     /* 입력 필드가 가능한 한 많이 차지하도록 설정 */
-     width: 750px;
-     align-content: center;
-     padding-inline-start: 10px;
-     border-radius: 15px; /* 입력 필드의 모서리 둥글게 하기 */
-      /* 테두리 색상 조정 */
-     box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
-     font-size: 1rem; /* 모바일에서 확대 방지 */
-     max-height: 200px;
-     overflow-y: auto; /* 내용이 넘치면 스크롤바 표시 */
-     resize: none; /* 사용자가 크기 조정 불가 */
-     background-color: #fafafa;
-     border-color: #fafafa;
+    width: 750px;
+    padding-inline-start: 10px;
+    border-radius: 15px; /* 입력 필드의 모서리 둥글게 하기 */
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+    font-size: 1rem; /* 모바일에서 확대 방지 */
+    max-height: 200px;
+    overflow-y: auto; /* 내용이 넘치면 스크롤바 표시 */
+    resize: none; /* 사용자가 크기 조정 불가 */
+    background-color: #fafafa;
+    border-color: #fafafa;
 }
 
 #user-input:focus {
@@ -148,75 +145,116 @@ body {
     color: #000;
 }
 
-/* 코드 블록 스타일링 */
-pre {
-    background-color: #333; /* 어두운 배경 색상 */
-    padding: 15px;
-    border-radius: 8px;
-    overflow-x: auto; /* 가로 스크롤 가능 */
-    margin: 0;
-    color: #f8f8f2; /* 기본 텍스트 색상 */
-}
-
-code {
-    display: block;
-    padding: 5px;
-    border-radius: 4px;
-    background-color: #2e2e2e; /* 코드 블록 배경 색상 */
-    color: #f8f8f2; /* 코드 텍스트 색상 */
-    word-wrap: break-word; /* 코드가 길어지면 줄바꿈 */
-}
-
-/* 코드 하이라이팅을 위한 스타일 추가 */
-.hljs {
+/* 코드 블록 기본 스타일 */
+pre, code.hljs {
     display: block;
     overflow-x: auto;
     padding: 1em;
     background: #2e2e2e;
     color: #f8f8f2;
+    border-radius: 8px; /* 테두리 둥글게 하기 */
 }
 
-.hljs-comment,
-.hljs-quote {
+/* 코드 블록 내부 패딩 */
+code.hljs {
+    padding: 3px 5px;
+}
+
+/* 하이라이팅 기본 스타일 */
+.hljs {
+    background: #2e2e2e;
+    color: #f8f8f2;
+}
+
+/* 주석 스타일 */
+.hljs-comment {
     color: #75715e;
 }
 
-.hljs-keyword,
-.hljs-selector-tag,
-.hljs-meta,
-.hljs-type,
-.hljs-strong {
-    color: #f92672;
+/* 구문 및 태그 스타일 */
+.hljs-punctuation,
+.hljs-tag {
+    color: #444a;
 }
 
-.hljs-literal,
+/* 태그 속성 및 이름 스타일 */
+.hljs-tag .hljs-attr,
+.hljs-tag .hljs-name {
+    color: #444;
+}
+
+/* 속성, 문서 태그, 키워드, 메타 데이터 스타일 */
+.hljs-attribute,
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-name,
+.hljs-selector-tag {
+    font-weight: 700; /* 굵게 표시 */
+}
+
+/* 삭제, 숫자, 인용, 클래스, 아이디, 문자열, 템플릿 태그, 타입 스타일 */
+.hljs-deletion,
 .hljs-number,
-.hljs-variable,
-.hljs-template-variable,
-.hljs-tag .hljs-value {
+.hljs-quote,
+.hljs-selector-class,
+.hljs-selector-id,
+.hljs-string,
+.hljs-template-tag,
+.hljs-type {
     color: #ae81ff;
 }
 
-.hljs-string,
-.hljs-symbol,
-.hljs-bullet,
-.hljs-title,
-.hljs-name,
-.hljs-built_in {
-    color: #e6db74;
-}
-
-.hljs-function .hljs-title,
+/* 섹션 및 제목 스타일 */
+.hljs-section,
 .hljs-title {
-    color: #a6e22e;
+    color: #e6db74;
+    font-weight: 700; /* 굵게 표시 */
 }
 
-.hljs-addition {
-    color: #a6e22e;
+/* 링크, 연산자, 정규 표현식, 속성, 의사 클래스, 기호, 템플릿 변수, 변수 스타일 */
+.hljs-link,
+.hljs-operator,
+.hljs-regexp,
+.hljs-selector-attr,
+.hljs-selector-pseudo,
+.hljs-symbol,
+.hljs-template-variable,
+.hljs-variable {
+    color: #ab5656;
 }
 
-.hljs-deletion {
-    color: #f92672;
+/* 리터럴 스타일 */
+.hljs-literal {
+    color: #695;
+}
+
+/* 추가, 내장, 총알, 코드 스타일 */
+.hljs-addition,
+.hljs-built_in,
+.hljs-bullet,
+.hljs-code {
+    color: #397300;
+}
+
+/* 메타 데이터 스타일 */
+.hljs-meta {
+    color: #1f7199;
+}
+
+/* 메타 데이터 문자열 스타일 */
+.hljs-meta .hljs-string {
+    color: #38a;
+}
+
+/* 강조된 텍스트 스타일 */
+.hljs-emphasis {
+    font-style: italic; /* 이탤릭체 */
+}
+
+/* 굵은 텍스트 스타일 */
+.hljs-strong {
+    font-weight: 700; /* 굵게 표시 */
 }
 
 /* 코드 블록의 스크롤바 스타일 (선택 사항) */
