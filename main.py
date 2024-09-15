@@ -53,13 +53,13 @@ async def process_message(request: Request):
         if 'response' in sheets_response:
             # Markdown 형식으로 응답을 변환합니다.
             markdown_response = sheets_response['response']
-            html_response = markdown.markdown(markdown_response)
+            html_response = markdown.markdown(markdown_response, extensions=['fenced_code'])
             return HTMLResponse(content=html_response)
 
         # 주식 관련 패턴이 아닌 경우 기본 대화 처리
         response = chat_chain.run(prompt)
         # Markdown 형식으로 응답을 변환합니다.
-        html_response = markdown.markdown(response)
+        html_response = markdown.markdown(response, extensions=['fenced_code'])
         return HTMLResponse(content=html_response)
 
     except Exception as e:
