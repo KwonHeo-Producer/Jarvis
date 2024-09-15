@@ -11,13 +11,14 @@ from chain_service import initialize_chat_chain  # chain_service 모듈에서 in
 
 # 환경 변수 로드
 load_dotenv('env/data.env')
+secret_key = os.getenv("SECRET_KEY")
 
 app = FastAPI()
 
 # 세션 미들웨어 추가
 app.add_middleware(
     SessionMiddleware,
-    secret_key=os.getenv("SECRET_KEY"),
+    secret_key=secret_key,
     cookie_params={
         "max_age": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
         "expires": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
