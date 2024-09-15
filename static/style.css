@@ -175,13 +175,7 @@ code.hljs {
 /* 구문 및 태그 스타일 */
 .hljs-punctuation,
 .hljs-tag {
-    color: #444a;
-}
-
-/* 태그 속성 및 이름 스타일 */
-.hljs-tag .hljs-attr,
-.hljs-tag .hljs-name {
-    color: #444;
+    color: #FFFFFF;
 }
 
 /* 속성, 문서 태그, 키워드, 메타 데이터 스타일 */
