@@ -1,3 +1,4 @@
+# main.py
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
@@ -16,7 +17,7 @@ app = FastAPI()
 # 세션 미들웨어 추가
 app.add_middleware(
     SessionMiddleware,
-    secret_key=os.getenv("SECRET_KEY", "your_secret_key_here"),
+    secret_key=os.getenv("SECRET_KEY"),
     cookie_params={
         "max_age": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
         "expires": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
