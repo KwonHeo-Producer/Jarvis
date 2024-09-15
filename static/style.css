@@ -148,6 +148,91 @@ body {
     color: #000;
 }
 
+/* 코드 블록 스타일링 */
+pre {
+    background-color: #333; /* 어두운 배경 색상 */
+    padding: 15px;
+    border-radius: 8px;
+    overflow-x: auto; /* 가로 스크롤 가능 */
+    margin: 0;
+    color: #f8f8f2; /* 기본 텍스트 색상 */
+}
+
+code {
+    display: block;
+    padding: 5px;
+    border-radius: 4px;
+    background-color: #2e2e2e; /* 코드 블록 배경 색상 */
+    color: #f8f8f2; /* 코드 텍스트 색상 */
+    word-wrap: break-word; /* 코드가 길어지면 줄바꿈 */
+}
+
+/* 코드 하이라이팅을 위한 스타일 추가 */
+.hljs {
+    display: block;
+    overflow-x: auto;
+    padding: 1em;
+    background: #2e2e2e;
+    color: #f8f8f2;
+}
+
+.hljs-comment,
+.hljs-quote {
+    color: #75715e;
+}
+
+.hljs-keyword,
+.hljs-selector-tag,
+.hljs-meta,
+.hljs-type,
+.hljs-strong {
+    color: #f92672;
+}
+
+.hljs-literal,
+.hljs-number,
+.hljs-variable,
+.hljs-template-variable,
+.hljs-tag .hljs-value {
+    color: #ae81ff;
+}
+
+.hljs-string,
+.hljs-symbol,
+.hljs-bullet,
+.hljs-title,
+.hljs-name,
+.hljs-built_in {
+    color: #e6db74;
+}
+
+.hljs-function .hljs-title,
+.hljs-title {
+    color: #a6e22e;
+}
+
+.hljs-addition {
+    color: #a6e22e;
+}
+
+.hljs-deletion {
+    color: #f92672;
+}
+
+/* 코드 블록의 스크롤바 스타일 (선택 사항) */
+pre::-webkit-scrollbar {
+    width: 12px;
+}
+
+pre::-webkit-scrollbar-thumb {
+    background: #555;
+    border-radius: 6px;
+}
+
+pre::-webkit-scrollbar-track {
+    background: #333;
+}
+
 /* 모바일 환경에서의 스타일 */
 @media (max-width: 768px) {
     #chat-container {
