@@ -1,3 +1,4 @@
+// script.js
 document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
@@ -100,4 +101,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial adjustment of textarea height
     adjustTextareaHeight();
+
+    // Function to delete session cookies
+    const deleteCookies = () => {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i];
+            const eqPos = cookie.indexOf('=');
+            const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+            document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/`;
+        }
+    };
+
+    // Event listener for beforeunload event
+    window.addEventListener('beforeunload', deleteCookies);
 });
