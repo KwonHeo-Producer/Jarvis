@@ -1,31 +1,17 @@
-# main.py
 from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from pydantic import BaseModel
 import os
-from starlette.middleware.sessions import SessionMiddleware
 from service.stock.stock_service import GoogleSheetsService
-from chain_service import initialize_chat_chain  # chain_service 모듈에서 initialize_chat_chain을 가져옵니다.
+from chain_service import initialize_chat_chain
+import markdown
 
 # 환경 변수 로드
 load_dotenv('env/data.env')
-secret_key = os.getenv("SECRET_KEY")
 
 app = FastAPI()
-
-# 세션 미들웨어 추가
-app.add_middleware(
-    SessionMiddleware,
-    secret_key=secret_key,
-    cookie_params={
-        "max_age": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
-        "expires": 0,  # 쿠키 만료 시간을 0으로 설정하여 브라우저 종료 시 세션 만료
-        "http_only": True,  # 클라이언트 측 JavaScript에서 쿠키에 접근할 수 없도록 설정
-        "secure": True,  # HTTPS를 사용하는 경우에만 쿠키가 전송되도록 설정
-    }
-)
 
 # 정적 파일 서빙
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -44,7 +30,7 @@ sheets_service = GoogleSheetsService(
 chat_chain = initialize_chat_chain()
 
 @app.get("/", response_class=HTMLResponse)
-async def read_index(request: Request):
+async def read_index():
     with open("index.html", "r", encoding="utf-8") as file:
         return file.read()
 
@@ -65,11 +51,16 @@ async def process_message(request: Request):
 
         # 주식 관련 질문이 처리된 경우
         if 'response' in sheets_response:
-            return {"response": sheets_response['response']}
+            # Markdown 형식으로 응답을 변환합니다.
+            markdown_response = sheets_response['response']
+            html_response = markdown.markdown(markdown_response)
+            return HTMLResponse(content=html_response)
 
         # 주식 관련 패턴이 아닌 경우 기본 대화 처리
         response = chat_chain.run(prompt)
-        return {"response": response}
+        # Markdown 형식으로 응답을 변환합니다.
+        html_response = markdown.markdown(response)
+        return HTMLResponse(content=html_response)
 
     except Exception as e:
         # 모든 예외를 포괄적으로 처리합니다.
