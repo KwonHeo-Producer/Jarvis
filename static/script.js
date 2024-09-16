@@ -14,8 +14,39 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.style.height = `${userInput.scrollHeight}px`;
     };
 
-    const convertNewlinesToHTML = (text) => {
-        return text.replace(/\n/g, '<br>');
+    const convertMarkdownToHTML = (markdown) => {
+        // 기본적인 마크다운 변환 처리
+        let html = markdown;
+
+        // 헤더
+        html = html.replace(/^(#{1,6})\s*(.+)$/gm, (match, hashes, content) => {
+            const level = hashes.length;
+            return `<h${level}>${content}</h${level}>`;
+        });
+
+        // 굵은 텍스트
+        html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+
+        // 기울임 텍스트
+        html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
+
+        // 코드 블록
+        html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
+
+        // 인라인 코드
+        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
+
+        // 리스트
+        html = html.replace(/^\*\s*(.+)$/gm, '<ul><li>$1</li></ul>');
+        html = html.replace(/<\/ul>\n<ul>/g, '');
+
+        // 링크
+        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
+
+        // 줄 바꿈
+        html = html.replace(/\n/g, '<br>');
+
+        return html;
     };
 
     const copyToClipboard = async (text) => {
@@ -34,8 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const content = document.createElement('div');
         content.className = 'message-content';
 
-        // 마크다운을 HTML로 변환
-        const htmlContent = marked.parse(messageText);
+        // HTML 텍스트로 변환
+        const htmlContent = convertMarkdownToHTML(messageText);
         content.innerHTML = htmlContent;
 
         const copyButton = document.createElement('button');
