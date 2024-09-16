@@ -25,60 +25,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Function to create a message element with copy button
-    const createMessageElement = (messageText, isUserMessage) => {
-        const container = document.createElement('div');
-        container.className = `message ${isUserMessage ? 'user-message' : 'assistant-message'}`;
-
-        const content = document.createElement('div');
-        content.className = 'message-content';
-
-        const textElement = document.createElement('p');
-        textElement.innerHTML = messageText; // Use innerHTML to render HTML content
-        content.appendChild(textElement);
-
-        // Only add the copy button for code blocks
-        if (isUserMessage) {
-            const copyButton = document.createElement('button');
-            copyButton.className = 'copy-btn';
-            copyButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>`;
-            copyButton.onclick = () => copyToClipboard(textElement.textContent);
-            content.appendChild(copyButton);
-        }
-
-        container.appendChild(content);
-        return container;
-    };
-
     // Function to create a code block element with copy button
     const createCodeBlockElement = (code, language) => {
-        const container = document.createElement('div');
-        container.className = 'code-block';
-
-        const header = document.createElement('div');
-        header.className = 'code-header';
-
-        const languageLabel = document.createElement('span');
-        languageLabel.className = 'language-label';
-        languageLabel.textContent = language;
-        header.appendChild(languageLabel);
-
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-btn';
-        copyButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>`;
-        copyButton.onclick = () => copyToClipboard(code);
-        header.appendChild(copyButton);
-
-        container.appendChild(header);
-
-        const pre = document.createElement('pre');
-        const codeElement = document.createElement('code');
-        codeElement.className = `language-${language.toLowerCase()}`;
-        codeElement.textContent = code; // Use textContent to avoid rendering issues
-        pre.appendChild(codeElement);
-        container.appendChild(pre);
-
-        return container;
+        return `
+            <div class="code-block">
+                <div class="code-header">
+                    <span class="language-label">${language}</span>
+                    <button class="copy-btn" onclick="copyToClipboard('${code.replace(/'/g, "\\'")}')">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm">
+                            <path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path>
+                        </svg>
+                    </button>
+                </div>
+                <pre><code class="language-${language.toLowerCase()}">${code}</code></pre>
+            </div>
+        `;
     };
 
     // Function to send a message
@@ -86,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const prompt = userInput.value.trim();
         if (prompt) {
             // Append user message to messagesDiv
-            messagesDiv.appendChild(createMessageElement(prompt, true));
+            messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = ''; // Clear the input field
 
             try {
@@ -102,23 +63,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get the response as text (HTML)
                 const text = await response.text();
 
-                // Create a temporary container to parse the response
-                const tempContainer = document.createElement('div');
-                tempContainer.innerHTML = text;
-
-                // Append the server's response
-                const responseElements = Array.from(tempContainer.childNodes);
-                responseElements.forEach(element => {
-                    messagesDiv.appendChild(element);
-                });
+                // Check if the response contains code blocks or plain text
+                if (text.includes('<pre><code')) {
+                    // If the response includes a code block
+                    messagesDiv.innerHTML += `<div class="message assistant-message">${text}</div>`;
+                } else {
+                    // If the response is plain text
+                    messagesDiv.innerHTML += `<div class="message assistant-message">${text}</div>`;
+                }
 
                 // Apply syntax highlighting
                 document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block); // Updated method for highlighting
+                    hljs.highlightElement(block);
                 });
             } catch (error) {
                 console.error('Error:', error);
-                messagesDiv.appendChild(createMessageElement('An error occurred. Please try again.', false));
+                messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
 
             // Scroll to the bottom of the messagesDiv
