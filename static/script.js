@@ -15,50 +15,40 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.style.height = `${userInput.scrollHeight}px`; // Set height based on scroll height
     };
 
-    // Function to get the current cursor position in a contenteditable div
-    const getCursorPosition = () => {
-        let range;
-        let sel = window.getSelection();
-        if (sel.getRangeAt && sel.rangeCount) {
-            range = sel.getRangeAt(0);
-            let preCaretRange = range.cloneRange();
-            preCaretRange.selectNodeContents(userInput);
-            preCaretRange.setEnd(range.endContainer, range.endOffset);
-            return preCaretRange.toString().length;
-        }
-        return 0;
-    };
+    // Function to handle Enter key press event in a textarea
+const handleEnterKey = (event) => {
+    if (event.key === 'Enter') {
+        event.preventDefault(); // Prevent default Enter behavior
 
-    // Function to set the cursor position in a contenteditable div
-    const setCursorPosition = (pos) => {
-        let range = document.createRange();
-        let sel = window.getSelection();
-        range.setStart(userInput.childNodes[0] || userInput, pos);
-        range.collapse(true);
-        sel.removeAllRanges();
-        sel.addRange(range);
-    };
+        if (isMobile) {
+            // Mobile devices: Enter key is for line break only
+            let cursorPos = userInput.selectionStart;
+            let value = userInput.value;
+            userInput.value = value.slice(0, cursorPos) + '\n' + value.slice(cursorPos);
+            userInput.selectionStart = userInput.selectionEnd = cursorPos + 1; // Move cursor after newline
 
-    // Function to handle Enter key press event
-    const handleEnterKey = (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Prevent default Enter behavior
+            adjustTextareaHeight(); // Adjust height after adding newline
+        } else {
+            // Desktop devices
+            if (event.shiftKey) {
+                // Shift + Enter: Add a newline character
+                let cursorPos = userInput.selectionStart;
+                let value = userInput.value;
+                userInput.value = value.slice(0, cursorPos) + '\n' + value.slice(cursorPos);
+                userInput.selectionStart = userInput.selectionEnd = cursorPos + 1; // Move cursor after newline
 
-            if (isMobile) {
-                // Mobile devices: Enter key is for line break
-                userInput.innerHTML += '<br/>'; // Add a newline
                 adjustTextareaHeight(); // Adjust height after adding newline
             } else {
-                // Desktop devices: Enter key sends the message
-                if (event.shiftKey) {
-                    userInput.innerHTML += '<br/>'; // Add a newline
-                    adjustTextareaHeight(); // Adjust height after adding newline
-                } else {
-                    sendMessage(); // Send the message
-                }
+                // Enter (without Shift): Send the message
+                sendMessage(); // Send the message
             }
         }
-    };
+    }
+};
+
+// Add the event listener for the Enter key in the textarea
+userInput.addEventListener('keydown', handleEnterKey);
+
 
     // Function to send the message
     const sendMessage = async () => {
