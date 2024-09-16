@@ -15,39 +15,25 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.style.height = `${userInput.scrollHeight}px`; // Set height based on scroll height
     };
 
-    // Function to handle Enter key press event in a textarea
-const handleEnterKey = (event) => {
-    if (event.key === 'Enter') {
-        event.preventDefault(); // Prevent default Enter behavior
-
-        if (isMobile) {
-            // Mobile devices: Enter key is for line break only
-            let cursorPos = userInput.selectionStart;
-            let value = userInput.value;
-            userInput.value = value.slice(0, cursorPos) + '\n' + value.slice(cursorPos);
-            userInput.selectionStart = userInput.selectionEnd = cursorPos + 1; // Move cursor after newline
-
-            adjustTextareaHeight(); // Adjust height after adding newline
-        } else {
-            // Desktop devices
-            if (event.shiftKey) {
-                // Shift + Enter: Add a newline character
-                let cursorPos = userInput.selectionStart;
-                let value = userInput.value;
-                userInput.value = value.slice(0, cursorPos) + '\n' + value.slice(cursorPos);
-                userInput.selectionStart = userInput.selectionEnd = cursorPos + 1; // Move cursor after newline
-
+    // Event listener for the Enter key in the textarea
+    userInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent default Enter behavior
+            if (isMobile) {
+                // Mobile devices: Enter key is for line break
+                userInput.value += '\n'; // Add a newline
                 adjustTextareaHeight(); // Adjust height after adding newline
             } else {
-                // Enter (without Shift): Send the message
-                sendMessage(); // Send the message
+                // Desktop devices: Enter key sends the message
+                if (event.shiftKey) {
+                    userInput.value += '\n'; // Add a newline
+                    adjustTextareaHeight(); // Adjust height after adding newline
+                } else {
+                    sendMessage(); // Send the message
+                }
             }
         }
-    }
-};
-
-// Add the event listener for the Enter key in the textarea
-userInput.addEventListener('keydown', handleEnterKey);
+    });
 
 
     // Function to send the message
