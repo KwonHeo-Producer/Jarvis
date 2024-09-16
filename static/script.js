@@ -28,55 +28,55 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const createMessageElement = (messageText, isUserMessage) => {
-        const container = document.createElement('div');
-        container.className = `message ${isUserMessage ? 'user-message' : 'assistant-message'}`;
+    const container = document.createElement('div');
+    container.className = `message ${isUserMessage ? 'user-message' : 'assistant-message'}`;
 
-        const content = document.createElement('div');
-        content.className = 'message-content';
+    const content = document.createElement('div');
+    content.className = 'message-content';
 
-        const textElement = document.createElement('p');
-        textElement.innerHTML = convertNewlinesToHTML(messageText);
-        content.appendChild(textElement);
+    const textElement = document.createElement('p');
+    textElement.innerHTML = convertNewlinesToHTML(messageText);
+    content.appendChild(textElement);
 
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-btn';
-        copyButton.textContent = 'Copy';
-        copyButton.onclick = () => copyToClipboard(textElement.textContent);
-        content.appendChild(copyButton);
+    const copyButton = document.createElement('button');
+    copyButton.className = 'copy-btn';
+    copyButton.textContent = 'Copy';
+    copyButton.onclick = () => copyToClipboard(textElement.textContent);
+    content.appendChild(copyButton);
 
-        container.appendChild(content);
-        return container;
-    };
+    container.appendChild(content);
+    return container;
+};
 
-    const createCodeBlockElement = (code, language) => {
-        const container = document.createElement('div');
-        container.className = 'code-block';
+const createCodeBlockElement = (code, language) => {
+    const container = document.createElement('div');
+    container.className = 'code-block';
 
-        const header = document.createElement('div');
-        header.className = 'code-header';
+    const header = document.createElement('div');
+    header.className = 'code-header';
 
-        const languageLabel = document.createElement('span');
-        languageLabel.className = 'language';
-        languageLabel.textContent = language;
-        header.appendChild(languageLabel);
+    const languageLabel = document.createElement('span');
+    languageLabel.className = 'language-label';
+    languageLabel.textContent = language;
+    header.appendChild(languageLabel);
 
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-btn';
-        copyButton.textContent = 'Copy';
-        copyButton.onclick = () => copyToClipboard(code);
-        header.appendChild(copyButton);
+    const copyButton = document.createElement('button');
+    copyButton.className = 'copy-btn';
+    copyButton.textContent = 'Copy';
+    copyButton.onclick = () => copyToClipboard(code);
+    header.appendChild(copyButton);
 
-        container.appendChild(header);
+    container.appendChild(header);
 
-        const pre = document.createElement('pre');
-        const codeElement = document.createElement('code');
-        codeElement.className = `language-${language.toLowerCase()}`;
-        codeElement.textContent = code;
-        pre.appendChild(codeElement);
-        container.appendChild(pre);
+    const pre = document.createElement('pre');
+    const codeElement = document.createElement('code');
+    codeElement.className = `language-${language.toLowerCase()}`;
+    codeElement.textContent = code;
+    pre.appendChild(codeElement);
+    container.appendChild(pre);
 
-        return container;
-    };
+    return container;
+};
 
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
