@@ -102,24 +102,25 @@ const sendMessage = async () => {
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = text;
 
-            // Check if the response contains code blocks
+            // Append the server's response HTML directly
+            messagesDiv.appendChild(tempDiv);
+
+            // Find code blocks in the response
             const codeBlocks = tempDiv.querySelectorAll('pre code');
 
-            if (codeBlocks.length > 0) {
-                // If code blocks are found, treat as code block
-                codeBlocks.forEach((block) => {
-                    const language = block.className.replace('language-', '');
-                    messagesDiv.appendChild(createCodeBlockElement(block.textContent, language));
-                });
-            } else {
-                // Otherwise, treat as a general message
-                messagesDiv.appendChild(createMessageElement(text, false));
-            }
-
-            // Apply syntax highlighting if code blocks are present
-            document.querySelectorAll('pre code').forEach((block) => {
+            // Apply syntax highlighting to code blocks
+            codeBlocks.forEach((block) => {
                 hljs.highlightElement(block); // Updated method for highlighting
             });
+
+            // Ensure all elements are properly appended
+            tempDiv.childNodes.forEach((node) => {
+                messagesDiv.appendChild(node);
+            });
+
+            // Remove the temporary div after processing
+            tempDiv.remove();
+
         } catch (error) {
             console.error('Error:', error);
             messagesDiv.appendChild(createMessageElement('An error occurred. Please try again.', false));
@@ -137,6 +138,7 @@ const sendMessage = async () => {
         }
     }
 };
+
     
     // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
