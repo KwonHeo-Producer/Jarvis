@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
         content.className = 'message-content';
 
         const textElement = document.createElement('p');
-        textElement.innerHTML = messageText;
+        textElement.innerHTML = messageText; // Use innerHTML to render HTML content
         content.appendChild(textElement);
 
         const copyButton = document.createElement('button');
@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const pre = document.createElement('pre');
         const codeElement = document.createElement('code');
         codeElement.className = `language-${language.toLowerCase()}`;
-        codeElement.textContent = code;
+        codeElement.textContent = code; // Use textContent to avoid rendering issues
         pre.appendChild(codeElement);
         container.appendChild(pre);
 
@@ -99,8 +99,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get the response as text (HTML)
                 const text = await response.text();
 
-                // Append the server's response to messagesDiv
-                messagesDiv.appendChild(createCodeBlockElement(text, 'JavaScript'));
+                // Check if the response contains code
+                if (text.startsWith('<pre><code')) {
+                    // Append the server's response as a code block
+                    messagesDiv.appendChild(createCodeBlockElement(text, 'JavaScript'));
+                } else {
+                    // Append the server's response as a message
+                    messagesDiv.appendChild(createMessageElement(text, false));
+                }
 
                 // Apply syntax highlighting
                 document.querySelectorAll('pre code').forEach((block) => {
@@ -108,7 +114,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             } catch (error) {
                 console.error('Error:', error);
-                messagesDiv.appendChild(createCodeBlockElement('An error occurred. Please try again.', 'Error'));
+                messagesDiv.appendChild(createMessageElement('An error occurred. Please try again.', false));
             }
 
             // Scroll to the bottom of the messagesDiv
