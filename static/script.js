@@ -98,19 +98,25 @@ const sendMessage = async () => {
             // Get the response as text (HTML)
             const text = await response.text();
 
-            // Determine if the response is code or plain text
-            if (text.includes('<pre><code')) {
-                // Extract the code and language if available
-                const languageMatch = text.match(/<span class="language-label">([^<]+)<\/span>/);
-                const language = languageMatch ? languageMatch[1] : 'JavaScript';
-                // Append the server's response as a code block
-                messagesDiv.appendChild(createCodeBlockElement(text, language));
+            // Create a temporary container to parse the HTML content
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = text;
+
+            // Check if the response contains code blocks
+            const codeBlocks = tempDiv.querySelectorAll('pre code');
+
+            if (codeBlocks.length > 0) {
+                // If code blocks are found, treat as code block
+                codeBlocks.forEach((block) => {
+                    const language = block.className.replace('language-', '');
+                    messagesDiv.appendChild(createCodeBlockElement(block.textContent, language));
+                });
             } else {
-                // Append the server's response as a message
+                // Otherwise, treat as a general message
                 messagesDiv.appendChild(createMessageElement(text, false));
             }
 
-            // Apply syntax highlighting
+            // Apply syntax highlighting if code blocks are present
             document.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block); // Updated method for highlighting
             });
@@ -131,7 +137,7 @@ const sendMessage = async () => {
         }
     }
 };
-
+    
     // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
 
