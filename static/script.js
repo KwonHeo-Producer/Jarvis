@@ -78,57 +78,59 @@ document.addEventListener('DOMContentLoaded', () => {
     return container;
 };
     
-    // Function to send the message
     const sendMessage = async () => {
-        const prompt = userInput.value.trim();
-        if (prompt) {
-            // Append user message to messagesDiv
-            messagesDiv.appendChild(createMessageElement(prompt, true));
-            userInput.value = ''; // Clear the input field
+    const prompt = userInput.value.trim();
+    if (prompt) {
+        // Append user message to messagesDiv
+        messagesDiv.appendChild(createMessageElement(prompt, true));
+        userInput.value = ''; // Clear the input field
 
-            try {
-                // Fetch the response from the server
-                const response = await fetch('/process_message', {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({ prompt })
-                });
+        try {
+            // Fetch the response from the server
+            const response = await fetch('/process_message', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ prompt })
+            });
 
-                // Get the response as text (HTML)
-                const text = await response.text();
+            // Get the response as text (HTML)
+            const text = await response.text();
 
-                // Check if the response contains code
-                if (text.startsWith('<pre><code')) {
-                    // Append the server's response as a code block
-                    messagesDiv.appendChild(createCodeBlockElement(text, 'JavaScript'));
-                } else {
-                    // Append the server's response as a message
-                    messagesDiv.appendChild(createMessageElement(text, false));
-                }
-
-                // Apply syntax highlighting
-                document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block); // Updated method for highlighting
-                });
-            } catch (error) {
-                console.error('Error:', error);
-                messagesDiv.appendChild(createMessageElement('An error occurred. Please try again.', false));
+            // Determine if the response is code or plain text
+            if (text.includes('<pre><code')) {
+                // Extract the language if available
+                const languageMatch = text.match(/<span class="language-label">([^<]+)<\/span>/);
+                const language = languageMatch ? languageMatch[1] : 'JavaScript';
+                // Append the server's response as a code block
+                messagesDiv.appendChild(createCodeBlockElement(text, language));
+            } else {
+                // Append the server's response as a message
+                messagesDiv.appendChild(createMessageElement(text, false));
             }
 
-            // Scroll to the bottom of the messagesDiv
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-            // Display chat container and hide logo if it's the first message
-            if (!isFirstMessageSent) {
-                logoContainer.style.display = 'none';
-                chatContainer.style.display = 'flex';
-                messagesDiv.classList.add('expanded'); // Expand the message box
-                isFirstMessageSent = true;
-            }
+            // Apply syntax highlighting
+            document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block); // Updated method for highlighting
+            });
+        } catch (error) {
+            console.error('Error:', error);
+            messagesDiv.appendChild(createMessageElement('An error occurred. Please try again.', false));
         }
-    };
+
+        // Scroll to the bottom of the messagesDiv
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        // Display chat container and hide logo if it's the first message
+        if (!isFirstMessageSent) {
+            logoContainer.style.display = 'none';
+            chatContainer.style.display = 'flex';
+            messagesDiv.classList.add('expanded'); // Expand the message box
+            isFirstMessageSent = true;
+        }
+    }
+};
 
     // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
