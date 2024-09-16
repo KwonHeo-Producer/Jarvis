@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return container;
     };
 
-    // Function to create a codeblock element with copy button
+    // Function to create a code block element with copy button
     const createCodeBlockElement = (code, language) => {
         const container = document.createElement('div');
         container.className = 'code-block';
@@ -78,6 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return container;
     };
 
+    // Function to send a message
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
         if (prompt) {
