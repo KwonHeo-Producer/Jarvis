@@ -265,7 +265,7 @@ pre::-webkit-scrollbar-track {
     align-self: flex-start;
     }
     .user-message {
-        width: 80%;
+        max-width: 80%;
     }
     .assistant-message {
         width: 95%;
