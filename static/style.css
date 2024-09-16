@@ -146,6 +146,40 @@ body {
     color: #000;
 }
 
+.message .copy-button {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+.code-container .copy-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            cursor: pointer;
+}
+.code-container .language-label {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff;
+            color: #fff;
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+}
+
 /* 코드 블록 기본 스타일 */
 pre, code.hljs {
     display: block;
@@ -198,9 +232,11 @@ code.hljs {
 .hljs-number {
     color: #ae81ff;
 }
+.hljs-selector-class {
+    color: #e295d3;
+}
 .hljs-deletion,
 .hljs-quote,
-.hljs-selector-class,
 .hljs-selector-id,
 .hljs-string,
 .hljs-template-tag,
@@ -212,7 +248,6 @@ code.hljs {
 .hljs-section,
 .hljs-title {
     color: #e6db74;
-    font-weight: 700; /* 굵게 표시 */
 }
 
 /* 링크, 연산자, 정규 표현식, 속성, 의사 클래스, 기호, 템플릿 변수, 변수 스타일 */
