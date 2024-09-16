@@ -178,10 +178,11 @@ code.hljs {
 .hljs-number {
     color: #ae81ff;
 }
+.hljs-selector-class {
+    color: #e2e629;
+}
 .hljs-deletion,
 .hljs-quote,
-.hljs-selector-class,
-.hljs-selector-id,
 .hljs-string,
 .hljs-template-tag,
 .hljs-type {
@@ -256,6 +257,16 @@ pre::-webkit-scrollbar-track {
     #user-input {
         font-size: 1rem; /* 모바일에서 글꼴 크기 조정 */
         width: 88%;
+    }
+    .message {
+    border-radius: 10px;
+    padding: 10px;
+    word-wrap: break-word;
+    /* max-width: 80%; */
+    align-self: flex-start;
+    }
+    .user-message {
+        width: 80%;
     }
     .assistant-message {
         width: 95%;
