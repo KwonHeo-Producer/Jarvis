@@ -79,7 +79,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
     // Event listener for input changes to adjust textarea height
-    userInput.addEventListener('input', adjustTextareaHeight);
+    userInput.addEventListener('input', () => {
+        adjustTextareaHeight();
+    });
     // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
@@ -89,6 +91,10 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ensure messagesDiv scrolls to bottom on input focus
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    });
+    // Additional focus event listener to handle iOS auto-input issue
+    userInput.addEventListener('focusin', () => {
+        adjustTextareaHeight();
     });
     // Initial adjustment of textarea height
     adjustTextareaHeight();
