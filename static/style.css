@@ -192,7 +192,6 @@ code.hljs {
 .hljs-section,
 .hljs-title {
     color: #e6db74;
-    font-weight: 700; /* 굵게 표시 */
 }
 /* 링크, 연산자, 정규 표현식, 속성, 의사 클래스, 기호, 템플릿 변수, 변수 스타일 */
 .hljs-link,
