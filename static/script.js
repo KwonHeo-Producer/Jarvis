@@ -19,6 +19,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Append user message to messagesDiv
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = ''; // Clear the input field
+            // Reset textarea height to auto before fetching response
+            userInput.style.height = 'auto';
             try {
                 // Fetch the response from the server
                 const response = await fetch('/process_message', {
@@ -31,16 +33,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get the response as text (HTML)
                 const text = await response.text();
 
-                 // Append the server's response to messagesDiv
-                 messagesDiv.innerHTML += `<div class="message assistant-message">${text}</div>`;
+                // Append the server's response to messagesDiv
+                messagesDiv.innerHTML += `<div class="message assistant-message">${text}</div>`;
 
-                 // Apply syntax highlighting
-                 document.querySelectorAll('pre code').forEach((block) => {
-                     hljs.highlightBlock(block);
-                 });
-             } catch (error) {
-                 console.error('Error:', error);
-                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
+                // Apply syntax highlighting
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
             // Scroll to the bottom of the messagesDiv
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -51,6 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesDiv.classList.add('expanded'); // Expand the message box
                 isFirstMessageSent = true;
             }
+            // Adjust textarea height after message send
+            adjustTextareaHeight();
         }
     };
     // Event listener for the send button
@@ -58,19 +62,17 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for the Enter key in the textarea
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent default Enter behavior
             if (isMobile) {
                 // Mobile devices: Enter key is for line break
-                event.preventDefault(); // Prevent default Enter behavior
                 userInput.value += '\n'; // Add a newline
                 adjustTextareaHeight(); // Adjust height after adding newline
             } else {
                 // Desktop devices: Enter key sends the message
                 if (event.shiftKey) {
-                    event.preventDefault(); // Prevent default Enter behavior
                     userInput.value += '\n'; // Add a newline
                     adjustTextareaHeight(); // Adjust height after adding newline
                 } else {
-                    event.preventDefault(); // Prevent default Enter behavior
                     sendMessage(); // Send the message
                 }
             }
