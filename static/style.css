@@ -38,7 +38,7 @@ body {
 }
 /* 초기 메시지 박스 크기 */
 #messages {
-    padding: 10px;
+    /* padding: 10px; */
     height: 400px; /* 처음 화면에서의 기본 높이 */
     overflow-y: auto;
     background-color: #222; /* 메시지 영역의 배경색 추가 */
@@ -114,7 +114,8 @@ body {
 /* 메시지 스타일 */
 .message {
     border-radius: 10px;
-    padding: 10px;
+    padding: 5px;
+    margin: 5px;
     word-wrap: break-word;
     max-width: 80%; /* 최대 너비 설정 */
     align-self: flex-start; /* 메시지를 왼쪽 정렬 */
@@ -124,6 +125,7 @@ body {
     color: #000;
     align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
     margin-left: auto;
+    padding: 10px;
 }
 .assistant-message {
     background-color: #e0f7fa;
@@ -245,7 +247,7 @@ pre::-webkit-scrollbar-track {
 /* 모바일 환경에서의 스타일 */
 @media (max-width: 768px) {
     #chat-container {
-        width: 95%; /* 모바일에서는 너비를 좀 더 넓게 조정 */
+        width: auto; /* 모바일에서는 너비를 좀 더 넓게 조정 */
     }
     #input-container {
         width: 95%;
@@ -259,7 +261,7 @@ pre::-webkit-scrollbar-track {
     }
     .message {
     border-radius: 10px;
-    padding: 10px;
+    /* padding: 10px; */
     word-wrap: break-word;
     max-width: 100%;
     align-self: flex-start;
