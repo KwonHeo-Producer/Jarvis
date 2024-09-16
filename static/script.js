@@ -62,11 +62,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to send the message
     const sendMessage = async () => {
-        const prompt = userInput.innerHTML.trim();
+        const prompt = userInput.value.trim();
         if (prompt) {
             // Append user message to messagesDiv
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
-            userInput.innerHTML = ''; // Clear the input field
+            userInput.value = ''; // Clear the input field
             // Reset textarea height to auto before fetching response
             userInput.style.height = 'auto';
 
