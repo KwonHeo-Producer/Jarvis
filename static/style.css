@@ -148,11 +148,22 @@ body {
 }
 
 /* 복사 버튼 스타일 */
-.copy-btn {
-    position: absolute;
-    bottom: 10px;
-    right: 10px;
-    background-color: #007bff;
+.message.assistant-message .copy-btn {
+    position: relative;
+    /* bottom: 10px; */
+    left: 90%;
+    background-color: #2e2e2e;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+.message.user-message .copy-btn {
+    position: relative;
+    /* bottom: 10px; */
+    background-color: #2e2e2e;
     color: #fff;
     border: none;
     padding: 5px 10px;
@@ -236,7 +247,9 @@ code.hljs {
 .hljs-number {
     color: #ae81ff;
 }
-.hljs-selector-id,
+.hljs-selector-id {
+    color: #2e95d3
+
 .hljs-selector-class {
     color: #e295d3;
 }
