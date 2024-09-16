@@ -247,7 +247,7 @@ pre::-webkit-scrollbar-track {
 /* 모바일 환경에서의 스타일 */
 @media (max-width: 768px) {
     #chat-container {
-        width: auto; /* 모바일에서는 너비를 좀 더 넓게 조정 */
+        width: 100%; /* 모바일에서는 너비를 좀 더 넓게 조정 */
     }
     #input-container {
         width: 95%;
