@@ -113,7 +113,7 @@ body {
     bottom: 11px;
     padding: 10px;
     width: 38px; /* 버튼 너비 조정 */
-    background-color: #d0d0d0; /* 보라색 */
+    background-color: #d0d0d0; /* 버튼 배경색 */
     color: #FFF; /* 버튼 텍스트 색상 */
     border: none;
     border-radius: 40px;
@@ -122,7 +122,7 @@ body {
 }
 
 #send-button:hover {
-    background-color: #7f7f7f; /* 다크 보라색 */
+    background-color: #7f7f7f; /* 버튼 호버 색상 */
 }
 
 /* 메시지 스타일 */
@@ -147,47 +147,44 @@ body {
     color: #000;
 }
 
-.message .copy-button {
-            position: absolute;
-            bottom: 10px;
-            right: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
-        }
-
-.code-container {
-            position: relative;
-            margin-bottom: 10px;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            background-color: #f5f5f5;
+/* 복사 버튼 스타일 */
+.copy-btn {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 3px;
+    cursor: pointer;
 }
 
-.code-container .copy-button {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            padding: 5px 10px;
-            border-radius: 3px;
-            cursor: pointer;
+/* 코드 블록 스타일 */
+.code-block {
+    position: relative;
+    margin-bottom: 10px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: #f5f5f5;
 }
-.code-container .language-label {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #007bff;
-            color: #fff;
-            padding: 2px 5px;
-            border-radius: 3px;
-            font-size: 12px;
+
+.code-block .copy-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+}
+
+.code-block .language {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    background-color: #007bff;
+    color: #fff;
+    padding: 2px 5px;
+    border-radius: 3px;
+    font-size: 12px;
 }
 
 /* 코드 블록 기본 스타일 */
@@ -242,12 +239,12 @@ code.hljs {
 .hljs-number {
     color: #ae81ff;
 }
+.hljs-selector-id,
 .hljs-selector-class {
     color: #e295d3;
 }
 .hljs-deletion,
 .hljs-quote,
-.hljs-selector-id,
 .hljs-string,
 .hljs-template-tag,
 .hljs-type {
