@@ -12,7 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to adjust the height of the textarea
     const adjustTextareaHeight = () => {
         userInput.style.height = 'auto'; // Reset the height to allow shrinking if necessary
-        userInput.style.height = `${userInput.scrollHeight}px`; // Set height based on scroll height
+        const newHeight = Math.max(userInput.scrollHeight, 40); // Set minimum height
+        userInput.style.height = `${newHeight}px`; // Set height based on scroll height
     };
 
     // Event listener for the Enter key in the textarea
@@ -34,7 +35,6 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         }
     });
-
 
     // Function to send the message
     const sendMessage = async () => {
@@ -89,13 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
     // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
 
-    // Event listener for the Enter key in the textarea
-    userInput.addEventListener('keydown', handleEnterKey);
-
     // Event listener for input changes to adjust textarea height
-    userInput.addEventListener('input', () => {
-        adjustTextareaHeight();
-    });
+    userInput.addEventListener('input', adjustTextareaHeight);
 
     // Handle window resize events
     window.addEventListener('resize', () => {
@@ -107,11 +102,6 @@ document.addEventListener('DOMContentLoaded', () => {
     // Ensure messagesDiv scrolls to bottom on input focus
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    });
-
-    // Additional focus event listener to handle iOS auto-input issue
-    userInput.addEventListener('focusin', () => {
-        adjustTextareaHeight();
     });
 
     // Initial adjustment of textarea height
