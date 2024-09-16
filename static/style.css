@@ -127,6 +127,7 @@ body {
 
 /* 메시지 스타일 */
 .message {
+    position: relative;
     border-radius: 10px;
     padding: 10px;
     word-wrap: break-word;
@@ -157,6 +158,15 @@ body {
             border-radius: 3px;
             cursor: pointer;
         }
+
+.code-container {
+            position: relative;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background-color: #f5f5f5;
+}
 
 .code-container .copy-button {
             position: absolute;
