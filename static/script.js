@@ -25,30 +25,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Function to create a message element with copy button
     const createMessageElement = (messageText, isUserMessage) => {
-        const container = document.createElement('div');
-        container.className = `message ${isUserMessage ? 'user-message' : 'assistant-message'}`;
+    const container = document.createElement('div');
+    container.className = `message ${isUserMessage ? 'user-message' : 'assistant-message'}`;
 
-        const content = document.createElement('div');
-        content.className = 'message-content';
+    const content = document.createElement('div');
+    content.className = 'message-content';
 
-        const textElement = document.createElement('p');
-        textElement.innerHTML = messageText; // Use innerHTML to render HTML content
-        content.appendChild(textElement);
+    const textElement = document.createElement('p');
+    textElement.innerHTML = messageText; // Use innerHTML to render HTML content
+    content.appendChild(textElement);
 
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-btn';
-        copyButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>`;
-        copyButton.onclick = () => copyToClipboard(textElement.textContent);
-        content.appendChild(copyButton);
+    const copyButton = document.createElement('button');
+    copyButton.className = 'copy-btn';
+    copyButton.innerHTML = `<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm"><path fill-rule="evenodd" clip-rule="evenodd" d="M7 5C7 3.34315 8.34315 2 10 2H19C20.6569 2 22 3.34315 22 5V14C22 15.6569 20.6569 17 19 17H17V19C17 20.6569 15.6569 22 14 22H5C3.34315 22 2 20.6569 2 19V10C2 8.34315 3.34315 7 5 7H7V5ZM9 7H14C15.6569 7 17 8.34315 17 10V15H19C19.5523 15 20 14.5523 20 14V5C20 4.44772 19.5523 4 19 4H10C9.44772 4 9 4.44772 9 5V7ZM5 9C4.44772 9 4 9.44772 4 10V19C4 19.5523 4.44772 20 5 20H14C14.5523 20 15 19.5523 15 19V10C15 9.44772 14.5523 9 14 9H5Z" fill="currentColor"></path></svg>`;
+    copyButton.onclick = () => copyToClipboard(textElement.textContent);
+    content.appendChild(copyButton);
 
-        container.appendChild(content);
-        return container;
-    };
+    container.appendChild(content);
+    return container;
+};
 
-    // Function to create a codeblock element with copy button
-    const createCodeBlockElement = (code, language) => {
+const createCodeBlockElement = (code, language) => {
     const container = document.createElement('div');
     container.className = 'code-block';
 
@@ -77,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     return container;
 };
-    
+
 const sendMessage = async () => {
     const prompt = userInput.value.trim();
     if (prompt) {
@@ -98,29 +96,28 @@ const sendMessage = async () => {
             // Get the response as text (HTML)
             const text = await response.text();
 
-            // Create a temporary container to parse the HTML content
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = text;
+            // Create a temporary container to parse the response
+            const tempContainer = document.createElement('div');
+            tempContainer.innerHTML = text;
 
-            // Append the server's response HTML directly
-            messagesDiv.appendChild(tempDiv);
+            // Check if the response contains a code block
+            const codeBlock = tempContainer.querySelector('pre code');
+            if (codeBlock) {
+                // Extract code and language
+                const code = codeBlock.textContent;
+                const languageLabel = tempContainer.querySelector('.language-label');
+                const language = languageLabel ? languageLabel.textContent : 'JavaScript';
+                // Append the server's response as a code block
+                messagesDiv.appendChild(createCodeBlockElement(code, language));
+            } else {
+                // Append the server's response as a message
+                messagesDiv.appendChild(createMessageElement(text, false));
+            }
 
-            // Find code blocks in the response
-            const codeBlocks = tempDiv.querySelectorAll('pre code');
-
-            // Apply syntax highlighting to code blocks
-            codeBlocks.forEach((block) => {
+            // Apply syntax highlighting
+            document.querySelectorAll('pre code').forEach((block) => {
                 hljs.highlightElement(block); // Updated method for highlighting
             });
-
-            // Ensure all elements are properly appended
-            tempDiv.childNodes.forEach((node) => {
-                messagesDiv.appendChild(node);
-            });
-
-            // Remove the temporary div after processing
-            tempDiv.remove();
-
         } catch (error) {
             console.error('Error:', error);
             messagesDiv.appendChild(createMessageElement('An error occurred. Please try again.', false));
@@ -138,7 +135,6 @@ const sendMessage = async () => {
         }
     }
 };
-
     
     // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
