@@ -4,51 +4,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const messagesDiv = document.getElementById('messages');
     const chatContainer = document.getElementById('chat-container');
     const logoContainer = document.querySelector('.logo-container');
-
     let isFirstMessageSent = false;
 
+    // Detect if the device is mobile
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
+    // Function to adjust the height of the textarea
     const adjustTextareaHeight = () => {
-        userInput.style.height = 'auto';
-        userInput.style.height = `${userInput.scrollHeight}px`;
+        userInput.style.height = 'auto'; // Reset the height to allow shrinking if necessary
+        userInput.style.height = `${userInput.scrollHeight}px`; // Set height based on scroll height
     };
 
-    const convertMarkdownToHTML = (markdown) => {
-        // 기본적인 마크다운 변환 처리
-        let html = markdown;
-
-        // 헤더
-        html = html.replace(/^(#{1,6})\s*(.+)$/gm, (match, hashes, content) => {
-            const level = hashes.length;
-            return `<h${level}>${content}</h${level}>`;
-        });
-
-        // 굵은 텍스트
-        html = html.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
-
-        // 기울임 텍스트
-        html = html.replace(/\*(.+?)\*/g, '<em>$1</em>');
-
-        // 코드 블록
-        html = html.replace(/```([\s\S]*?)```/g, '<pre><code>$1</code></pre>');
-
-        // 인라인 코드
-        html = html.replace(/`([^`]+)`/g, '<code>$1</code>');
-
-        // 리스트
-        html = html.replace(/^\*\s*(.+)$/gm, '<ul><li>$1</li></ul>');
-        html = html.replace(/<\/ul>\n<ul>/g, '');
-
-        // 링크
-        html = html.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2">$1</a>');
-
-        // 줄 바꿈
-        html = html.replace(/\n/g, '<br>');
-
-        return html;
-    };
-
+    // Function to copy text to clipboard
     const copyToClipboard = async (text) => {
         try {
             await navigator.clipboard.writeText(text);
@@ -58,6 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Function to create a message element with copy button
     const createMessageElement = (messageText, isUserMessage) => {
         const container = document.createElement('div');
         container.className = `message ${isUserMessage ? 'user-message' : 'assistant-message'}`;
@@ -65,20 +33,21 @@ document.addEventListener('DOMContentLoaded', () => {
         const content = document.createElement('div');
         content.className = 'message-content';
 
-        // HTML 텍스트로 변환
-        const htmlContent = convertMarkdownToHTML(messageText);
-        content.innerHTML = htmlContent;
+        const textElement = document.createElement('p');
+        textElement.innerHTML = messageText;
+        content.appendChild(textElement);
 
         const copyButton = document.createElement('button');
         copyButton.className = 'copy-btn';
         copyButton.textContent = 'Copy';
-        copyButton.onclick = () => copyToClipboard(messageText);
+        copyButton.onclick = () => copyToClipboard(textElement.textContent);
         content.appendChild(copyButton);
 
         container.appendChild(content);
         return container;
     };
 
+    // Function to create a code block element with copy button and language label
     const createCodeBlockElement = (code, language) => {
         const container = document.createElement('div');
         container.className = 'code-block';
@@ -106,20 +75,19 @@ document.addEventListener('DOMContentLoaded', () => {
         pre.appendChild(codeElement);
         container.appendChild(pre);
 
-        // 코드 하이라이팅
-        hljs.highlightElement(codeElement);
-
         return container;
     };
 
+    // Function to send the message
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
         if (prompt) {
-            const userMessageElement = createMessageElement(prompt, true);
-            messagesDiv.appendChild(userMessageElement);
-            userInput.value = '';
+            // Append user message to messagesDiv
+            messagesDiv.appendChild(createMessageElement(prompt, true));
+            userInput.value = ''; // Clear the input field
 
             try {
+                // Fetch the response from the server
                 const response = await fetch('/process_message', {
                     method: 'POST',
                     headers: {
@@ -128,65 +96,74 @@ document.addEventListener('DOMContentLoaded', () => {
                     body: JSON.stringify({ prompt })
                 });
 
+                // Get the response as text (HTML)
                 const text = await response.text();
-                const assistantMessageElement = createCodeBlockElement(text, 'JavaScript');
-                messagesDiv.appendChild(assistantMessageElement);
 
-                // 코드 블록 하이라이팅
+                // Append the server's response to messagesDiv
+                messagesDiv.appendChild(createCodeBlockElement(text, 'JavaScript'));
+
+                // Apply syntax highlighting
                 document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block);
+                    hljs.highlightElement(block); // Updated method for highlighting
                 });
             } catch (error) {
                 console.error('Error:', error);
-                const errorMessageElement = createCodeBlockElement('An error occurred. Please try again.', 'Error');
-                messagesDiv.appendChild(errorMessageElement);
+                messagesDiv.appendChild(createCodeBlockElement('An error occurred. Please try again.', 'Error'));
             }
 
+            // Scroll to the bottom of the messagesDiv
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
+            // Display chat container and hide logo if it's the first message
             if (!isFirstMessageSent) {
                 logoContainer.style.display = 'none';
                 chatContainer.style.display = 'flex';
-                messagesDiv.classList.add('expanded');
+                messagesDiv.classList.add('expanded'); // Expand the message box
                 isFirstMessageSent = true;
             }
         }
     };
 
+    // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
 
+    // Event listener for the Enter key in the textarea
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             if (isMobile) {
-                event.preventDefault();
-                userInput.value += '\n';
+                // Mobile devices: Enter key is for line break
+                event.preventDefault(); // Prevent default Enter behavior
+                userInput.value += '\n'; // Add a newline
                 setTimeout(adjustTextareaHeight, 100);
             } else {
+                // Desktop devices: Enter key sends the message
                 if (event.shiftKey) {
-                    event.preventDefault();
-                    userInput.value += '\n';
+                    event.preventDefault(); // Prevent default Enter behavior
+                    userInput.value += '\n'; // Add a newline
                     setTimeout(adjustTextareaHeight, 100);
                 } else {
-                    event.preventDefault();
-                    sendMessage();
+                    event.preventDefault(); // Prevent default Enter behavior
+                    sendMessage(); // Send the message
                 }
             }
         }
     });
 
-    userInput.addEventListener('input', () => {
-        setTimeout(adjustTextareaHeight, 100);
-    });
+    // Event listener for input changes to adjust textarea height
+    userInput.addEventListener('input', adjustTextareaHeight);
 
+    // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom on resize if input is focused
         }
     });
 
+    // Ensure messagesDiv scrolls to bottom on input focus
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
+    // Initial adjustment of textarea height
     adjustTextareaHeight();
 });
