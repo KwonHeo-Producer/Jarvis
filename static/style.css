@@ -164,10 +164,12 @@ code.hljs {
  .hljs-doctag,
  .hljs-name,
  .hljs-selector-tag {
-     color: #ffffff;
+     color: #2ebbd1;
+ }
+ .hljs-selector-ID {
+     color: #e2bbd1;
  }
  .hljs-keyword,
- .hljs-selector-ID,
  .hljs-tag .hljs-attr {
      color: #f92672;
  }
@@ -254,6 +256,9 @@ pre::-webkit-scrollbar-track {
     #user-input {
         font-size: 1rem; /* 모바일에서 글꼴 크기 조정 */
         width: 88%;
+    }
+    .assistant-message {
+        width: 95%;
     }
 }
 /* PC 환경에서의 스타일 */
