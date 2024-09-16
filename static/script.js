@@ -78,7 +78,7 @@ document.addEventListener('DOMContentLoaded', () => {
     return container;
 };
     
-    const sendMessage = async () => {
+const sendMessage = async () => {
     const prompt = userInput.value.trim();
     if (prompt) {
         // Append user message to messagesDiv
@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Determine if the response is code or plain text
             if (text.includes('<pre><code')) {
-                // Extract the language if available
+                // Extract the code and language if available
                 const languageMatch = text.match(/<span class="language-label">([^<]+)<\/span>/);
                 const language = languageMatch ? languageMatch[1] : 'JavaScript';
                 // Append the server's response as a code block
