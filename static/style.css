@@ -262,7 +262,7 @@ pre::-webkit-scrollbar-track {
     border-radius: 10px;
     padding: 10px;
     word-wrap: break-word;
-    /* max-width: 80%; */
+    max-width: 100%;
     align-self: flex-start;
     }
     .user-message {
