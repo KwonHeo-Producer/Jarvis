@@ -63,9 +63,26 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const codeBlockDiv = document.createElement('div');
                                 codeBlockDiv.className = 'code-block';
 
+                                // Create code-header div
+                                const codeHeaderDiv = document.createElement('div');
+                                codeHeaderDiv.className = 'code-header';
+
+                                // Create and add the label
+                                const language = block.className; // Extract the language from the code class
+                                const codeLabelDiv = document.createElement('div');
+                                codeLabelDiv.className = 'code-label';
+                                codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language or 'Code'
+                                codeHeaderDiv.appendChild(codeLabelDiv);
+
+                                // Add code-header to code-block
+                                codeBlockDiv.appendChild(codeHeaderDiv);
+
+                                // Add pre element to code-block
                                 const codePre = document.createElement('pre');
                                 codePre.appendChild(block.cloneNode(true));
                                 codeBlockDiv.appendChild(codePre);
+
+                                // Add code-block to current message
                                 currentMessageDiv.appendChild(codeBlockDiv);
                             });
                         } else {
@@ -81,9 +98,9 @@ document.addEventListener('DOMContentLoaded', () => {
                     hljs.highlightElement(block); // 최신 highlight.js 메서드
                 });
 
-                // Add labels and copy buttons
-                addCodeLabels();
+                // Add copy buttons after code blocks are added
                 addCopyButtons();
+
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
@@ -112,24 +129,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     };
 
-    // Function to add labels to all code blocks
-    const addCodeLabels = () => {
-        document.querySelectorAll('.code-block').forEach((codeBlockDiv) => {
-            // Remove any existing labels to avoid duplicates
-            const existingLabel = codeBlockDiv.querySelector('.code-label');
-            if (existingLabel) {
-                existingLabel.remove();
-            }
-
-            // Create and add the label
-            const language = codeBlockDiv.querySelector('code').className; // Extract the language from the code class
-            const codeLabelDiv = document.createElement('div');
-            codeLabelDiv.className = 'code-label';
-            codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language or 'Code'
-            codeBlockDiv.insertBefore(codeLabelDiv, codeBlockDiv.firstChild);
-        });
-    };
-
     // Function to add copy buttons to all code blocks
     const addCopyButtons = () => {
         document.querySelectorAll('.code-block').forEach((codeBlockDiv) => {
@@ -149,7 +148,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 const codeText = codeBlockDiv.querySelector('code').innerText;
                 copyToClipboard(codeText);
             };
-            codeBlockDiv.appendChild(copyButton);
+            const codeHeader = codeBlockDiv.querySelector('.code-header');
+            if (codeHeader) {
+                codeHeader.appendChild(copyButton);
+            } else {
+                // If no code-header, append button directly to code-block
+                codeBlockDiv.appendChild(copyButton);
+            }
         });
     };
 
