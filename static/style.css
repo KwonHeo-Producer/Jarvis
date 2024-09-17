@@ -73,7 +73,7 @@ body {
     flex: 1; /* 입력 필드가 가능한 한 많이 차지하도록 설정 */
     position: relative; /* 버튼을 입력 필드 안에 위치시키기 위한 설정 */
     align-items: center;
-    background-color: #bbb;
+    background-color: #444;
     border-radius: 15px;
 }
 /* 입력 필드 스타일 */
@@ -87,8 +87,9 @@ body {
     max-height: 200px;
     overflow-y: auto; /* 내용이 넘치면 스크롤바 표시 */
     resize: none; /* 사용자가 크기 조정 불가 */
-    background-color: #bbb;
-    border-color: #bbb;
+    color: #bbb;
+    background-color: #444;
+    border-color: #444;
 }
 #user-input:focus {
     border: none; /* 포커스 시 테두리 제거 */
@@ -158,6 +159,12 @@ body {
 h2,strong,p,li {
     color: #bbb;
     padding: 10px;
+}
+
+textarea::placeholder {
+  color: #bbb;
+  font-weight: bold;
+
 }
 
 /* 버튼 호버 시 스타일 */
@@ -325,8 +332,8 @@ pre::-webkit-scrollbar-track {
         width: 88%;
     }
 
-    
-    
+
+
     .message {
     border-radius: 10px;
     /* padding: 10px; */
