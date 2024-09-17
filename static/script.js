@@ -103,9 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
                                 // Add the code block content
                                 const codePre = document.createElement('pre');
+                                codePre.className = 'code-content'; // Optional: add class for styling if needed
                                 codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
-                                codeBlockDiv.appendChild(codePre);
-
+                                
                                 // Create and add the copy button
                                 const copyButton = document.createElement('button');
                                 copyButton.className = 'copy-button';
@@ -113,7 +113,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 copyButton.addEventListener('click', () => {
                                     copyToClipboard(block.textContent);
                                 });
-                                codeBlockDiv.appendChild(copyButton);
+
+                                // Create a wrapper for the pre and button
+                                const codeWrapper = document.createElement('div');
+                                codeWrapper.className = 'code-wrapper';
+                                codeWrapper.appendChild(codePre);
+                                codeWrapper.appendChild(copyButton);
+
+                                // Add the wrapper to the code block div
+                                codeBlockDiv.appendChild(codeWrapper);
 
                                 // Append the new code block div to the fragment
                                 currentMessageDiv.appendChild(codeBlockDiv);
