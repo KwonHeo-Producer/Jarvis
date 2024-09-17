@@ -33,6 +33,15 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Function to copy code to clipboard
+    const copyCodeToClipboard = (code) => {
+        navigator.clipboard.writeText(code).then(() => {
+            alert('Code copied to clipboard!');
+        }).catch(err => {
+            console.error('Failed to copy code: ', err);
+        });
+    };
+
     // Function to send the message
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
@@ -79,6 +88,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 codeLabelDiv.className = 'code-label';
                                 codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language
                                 codeBlockDiv.appendChild(codeLabelDiv);
+
+                                // Create and add the copy button
+                                const copyButton = document.createElement('button');
+                                copyButton.textContent = 'Copy';
+                                copyButton.className = 'copy-button';
+                                copyButton.addEventListener('click', () => {
+                                    copyCodeToClipboard(block.textContent);
+                                });
+                                codeBlockDiv.appendChild(copyButton);
 
                                 // Add the code block content
                                 const codePre = document.createElement('pre');
