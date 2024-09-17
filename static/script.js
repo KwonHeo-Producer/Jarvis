@@ -86,6 +86,28 @@ document.addEventListener('DOMContentLoaded', () => {
                                 codeBlockDiv.appendChild(codePre);
                                 // Append the new code block div to the fragment
                                 currentMessageDiv.appendChild(codeBlockDiv);
+
+                                // Add a copy button to each code block
+                                const copyButton = document.createElement('button');
+                                copyButton.className = 'copy-button';
+                                copyButton.textContent = '복사';
+                                codeBlockDiv.appendChild(copyButton);
+
+                                // Add event listener for copy button click
+                                copyButton.addEventListener('click', () => {
+                                    // Copy the code block content to the clipboard
+                                    navigator.clipboard.writeText(block.textContent.trim())
+                                        .then(() => {
+                                            // Display a success message (optional)
+                                            copyButton.textContent = '복사됨';
+                                            setTimeout(() => {
+                                                copyButton.textContent = '복사';
+                                            }, 1000); // Reset button text after 1 second
+                                        })
+                                        .catch(err => {
+                                            console.error('Failed to copy:', err);
+                                        });
+                                });
                             });
                         } else {
                             // It's a text node or other HTML content
