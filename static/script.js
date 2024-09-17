@@ -62,6 +62,9 @@ document.addEventListener('DOMContentLoaded', () => {
             const tempDiv = document.createElement('div');
             tempDiv.innerHTML = text;
 
+            // Create a fragment to hold the new HTML
+            const fragment = document.createDocumentFragment();
+
             // Find all <pre><code> blocks and add a label
             tempDiv.querySelectorAll('pre code').forEach((block, index) => {
                 // Extract the language class (e.g., 'language-python')
@@ -83,12 +86,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
                 codeBlockDiv.appendChild(codePre);
 
-                // Replace the original code block with the new one
-                block.parentNode.replaceChild(codeBlockDiv, block.parentNode);
+                // Append the new code block div to the fragment
+                fragment.appendChild(codeBlockDiv);
             });
 
             // Append the server's response with labels to messagesDiv
-            messagesDiv.innerHTML += `<div class="message assistant-message">${tempDiv.innerHTML}</div>`;
+            messagesDiv.innerHTML += `<div class="message assistant-message"></div>`;
+            messagesDiv.lastElementChild.appendChild(fragment);
 
             // Apply syntax highlighting
             document.querySelectorAll('pre code').forEach((block) => {
