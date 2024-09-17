@@ -133,6 +133,69 @@ body {
     font-weight: bold;
 }
 
+pre {
+  position: relative;
+  overflow: visible;
+}
+ 
+pre .copy-button {
+	opacity: 0;
+	position: absolute;
+	right: 8px;
+	top: 8px;
+	padding: 4px;
+  background: #2c2d31;
+	border-radius: 5px;
+  border-color: #9ca3af;
+  border-width: 1px;
+	transition: opacity .3s ease-in-out;
+}
+ 
+pre .copy-button img {
+    width: 24px;
+    height: 24px;
+    vertical-align: middle;
+}
+ 
+pre:hover .copy-button {
+  opacity: 1;
+}
+ 
+pre .copy-button:hover {
+  color: #eee;
+  transition: all ease-in-out 0.3s;
+}
+ 
+pre .copy-button:active {
+  border-width: 3px;
+  border-color: #FFA500;
+  transition: all ease-out 0.1s;
+}
+ 
+.copy-message:before {
+  font-family: SUIT, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  content: "Copied";
+	position: absolute;
+  font-weight: bold;
+  font-size: 14px;
+	left: -10px;
+	bottom: 49px;
+	padding: 2px;
+	color: #eee;
+	background: #2c2d31;
+	border-radius: 5px;
+}
+ 
+.copy-message:after {
+    border-top: 8px solid #2c2d31;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-bottom: 0px solid transparent;
+    content: "";
+    position: absolute;
+    bottom: 41px;
+}
+
 /* 메시지 스타일 */
 .message {
     border-radius: 10px;
