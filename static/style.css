@@ -111,6 +111,28 @@ body {
 #send-button:hover {
     background-color: #7f7f7f; /* 다크 보라색 */
 }
+
+/* Additional styles for code blocks */
+.code-block {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 10px;
+    background-color: #2e2e2e;
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.code-label {
+    position: relative;
+    /* top: -1px; */
+    left: 0;
+    background-color: #2e2e2e;
+    color: #f8f8f2;
+    padding: 5px;
+    border-bottom: 1px solid #ddd;
+    font-weight: bold;
+}
+
 /* 메시지 스타일 */
 .message {
     border-radius: 10px;
@@ -259,6 +281,9 @@ pre::-webkit-scrollbar-track {
         font-size: 1rem; /* 모바일에서 글꼴 크기 조정 */
         width: 88%;
     }
+
+    
+    
     .message {
     border-radius: 10px;
     /* padding: 10px; */
