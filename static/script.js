@@ -67,46 +67,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // Extract text and code blocks
                 let htmlContent = '';
-                tempDiv.querySelectorAll('pre code').forEach((block, index) => {
-                    // Extract the language class (e.g., 'language-python')
-                    const languageClass = block.className;
-                    const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
+                let currentMessageDiv = document.createElement('div');
+                currentMessageDiv.className = 'message assistant-message';
 
-                    // Create a new div for the code block with a label
-                    const codeBlockDiv = document.createElement('div');
-                    codeBlockDiv.className = 'code-block';
+                tempDiv.childNodes.forEach(node => {
+                    if (node.nodeType === Node.ELEMENT_NODE) {
+                        if (node.querySelector('pre code')) {
+                            // It's a code block
+                            const codeBlocks = node.querySelectorAll('pre code');
+                            codeBlocks.forEach((block, index) => {
+                                // Extract the language class (e.g., 'language-python')
+                                const languageClass = block.className;
+                                const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
 
-                    // Create and add the label
-                    const codeLabelDiv = document.createElement('div');
-                    codeLabelDiv.className = 'code-label';
-                    codeLabelDiv.textContent = language ? `Language: ${language}` : 'Code'; // Display language
-                    codeBlockDiv.appendChild(codeLabelDiv);
+                                // Create a new div for the code block with a label
+                                const codeBlockDiv = document.createElement('div');
+                                codeBlockDiv.className = 'code-block';
 
-                    // Add the code block content
-                    const codePre = document.createElement('pre');
-                    codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
-                    codeBlockDiv.appendChild(codePre);
+                                // Create and add the label
+                                const codeLabelDiv = document.createElement('div');
+                                codeLabelDiv.className = 'code-label';
+                                codeLabelDiv.textContent = language ? `Language: ${language}` : 'Code'; // Display language
+                                codeBlockDiv.appendChild(codeLabelDiv);
 
-                    // Append the new code block div to the fragment
-                    fragment.appendChild(codeBlockDiv);
+                                // Add the code block content
+                                const codePre = document.createElement('pre');
+                                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
+                                codeBlockDiv.appendChild(codePre);
+
+                                // Append the new code block div to the fragment
+                                currentMessageDiv.appendChild(codeBlockDiv);
+                            });
+                        } else {
+                            // It's a text node or other HTML content
+                            currentMessageDiv.innerHTML += node.outerHTML;
+                        }
+                    }
                 });
 
-                // Extract the remaining HTML content excluding code blocks
-                const textNodes = Array.from(tempDiv.childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE && !node.querySelector('pre code'));
-                textNodes.forEach(node => htmlContent += node.outerHTML);
-
-                // Create a div for the entire response
-                const responseDiv = document.createElement('div');
-                responseDiv.className = 'message assistant-message';
-
-                // Append the code block fragment first
-                responseDiv.appendChild(fragment);
-
-                // Add the original response HTML content after the code blocks
-                responseDiv.innerHTML += htmlContent;
-
-                // Append the server's response with labels to messagesDiv
-                messagesDiv.appendChild(responseDiv);
+                // Append the response div to messagesDiv
+                messagesDiv.appendChild(currentMessageDiv);
 
                 // Apply syntax highlighting
                 document.querySelectorAll('pre code').forEach((block) => {
