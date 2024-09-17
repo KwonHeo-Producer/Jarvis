@@ -65,7 +65,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Create a fragment to hold the new HTML
                 const fragment = document.createDocumentFragment();
 
-                // Find all <pre><code> blocks and add a label
+                // Extract text and code blocks
+                let htmlContent = '';
                 tempDiv.querySelectorAll('pre code').forEach((block, index) => {
                     // Extract the language class (e.g., 'language-python')
                     const languageClass = block.className;
@@ -90,10 +91,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     fragment.appendChild(codeBlockDiv);
                 });
 
+                // Extract the remaining HTML content excluding code blocks
+                const textNodes = Array.from(tempDiv.childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE && !node.querySelector('pre code'));
+                textNodes.forEach(node => htmlContent += node.outerHTML);
+
                 // Create a div for the entire response, including text and code blocks
                 const responseDiv = document.createElement('div');
                 responseDiv.className = 'message assistant-message';
-                responseDiv.innerHTML = tempDiv.innerHTML; // Add the original response HTML
+                responseDiv.innerHTML = htmlContent; // Add the original response HTML without code blocks
 
                 // Append the code block fragment to the responseDiv
                 responseDiv.appendChild(fragment);
