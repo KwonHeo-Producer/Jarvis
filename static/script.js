@@ -42,6 +42,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    // Add event listeners to all copy buttons
+    document.querySelectorAll('.copy-button').forEach(button => {
+    button.addEventListener('click', () => {
+        // Find the closest <code> tag within the same .code-container
+        const codeElement = button.previousElementSibling.querySelector('code');
+        if (codeElement) {
+            copyCodeToClipboard(codeElement.textContent);
+        }
+    });
+});
+    
     // Function to send the message
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
