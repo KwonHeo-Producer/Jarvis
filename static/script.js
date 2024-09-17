@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const text = await response.text();
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = text;
-                const fragment = document.createDocumentFragment();
                 let currentMessageDiv = document.createElement('div');
                 currentMessageDiv.className = 'message assistant-message';
 
@@ -89,7 +88,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 messagesDiv.appendChild(currentMessageDiv);
                 document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightBlock(block);
+                    hljs.highlightElement(block); // 최신 highlight.js 메서드
                 });
             } catch (error) {
                 console.error('Error:', error);
@@ -107,27 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    // Function to copy text to clipboard using execCommand
+    // Function to copy text to clipboard using navigator.clipboard
     const copyToClipboard = (text) => {
-        // Create a temporary textarea element
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        try {
-            // Execute copy command
-            const successful = document.execCommand('copy');
-            if (successful) {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                console.log('Text successfully copied'); // 디버깅용 로그 추가
                 alert('Code copied to clipboard!');
-            } else {
-                console.error('Failed to copy text.');
-            }
-        } catch (err) {
-            console.error('Error copying text: ', err);
-        } finally {
-            // Clean up
-            document.body.removeChild(textarea);
-        }
+            })
+            .catch(err => {
+                console.error('Failed to copy text: ', err);
+            });
     };
 
     // Event listeners for sending messages and adjusting textarea
@@ -141,5 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
+
+    // Initial adjustment of textarea height
     adjustTextareaHeight();
 });
