@@ -38,86 +38,93 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Function to send the message
     const sendMessage = async () => {
-    const prompt = userInput.value.trim();
-    if (prompt) {
-        // Append user message to messagesDiv
-        messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
-        userInput.value = ''; // Clear the input field
-        // Reset textarea height to auto before fetching response
-        userInput.style.height = 'auto';
+        const prompt = userInput.value.trim();
+        if (prompt) {
+            // Append user message to messagesDiv
+            messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
+            userInput.value = ''; // Clear the input field
+            // Reset textarea height to auto before fetching response
+            userInput.style.height = 'auto';
 
-        try {
-            // Fetch the response from the server
-            const response = await fetch('/process_message', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ prompt })
-            });
-            // Get the response as text (HTML)
-            const text = await response.text();
+            try {
+                // Fetch the response from the server
+                const response = await fetch('/process_message', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ prompt })
+                });
+                // Get the response as text (HTML)
+                const text = await response.text();
 
-            // Create a temporary container to manipulate the HTML
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = text;
+                // Create a temporary container to manipulate the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = text;
 
-            // Create a fragment to hold the new HTML
-            const fragment = document.createDocumentFragment();
+                // Create a fragment to hold the new HTML
+                const fragment = document.createDocumentFragment();
 
-            // Find all <pre><code> blocks and add a label
-            tempDiv.querySelectorAll('pre code').forEach((block, index) => {
-                // Extract the language class (e.g., 'language-python')
-                const languageClass = block.className;
-                const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
+                // Find all <pre><code> blocks and add a label
+                tempDiv.querySelectorAll('pre code').forEach((block, index) => {
+                    // Extract the language class (e.g., 'language-python')
+                    const languageClass = block.className;
+                    const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
 
-                // Create a new div for the code block with a label
-                const codeBlockDiv = document.createElement('div');
-                codeBlockDiv.className = 'code-block';
+                    // Create a new div for the code block with a label
+                    const codeBlockDiv = document.createElement('div');
+                    codeBlockDiv.className = 'code-block';
 
-                // Create and add the label
-                const codeLabelDiv = document.createElement('div');
-                codeLabelDiv.className = 'code-label';
-                codeLabelDiv.textContent = `Code Block ${index + 1} (${language})`; // Display language
-                codeBlockDiv.appendChild(codeLabelDiv);
+                    // Create and add the label
+                    const codeLabelDiv = document.createElement('div');
+                    codeLabelDiv.className = 'code-label';
+                    codeLabelDiv.textContent = `Code Block ${index + 1} (${language})`; // Display language
+                    codeBlockDiv.appendChild(codeLabelDiv);
 
-                // Add the code block content
-                const codePre = document.createElement('pre');
-                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
-                codeBlockDiv.appendChild(codePre);
+                    // Add the code block content
+                    const codePre = document.createElement('pre');
+                    codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
+                    codeBlockDiv.appendChild(codePre);
 
-                // Append the new code block div to the fragment
-                fragment.appendChild(codeBlockDiv);
-            });
+                    // Append the new code block div to the fragment
+                    fragment.appendChild(codeBlockDiv);
+                });
 
-            // Append the server's response with labels to messagesDiv
-            messagesDiv.innerHTML += `<div class="message assistant-message"></div>`;
-            messagesDiv.lastElementChild.appendChild(fragment);
+                // Create a div for the entire response, including text and code blocks
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'message assistant-message';
+                responseDiv.innerHTML = tempDiv.innerHTML; // Add the original response HTML
 
-            // Apply syntax highlighting
-            document.querySelectorAll('pre code').forEach((block) => {
-                hljs.highlightBlock(block);
-            });
-        } catch (error) {
-            console.error('Error:', error);
-            messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
+                // Append the code block fragment to the responseDiv
+                responseDiv.appendChild(fragment);
+
+                // Append the server's response with labels to messagesDiv
+                messagesDiv.appendChild(responseDiv);
+
+                // Apply syntax highlighting
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+                messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
+            }
+
+            // Scroll to the bottom of the messagesDiv
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+            // Display chat container and hide logo if it's the first message
+            if (!isFirstMessageSent) {
+                logoContainer.style.display = 'none';
+                chatContainer.style.display = 'flex';
+                messagesDiv.classList.add('expanded'); // Expand the message box
+                isFirstMessageSent = true;
+            }
+
+            // Adjust textarea height after message send
+            adjustTextareaHeight();
         }
-
-        // Scroll to the bottom of the messagesDiv
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
-        // Display chat container and hide logo if it's the first message
-        if (!isFirstMessageSent) {
-            logoContainer.style.display = 'none';
-            chatContainer.style.display = 'flex';
-            messagesDiv.classList.add('expanded'); // Expand the message box
-            isFirstMessageSent = true;
-        }
-
-        // Adjust textarea height after message send
-        adjustTextareaHeight();
-    }
-};
+    };
 
     // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
