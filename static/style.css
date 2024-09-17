@@ -2,7 +2,7 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #222;
-    color: #FFFFFF;
+    color: #BBBBBB;
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* 수평 스크롤 방지 */
@@ -73,7 +73,7 @@ body {
     flex: 1; /* 입력 필드가 가능한 한 많이 차지하도록 설정 */
     position: relative; /* 버튼을 입력 필드 안에 위치시키기 위한 설정 */
     align-items: center;
-    background-color: #fafafa;
+    background-color: #bbb;
     border-radius: 15px;
 }
 /* 입력 필드 스타일 */
@@ -87,8 +87,8 @@ body {
     max-height: 200px;
     overflow-y: auto; /* 내용이 넘치면 스크롤바 표시 */
     resize: none; /* 사용자가 크기 조정 불가 */
-    background-color: #fafafa;
-    border-color: #fafafa;
+    background-color: #bbb;
+    border-color: #bbb;
 }
 #user-input:focus {
     border: none; /* 포커스 시 테두리 제거 */
@@ -101,8 +101,8 @@ body {
     bottom: 11px;
     padding: 10px;
     width: 38px; /* 버튼 너비 조정 */
-    background-color: #d0d0d0; /* 보라색 */
-    color: #FFF; /* 버튼 텍스트 색상 */
+    background-color: #888; /* 보라색 */
+    color: #fff; /* 버튼 텍스트 색상 */
     border: none;
     border-radius: 40px;
     cursor: pointer;
@@ -120,13 +120,15 @@ body {
     justify-content: space-between; /* 라벨과 버튼을 양 끝으로 배치 */
     align-items: center; /* 수직 중앙 정렬 */
     margin-bottom: 8px; /* 코드 블록과 코드 사이의 간격 */
+    margin: -10px;
+    background-color: #222;
 }
 
 .code-block {
     border: 1px solid #ddd;
     border-radius: 4px;
     padding: 10px;
-    background-color: #2e2e2e;
+    background-color: #111;
     position: relative;
     margin-bottom: 20px;
 }
@@ -135,22 +137,27 @@ body {
     position: relative;
     /* top: -1px; */
     left: 0;
-    background-color: #2e2e2e;
-    color: #f8f8f2;
+    background-color: #222;
+    color: #bbb;
     padding: 5px;
     border-bottom: 1px solid #ddd;
     font-weight: bold;
 }
 
 .copy-button {
-    background-color: #444; /* 버튼 배경색 */
-    color: white; /* 버튼 텍스트 색상 */
+    background-color: #333; /* 버튼 배경색 */
+    color: #bbb; /* 버튼 텍스트 색상 */
     border: none; /* 버튼 테두리 제거 */
     border-radius: 4px; /* 버튼 모서리 둥글게 */
     padding: 6px 12px; /* 버튼 패딩 */
     font-size: 14px; /* 버튼 텍스트 크기 */
     cursor: pointer; /* 마우스 커서 포인터로 변경 */
     transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 배경색 전환과 클릭 효과 */
+}
+
+h2,strong,p,li {
+    color: #bbb;
+    padding: 10px;
 }
 
 /* 버튼 호버 시 스타일 */
@@ -179,22 +186,22 @@ pre {
     align-self: flex-start; /* 메시지를 왼쪽 정렬 */
 }
 .user-message {
-    background-color: #d1c4e9;
-    color: #000;
+    background-color: #444;
+    color: #fff;
     align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
     margin-left: auto;
     padding: 10px;
 }
 .assistant-message {
-    background-color: #e0f7fa;
-    color: #000;
+    background-color: #222;
+    color: #ffffff;
 }
 /* 코드 블록 기본 스타일 */
 pre, code.hljs {
     display: block;
     overflow-x: auto;
     padding: 1em;
-    background: #2e2e2e;
+    background: #111;
     color: #f8f8f2;
     border-radius: 8px; /* 테두리 둥글게 하기 */
 }
@@ -318,7 +325,8 @@ pre::-webkit-scrollbar-track {
         width: 88%;
     }
 
-       
+    
+    
     .message {
     border-radius: 10px;
     /* padding: 10px; */
