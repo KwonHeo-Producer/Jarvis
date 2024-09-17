@@ -121,16 +121,6 @@ document.addEventListener('DOMContentLoaded', () => {
                     hljs.highlightBlock(block);
                 });
 
-                // Add event listeners to copy buttons
-                document.querySelectorAll('.copy-button').forEach(button => {
-                    button.addEventListener('click', () => {
-                        const codeElement = button.previousElementSibling.querySelector('code');
-                        if (codeElement) {
-                            copyCodeToClipboard(codeElement.textContent);
-                        }
-                    });
-                });
-
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
