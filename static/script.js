@@ -7,12 +7,14 @@ document.addEventListener('DOMContentLoaded', () => {
     let isFirstMessageSent = false;
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
+    // Adjust the textarea height based on its content
     const adjustTextareaHeight = () => {
         userInput.style.height = 'auto';
         const newHeight = Math.max(userInput.scrollHeight, 40);
         userInput.style.height = `${newHeight}px`;
     };
 
+    // Event listener for handling 'Enter' keypress in the textarea
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
@@ -30,9 +32,11 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Function to send the message and handle response
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
         if (prompt) {
+            // Append user message to the messages container
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = '';
             userInput.style.height = 'auto';
@@ -57,9 +61,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (node.querySelector('pre code')) {
                             const codeBlocks = node.querySelectorAll('pre code');
                             codeBlocks.forEach((block) => {
-                                const languageClass = block.className;
-                                const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
-                                
                                 const codeBlockDiv = document.createElement('div');
                                 codeBlockDiv.className = 'code-block';
 
@@ -67,14 +68,11 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const copyButton = document.createElement('button');
                                 copyButton.textContent = 'Copy';
                                 copyButton.className = 'copy-button';
-                                
+
                                 // Copy to clipboard functionality
                                 copyButton.onclick = () => {
-                                    navigator.clipboard.writeText(block.textContent).then(() => {
-                                        alert('Code copied to clipboard!');
-                                    }).catch(err => {
-                                        console.error('Could not copy text: ', err);
-                                    });
+                                    const codeText = block.innerText;
+                                    copyToClipboard(codeText);
                                 };
                                 codeBlockDiv.appendChild(copyButton);
 
@@ -109,6 +107,30 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
+    // Function to copy text to clipboard using execCommand
+    const copyToClipboard = (text) => {
+        // Create a temporary textarea element
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        try {
+            // Execute copy command
+            const successful = document.execCommand('copy');
+            if (successful) {
+                alert('Code copied to clipboard!');
+            } else {
+                console.error('Failed to copy text.');
+            }
+        } catch (err) {
+            console.error('Error copying text: ', err);
+        } finally {
+            // Clean up
+            document.body.removeChild(textarea);
+        }
+    };
+
+    // Event listeners for sending messages and adjusting textarea
     sendButton.addEventListener('click', sendMessage);
     userInput.addEventListener('input', adjustTextareaHeight);
     window.addEventListener('resize', () => {
