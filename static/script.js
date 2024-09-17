@@ -75,11 +75,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 messagesDiv.appendChild(currentMessageDiv);
+
+                // Highlight code blocks
                 document.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightElement(block); // 최신 highlight.js 메서드
                 });
 
-                // Add copy buttons after code blocks are added
+                // Add labels and copy buttons
+                addCodeLabels();
                 addCopyButtons();
             } catch (error) {
                 console.error('Error:', error);
@@ -107,6 +110,24 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error('Failed to copy text: ', err);
             });
+    };
+
+    // Function to add labels to all code blocks
+    const addCodeLabels = () => {
+        document.querySelectorAll('.code-block').forEach((codeBlockDiv) => {
+            // Remove any existing labels to avoid duplicates
+            const existingLabel = codeBlockDiv.querySelector('.code-label');
+            if (existingLabel) {
+                existingLabel.remove();
+            }
+
+            // Create and add the label
+            const language = codeBlockDiv.querySelector('code').className; // Extract the language from the code class
+            const codeLabelDiv = document.createElement('div');
+            codeLabelDiv.className = 'code-label';
+            codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language or 'Code'
+            codeBlockDiv.insertBefore(codeLabelDiv, codeBlockDiv.firstChild);
+        });
     };
 
     // Function to add copy buttons to all code blocks
