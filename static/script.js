@@ -101,11 +101,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 codeLabelDiv.textContent = language ? `Language: ${language}` : 'Code'; // Display language
                                 codeBlockDiv.appendChild(codeLabelDiv);
 
-                                // Add the code block content
-                                const codePre = document.createElement('pre');
-                                codePre.className = 'code-content'; // Optional: add class for styling if needed
-                                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
-                                
                                 // Create and add the copy button
                                 const copyButton = document.createElement('button');
                                 copyButton.className = 'copy-button';
@@ -117,6 +112,13 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Create a wrapper for the pre and button
                                 const codeWrapper = document.createElement('div');
                                 codeWrapper.className = 'code-wrapper';
+                                
+                                // Add the code block content
+                                const codePre = document.createElement('pre');
+                                codePre.className = 'code-content'; // Optional: add class for styling if needed
+                                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
+
+                                // Append the pre and copy button to the wrapper
                                 codeWrapper.appendChild(codePre);
                                 codeWrapper.appendChild(copyButton);
 
