@@ -85,7 +85,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         if (node.querySelector('pre code')) {
                             // It's a code block
                             const codeBlocks = node.querySelectorAll('pre code');
-                            codeBlocks.forEach((block, index) => {
+                            codeBlocks.forEach((block) => {
                                 // Extract the language class (e.g., 'language-python')
                                 const languageClass = block.className;
                                 const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
@@ -100,29 +100,30 @@ document.addEventListener('DOMContentLoaded', () => {
                                 codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language
                                 codeBlockDiv.appendChild(codeLabelDiv);
 
-                                // Create a wrapper for the pre and button
-                                const codeWrapper = document.createElement('div');
-                                codeWrapper.className = 'code-wrapper';
-
-                                // Add the code block content
+                                // Create the <pre> element and add the code block to it
                                 const codePre = document.createElement('pre');
-                                codePre.className = 'code-content'; // Optional: add class for styling if needed
-                                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
+                                codePre.className = 'code-content';
+                                codePre.appendChild(block.cloneNode(true)); // Clone to avoid issues
 
                                 // Create and add the copy button
                                 const copyButton = document.createElement('button');
                                 copyButton.className = 'copy-button';
                                 copyButton.textContent = 'Copy';
                                 copyButton.addEventListener('click', () => {
-                                    copyToClipboard(block.textContent);
+                                    copyToClipboard(codePre.textContent); // Use codePre.textContent
                                 });
 
-                                // Append the pre and copy button to the wrapper
-                                codeWrapper.appendChild(codePre);
-                                codeWrapper.appendChild(copyButton);
+                                // Create a container to hold <pre> and button
+                                const codeContainer = document.createElement('div');
+                                codeContainer.className = 'code-container';
+                                codeContainer.style.position = 'relative';
 
-                                // Add the wrapper to the code block div
-                                codeBlockDiv.appendChild(codeWrapper);
+                                // Add the <pre> and copy button to the container
+                                codeContainer.appendChild(codePre);
+                                codeContainer.appendChild(copyButton);
+
+                                // Add the container to the code block div
+                                codeBlockDiv.appendChild(codeContainer);
 
                                 // Append the new code block div to the fragment
                                 currentMessageDiv.appendChild(codeBlockDiv);
