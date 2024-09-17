@@ -36,6 +36,17 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // Function to copy text to clipboard
+    const copyToClipboard = (text) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                alert('Copied to clipboard!');
+            })
+            .catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+    };
+
     // Function to send the message
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
@@ -87,13 +98,22 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Create and add the label
                                 const codeLabelDiv = document.createElement('div');
                                 codeLabelDiv.className = 'code-label';
-                                codeLabelDiv.textContent = language ? `Language: ${language}` : 'Code'; // Display language
+                                codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language
                                 codeBlockDiv.appendChild(codeLabelDiv);
 
                                 // Add the code block content
                                 const codePre = document.createElement('pre');
                                 codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
                                 codeBlockDiv.appendChild(codePre);
+
+                                // Create and add the copy button
+                                const copyButton = document.createElement('button');
+                                copyButton.className = 'copy-button';
+                                copyButton.textContent = 'Copy';
+                                copyButton.addEventListener('click', () => {
+                                    copyToClipboard(block.textContent);
+                                });
+                                codeBlockDiv.appendChild(copyButton);
 
                                 // Append the new code block div to the fragment
                                 currentMessageDiv.appendChild(codeBlockDiv);
