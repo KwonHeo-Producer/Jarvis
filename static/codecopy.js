@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    $('pre[id^="code"],[class="bash"]').each(function (index, e) {
+    $('pre').each(function (index, e) {
         let button = document.createElement('button');
         button.innerText = "Copy";
         button.className = 'copy-button';
