@@ -79,7 +79,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     // Create and add the label
                     const codeLabelDiv = document.createElement('div');
                     codeLabelDiv.className = 'code-label';
-                    codeLabelDiv.textContent = `Code Block ${index + 1} (${language})`; // Display language
+                    codeLabelDiv.textContent = language ? `Language: ${language}` : 'Code'; // Display language
                     codeBlockDiv.appendChild(codeLabelDiv);
 
                     // Add the code block content
@@ -95,13 +95,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 const textNodes = Array.from(tempDiv.childNodes).filter(node => node.nodeType === Node.ELEMENT_NODE && !node.querySelector('pre code'));
                 textNodes.forEach(node => htmlContent += node.outerHTML);
 
-                // Create a div for the entire response, including text and code blocks
+                // Create a div for the entire response
                 const responseDiv = document.createElement('div');
                 responseDiv.className = 'message assistant-message';
-                responseDiv.innerHTML = htmlContent; // Add the original response HTML without code blocks
 
-                // Append the code block fragment to the responseDiv
+                // Append the code block fragment first
                 responseDiv.appendChild(fragment);
+
+                // Add the original response HTML content after the code blocks
+                responseDiv.innerHTML += htmlContent;
 
                 // Append the server's response with labels to messagesDiv
                 messagesDiv.appendChild(responseDiv);
