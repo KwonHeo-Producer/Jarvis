@@ -77,7 +77,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const fragment = document.createDocumentFragment();
 
                 // Extract text and code blocks
-                let htmlContent = '';
                 let currentMessageDiv = document.createElement('div');
                 currentMessageDiv.className = 'message assistant-message';
 
@@ -98,8 +97,17 @@ document.addEventListener('DOMContentLoaded', () => {
                                 // Create and add the label
                                 const codeLabelDiv = document.createElement('div');
                                 codeLabelDiv.className = 'code-label';
-                                codeLabelDiv.textContent = language ? `Language: ${language}` : 'Code'; // Display language
+                                codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language
                                 codeBlockDiv.appendChild(codeLabelDiv);
+
+                                // Create a wrapper for the pre and button
+                                const codeWrapper = document.createElement('div');
+                                codeWrapper.className = 'code-wrapper';
+
+                                // Add the code block content
+                                const codePre = document.createElement('pre');
+                                codePre.className = 'code-content'; // Optional: add class for styling if needed
+                                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
 
                                 // Create and add the copy button
                                 const copyButton = document.createElement('button');
@@ -108,15 +116,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 copyButton.addEventListener('click', () => {
                                     copyToClipboard(block.textContent);
                                 });
-
-                                // Create a wrapper for the pre and button
-                                const codeWrapper = document.createElement('div');
-                                codeWrapper.className = 'code-wrapper';
-                                
-                                // Add the code block content
-                                const codePre = document.createElement('pre');
-                                codePre.className = 'code-content'; // Optional: add class for styling if needed
-                                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
 
                                 // Append the pre and copy button to the wrapper
                                 codeWrapper.appendChild(codePre);
