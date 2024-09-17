@@ -5,17 +5,14 @@ document.addEventListener('DOMContentLoaded', () => {
     const chatContainer = document.getElementById('chat-container');
     const logoContainer = document.querySelector('.logo-container');
     let isFirstMessageSent = false;
-
     // Detect if the device is mobile
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
     // Function to adjust the height of the textarea
     const adjustTextareaHeight = () => {
         userInput.style.height = 'auto'; // Reset the height to allow shrinking if necessary
         const newHeight = Math.max(userInput.scrollHeight, 40); // Set minimum height
         userInput.style.height = `${newHeight}px`; // Set height based on scroll height
     };
-
     // Event listener for the Enter key in the textarea
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
@@ -36,17 +33,6 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    // Function to copy text to clipboard
-    const copyToClipboard = async (text) => {
-        try {
-            await navigator.clipboard.writeText(text);
-            alert('Copied to clipboard!');
-        } catch (err) {
-            console.error('Failed to copy: ', err);
-            alert('Failed to copy!');
-        }
-    };
-
     // Function to send the message
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
@@ -56,7 +42,6 @@ document.addEventListener('DOMContentLoaded', () => {
             userInput.value = ''; // Clear the input field
             // Reset textarea height to auto before fetching response
             userInput.style.height = 'auto';
-
             try {
                 // Fetch the response from the server
                 const response = await fetch('/process_message', {
@@ -68,62 +53,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
                 // Get the response as text (HTML)
                 const text = await response.text();
-
                 // Create a temporary container to manipulate the HTML
                 const tempDiv = document.createElement('div');
                 tempDiv.innerHTML = text;
-
                 // Create a fragment to hold the new HTML
                 const fragment = document.createDocumentFragment();
-
                 // Extract text and code blocks
+                let htmlContent = '';
                 let currentMessageDiv = document.createElement('div');
                 currentMessageDiv.className = 'message assistant-message';
-
                 tempDiv.childNodes.forEach(node => {
                     if (node.nodeType === Node.ELEMENT_NODE) {
                         if (node.querySelector('pre code')) {
                             // It's a code block
                             const codeBlocks = node.querySelectorAll('pre code');
-                            codeBlocks.forEach((block) => {
+                            codeBlocks.forEach((block, index) => {
                                 // Extract the language class (e.g., 'language-python')
                                 const languageClass = block.className;
                                 const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
-
                                 // Create a new div for the code block with a label
                                 const codeBlockDiv = document.createElement('div');
                                 codeBlockDiv.className = 'code-block';
-
                                 // Create and add the label
                                 const codeLabelDiv = document.createElement('div');
                                 codeLabelDiv.className = 'code-label';
                                 codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language
                                 codeBlockDiv.appendChild(codeLabelDiv);
 
-                                // Create the <pre> element and add the code block to it
+                                // Add the code block content
                                 const codePre = document.createElement('pre');
-                                codePre.className = 'code-content';
-                                codePre.appendChild(block.cloneNode(true)); // Clone to avoid issues
-
-                                // Create and add the copy button
-                                const copyButton = document.createElement('button');
-                                copyButton.className = 'copy-button';
-                                copyButton.textContent = 'Copy';
-                                copyButton.addEventListener('click', () => {
-                                    copyToClipboard(codePre.textContent); // Use codePre.textContent
-                                });
-
-                                // Create a container to hold <pre> and button
-                                const codeContainer = document.createElement('div');
-                                codeContainer.className = 'code-container';
-                                codeContainer.style.position = 'relative';
-
-                                // Add the <pre> and copy button to the container
-                                codeContainer.appendChild(codePre);
-                                codeContainer.appendChild(copyButton);
-
-                                // Add the container to the code block div
-                                codeBlockDiv.appendChild(codeContainer);
+                                codePre.appendChild(block.cloneNode(true)); // Clone the block to avoid issues
+                                codeBlockDiv.appendChild(codePre);
 
                                 // Append the new code block div to the fragment
                                 currentMessageDiv.appendChild(codeBlockDiv);
@@ -134,10 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                 });
-
                 // Append the response div to messagesDiv
                 messagesDiv.appendChild(currentMessageDiv);
-
                 // Apply syntax highlighting
                 document.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightBlock(block);
@@ -146,10 +104,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
             }
-
             // Scroll to the bottom of the messagesDiv
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-
             // Display chat container and hide logo if it's the first message
             if (!isFirstMessageSent) {
                 logoContainer.style.display = 'none';
@@ -157,30 +113,24 @@ document.addEventListener('DOMContentLoaded', () => {
                 messagesDiv.classList.add('expanded'); // Expand the message box
                 isFirstMessageSent = true;
             }
-
             // Adjust textarea height after message send
             adjustTextareaHeight();
         }
     };
-
     // Event listener for the send button
     sendButton.addEventListener('click', sendMessage);
-
     // Event listener for input changes to adjust textarea height
     userInput.addEventListener('input', adjustTextareaHeight);
-
     // Handle window resize events
     window.addEventListener('resize', () => {
         if (document.activeElement === userInput) {
             messagesDiv.scrollTop = messagesDiv.scrollHeight; // Scroll to bottom on resize if input is focused
         }
     });
-
     // Ensure messagesDiv scrolls to bottom on input focus
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
-
     // Initial adjustment of textarea height
     adjustTextareaHeight();
 });
