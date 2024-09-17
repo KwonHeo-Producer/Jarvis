@@ -58,8 +58,37 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Get the response as text (HTML)
                 const text = await response.text();
 
-                // Append the server's response to messagesDiv
-                messagesDiv.innerHTML += `<div class="message assistant-message">${text}</div>`;
+                // Create a temporary container to manipulate the HTML
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = text;
+
+                // Find all <pre><code> blocks and add a label
+                tempDiv.querySelectorAll('pre code').forEach((block, index) => {
+                    // Extract the language class (e.g., 'language-python')
+                    const languageClass = block.className;
+                    const language = languageClass ? languageClass.replace('language-', '') : 'unknown';
+
+                    // Create a new div for the code block with a label
+                    const codeBlockDiv = document.createElement('div');
+                    codeBlockDiv.className = 'code-block';
+
+                    // Create and add the label
+                    const codeLabelDiv = document.createElement('div');
+                    codeLabelDiv.className = 'code-label';
+                    codeLabelDiv.textContent = `Code Block ${index + 1} (${language})`; // Display language
+                    codeBlockDiv.appendChild(codeLabelDiv);
+
+                    // Add the code block content
+                    const codePre = document.createElement('pre');
+                    codePre.appendChild(block);
+                    codeBlockDiv.appendChild(codePre);
+
+                    // Replace the original code block with the new one
+                    block.parentNode.replaceWith(codeBlockDiv);
+                });
+
+                // Append the server's response with labels to messagesDiv
+                messagesDiv.innerHTML += `<div class="message assistant-message">${tempDiv.innerHTML}</div>`;
 
                 // Apply syntax highlighting
                 document.querySelectorAll('pre code').forEach((block) => {
