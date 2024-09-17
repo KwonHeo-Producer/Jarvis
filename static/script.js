@@ -63,18 +63,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const codeBlockDiv = document.createElement('div');
                                 codeBlockDiv.className = 'code-block';
 
-                                // Create Copy button
-                                const copyButton = document.createElement('button');
-                                copyButton.textContent = 'Copy';
-                                copyButton.className = 'copy-button';
-
-                                // Copy to clipboard functionality
-                                copyButton.onclick = () => {
-                                    const codeText = block.innerText;
-                                    copyToClipboard(codeText);
-                                };
-                                codeBlockDiv.appendChild(copyButton);
-
                                 const codePre = document.createElement('pre');
                                 codePre.appendChild(block.cloneNode(true));
                                 codeBlockDiv.appendChild(codePre);
@@ -90,6 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 document.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightElement(block); // 최신 highlight.js 메서드
                 });
+
+                // Add copy buttons after code blocks are added
+                addCopyButtons();
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
@@ -116,6 +107,29 @@ document.addEventListener('DOMContentLoaded', () => {
             .catch(err => {
                 console.error('Failed to copy text: ', err);
             });
+    };
+
+    // Function to add copy buttons to all code blocks
+    const addCopyButtons = () => {
+        document.querySelectorAll('.code-block').forEach((codeBlockDiv) => {
+            // Remove any existing copy buttons to avoid duplicates
+            const existingButton = codeBlockDiv.querySelector('.copy-button');
+            if (existingButton) {
+                existingButton.remove();
+            }
+
+            // Create Copy button
+            const copyButton = document.createElement('button');
+            copyButton.textContent = 'Copy';
+            copyButton.className = 'copy-button';
+
+            // Copy to clipboard functionality
+            copyButton.onclick = () => {
+                const codeText = codeBlockDiv.querySelector('code').innerText;
+                copyToClipboard(codeText);
+            };
+            codeBlockDiv.appendChild(copyButton);
+        });
     };
 
     // Event listeners for sending messages and adjusting textarea
