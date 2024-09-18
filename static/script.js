@@ -58,6 +58,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const loadingSpinnerDiv = document.createElement('div');
             loadingSpinnerDiv.className = 'loading-spinner';
             messagesDiv.appendChild(loadingSpinnerDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             try {
                 const response = await fetch('/process_message', {
