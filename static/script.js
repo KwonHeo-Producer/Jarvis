@@ -40,7 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const formattedPrompt = prompt.replace(/\n/g, '<br>');
             
             // Append user message to the messages container
-            messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
+            messagesDiv.innerHTML += `<div class="message user-message">${formattedPrompt}</div>`;
             userInput.value = '';
             userInput.style.height = 'auto';
 
