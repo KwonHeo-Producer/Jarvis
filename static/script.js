@@ -46,7 +46,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
         if (prompt) {
-            // 줄바꿈을 <br>로 변환
             const formattedPrompt = escapeHTML(prompt).replace(/\n/g, '<br>');
 
             // Append user message to the messages container
@@ -57,9 +56,9 @@ document.addEventListener('DOMContentLoaded', () => {
             // Loading spinner
             const loadingSpinnerDiv = document.createElement('div');
             loadingSpinnerDiv.className = 'loading-spinner';
-            loadingSpinnerDiv.style.height = '40px'; // 높이 40px
-            loadingSpinnerDiv.style.width = '40px'; // 너비 40px
-            loadingSpinnerDiv.style.display = 'flex'; // flexbox 사용
+            loadingSpinnerDiv.style.height = '40px';
+            loadingSpinnerDiv.style.width = '40px';
+            loadingSpinnerDiv.style.display = 'flex';
             messagesDiv.appendChild(loadingSpinnerDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
@@ -88,21 +87,16 @@ document.addEventListener('DOMContentLoaded', () => {
                                 const codeHeaderDiv = document.createElement('div');
                                 codeHeaderDiv.className = 'code-header';
 
-                                const language = block.className; // Extract the language from the code class
+                                const language = block.className;
                                 const codeLabelDiv = document.createElement('div');
                                 codeLabelDiv.className = 'code-label';
-                                codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language or 'Code'
+                                codeLabelDiv.textContent = language ? `${language}` : 'Code';
                                 codeHeaderDiv.appendChild(codeLabelDiv);
 
-                                // Add code header to the code block
-                                codeBlockDiv.appendChild(codeHeaderDiv);
-
-                                // Add pre element to code-block
                                 const codePre = document.createElement('pre');
                                 codePre.appendChild(block.cloneNode(true));
                                 codeBlockDiv.appendChild(codePre);
-
-                                // Add code-block to current message
+                                codeBlockDiv.appendChild(codeHeaderDiv);
                                 currentMessageDiv.appendChild(codeBlockDiv);
                             });
                         } else {
@@ -115,11 +109,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadingSpinnerDiv.remove(); // 로딩 스피너 제거
 
                 document.querySelectorAll('pre code').forEach((block) => {
-                    hljs.highlightElement(block); // 최신 highlight.js 메서드
+                    hljs.highlightElement(block);
                 });
 
                 // Add copy buttons after code blocks are added
                 addCopyButtons();
+
+                // 첫 번째 메시지 전송 후 스피너 추가
+                if (!isFirstMessageSent) {
+                    logoContainer.style.display = 'none';
+                    chatContainer.style.display = 'flex';
+                    messagesDiv.classList.add('expanded');
+                    isFirstMessageSent = true;
+
+                    const newLoadingSpinnerDiv = document.createElement('div');
+                    newLoadingSpinnerDiv.className = 'loading-spinner';
+                    newLoadingSpinnerDiv.style.height = '40px';
+                    newLoadingSpinnerDiv.style.width = '40px';
+                    newLoadingSpinnerDiv.style.display = 'flex';
+                    messagesDiv.appendChild(newLoadingSpinnerDiv);
+                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+                }
 
             } catch (error) {
                 console.error('Error:', error);
@@ -127,12 +137,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 loadingSpinnerDiv.remove(); // 로딩 스피너 제거
             }
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
-            if (!isFirstMessageSent) {
-                logoContainer.style.display = 'none';
-                chatContainer.style.display = 'flex';
-                messagesDiv.classList.add('expanded');
-                isFirstMessageSent = true;
-            }
             adjustTextareaHeight();
         }
     };
@@ -141,7 +145,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copyToClipboard = (text) => {
         navigator.clipboard.writeText(text)
             .then(() => {
-                console.log('Text successfully copied'); // 디버깅용 로그 추가
+                console.log('Text successfully copied');
                 alert('Code copied to clipboard!');
             })
             .catch(err => {
@@ -152,27 +156,24 @@ document.addEventListener('DOMContentLoaded', () => {
     // Function to add copy buttons to all code blocks
     const addCopyButtons = () => {
         document.querySelectorAll('.code-block').forEach((codeBlockDiv) => {
-            // Remove any existing copy buttons to avoid duplicates
             const existingButton = codeBlockDiv.querySelector('.copy-button');
             if (existingButton) {
                 existingButton.remove();
             }
 
-            // Create Copy button
             const copyButton = document.createElement('button');
             copyButton.textContent = 'Copy';
             copyButton.className = 'copy-button';
 
-            // Copy to clipboard functionality
             copyButton.onclick = () => {
                 const codeText = codeBlockDiv.querySelector('code').innerText;
                 copyToClipboard(codeText);
             };
+
             const codeHeader = codeBlockDiv.querySelector('.code-header');
             if (codeHeader) {
                 codeHeader.appendChild(copyButton);
             } else {
-                // If no code-header, append button directly to code-block
                 codeBlockDiv.appendChild(copyButton);
             }
         });
