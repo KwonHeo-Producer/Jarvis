@@ -113,6 +113,22 @@ body {
     background-color: #7f7f7f; /* 다크 보라색 */
 }
 
+.loading-spinner {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #999; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: 10px auto; /* Center the spinner */
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+
 /* Additional styles for code blocks */
 
 /* 코드 헤더 스타일 */
