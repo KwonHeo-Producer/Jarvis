@@ -90,10 +90,15 @@ document.addEventListener('DOMContentLoaded', () => {
                                 codeLabelDiv.textContent = language ? `${language}` : 'Code'; // Display language or 'Code'
                                 codeHeaderDiv.appendChild(codeLabelDiv);
 
+                                // Add code header to the code block
+                                codeBlockDiv.appendChild(codeHeaderDiv);
+
+                                // Add pre element to code-block
                                 const codePre = document.createElement('pre');
                                 codePre.appendChild(block.cloneNode(true));
                                 codeBlockDiv.appendChild(codePre);
 
+                                // Add code-block to current message
                                 currentMessageDiv.appendChild(codeBlockDiv);
                             });
                         } else {
