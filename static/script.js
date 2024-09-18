@@ -36,6 +36,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
         if (prompt) {
+            // 줄바꿈을 <br>로 변환
+            const formattedPrompt = prompt.replace(/\n/g, '<br>');
+            
             // Append user message to the messages container
             messagesDiv.innerHTML += `<div class="message user-message">${prompt}</div>`;
             userInput.value = '';
