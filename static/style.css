@@ -1,8 +1,8 @@
 /* 기본 스타일 설정 */
 body {
     font-family: Arial, sans-serif;
-    background-color: #222;
-    color: #BBBBBB;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
     margin: 0;
     padding: 0;
     overflow-x: hidden; /* 수평 스크롤 방지 */
@@ -23,7 +23,7 @@ body {
     height: auto; /* 비율을 유지하며 높이 자동 조절 */
 }
 .logo-container h1 {
-    color: #d2d2d2;
+    color: #e0e0e0;
     margin: 10px 0; /* 위쪽과 아래쪽 여백을 동일하게 설정 */
 }
 /* 채팅 컨테이너 스타일 */
@@ -41,9 +41,9 @@ body {
     /* padding: 10px; */
     height: 400px; /* 처음 화면에서의 기본 높이 */
     overflow-y: auto;
-    background-color: #222; /* 메시지 영역의 배경색 추가 */
+    background-color: transparent; /* 메시지 영역의 배경색 추가 */
     border-radius: 8px; /* 테두리 둥글게 하기 */
-    color: #FFF; /* 메시지 텍스트 색상 */
+    color: #e0e0e0; /* 메시지 텍스트 색상 */
     display: flex;
     flex-direction: column;
     gap: 5px; /* 메시지 간의 간격 */
@@ -60,7 +60,7 @@ body {
     left: 50%;
     transform: translateX(-50%); /* 가로 중앙 정렬 */
     width: 800px; /* 입력 필드와 버튼이 페이지의 전체 너비를 차지하도록 설정 */
-    background-color: #222; /* 배경색 설정 (필요에 따라 조정) */
+    background-color: transparent; /* 배경색 설정 (필요에 따라 조정) */
     padding: 10px; /* 여백 설정 (필요에 따라 조정) */
     display: flex;
     align-items: center; /* 입력 필드와 버튼을 수직 중앙에 맞춤 */
@@ -73,7 +73,7 @@ body {
     flex: 1; /* 입력 필드가 가능한 한 많이 차지하도록 설정 */
     position: relative; /* 버튼을 입력 필드 안에 위치시키기 위한 설정 */
     align-items: center;
-    background-color: #444;
+    background-color: #e0e0e0;
     border-radius: 15px;
 }
 /* 입력 필드 스타일 */
@@ -87,9 +87,9 @@ body {
     max-height: 200px;
     overflow-y: auto; /* 내용이 넘치면 스크롤바 표시 */
     resize: none; /* 사용자가 크기 조정 불가 */
-    color: #fff;
-    background-color: #444;
-    border-color: #444;
+    color: #000;
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
 }
 #user-input:focus {
     border: none; /* 포커스 시 테두리 제거 */
@@ -100,14 +100,14 @@ body {
     position: fixed;
     right: 15px;
     bottom: 11px;
-    padding: 10px;
+    padding: 1px;
     width: 38px; /* 버튼 너비 조정 */
-    background-color: #888; /* 보라색 */
-    color: #fff; /* 버튼 텍스트 색상 */
+    background-color: #bbb; /* 보라색 */
+    color: #e0e0e0; /* 버튼 텍스트 색상 */
     border: none;
     border-radius: 40px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.9rem;
 }
 #send-button:hover {
     background-color: #7f7f7f; /* 다크 보라색 */
@@ -139,10 +139,12 @@ body {
     margin-bottom: 8px; /* 코드 블록과 코드 사이의 간격 */
     margin: -10px;
     background-color: #222;
+    border-bottom: 1px solid #ddd;
+    border-color:#FFF
 }
 
 .code-block {
-    border: 1px solid #ddd;
+    border: 1px solid #e0e0e0;
     border-radius: 4px;
     padding: 10px;
     background-color: #111;
@@ -154,11 +156,10 @@ body {
     position: relative;
     /* top: -1px; */
     left: 0;
-    background-color: #222;
-    color: #bbb;
+    background-color: transparent;
+    color: #e0e0e0;
     padding: 5px;
-    border-bottom: 1px solid #ddd;
-    font-weight: bold;
+    /* font-weight: bold; */
 }
 
 .copy-button {
@@ -173,12 +174,12 @@ body {
 }
 
 h2,strong,p,li {
-    color: #FFF;
+    color: #e0e0e0;
     padding: 10px;
 }
 
 textarea::placeholder {
-  color: #BBB;
+  color: ##888;
   font-weight: bold;
 
 }
@@ -209,15 +210,15 @@ pre {
     align-self: flex-start; /* 메시지를 왼쪽 정렬 */
 }
 .user-message {
-    background-color: #444;
-    color: #fff;
+    background-color: #333;
+    color: #e0e0e0;
     align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
     margin-left: auto;
     padding: 10px;
 }
 .assistant-message {
-    background-color: #222;
-    color: #ffffff;
+    background-color: transparent;
+    color: #e0e0e0;
 }
 /* 코드 블록 기본 스타일 */
 pre, code.hljs {
@@ -225,7 +226,7 @@ pre, code.hljs {
     overflow-x: auto;
     padding: 1em;
     background: #111;
-    color: #f8f8f2;
+    color: #e0e0e0;
     border-radius: 8px; /* 테두리 둥글게 하기 */
 }
 /* 코드 블록 내부 패딩 */
@@ -235,7 +236,7 @@ code.hljs {
 /* 하이라이팅 기본 스타일 */
 .hljs {
     background: #2e2e2e;
-    color: #f8f8f2;
+    color: #e0e0e0;
 }
 /* 주석 스타일 */
 .hljs-comment {
@@ -244,7 +245,7 @@ code.hljs {
 /* 구문 및 태그 스타일 */
 .hljs-punctuation,
 .hljs-tag {
-    color: #FFFFFF;
+    color: #e0e0e0;
 }
 /* 속성, 문서 태그, 키워드, 메타 데이터 스타일 */
  .hljs-attribute {
