@@ -128,6 +128,35 @@ body {
     100% { transform: rotate(360deg); }
 }
 
+/* Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+    width: 12px; /* 스크롤바 너비 */
+    height: 12px; /* 수평 스크롤바 높이 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바의 색 */
+    border-radius: 6px; /* 스크롤바 둥글게 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 마우스 오버 시 색상 변경 */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* 배경 색상 */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin; /* 스크롤바 굵기 */
+    scrollbar-color: #888 transparent; /* 스크롤바 색상 */
+}
+
+/* Edge */
+@supports (-ms-overflow-style: auto) {
+    ::-ms-overflow-style: scrollbar; /* 기본 스크롤바 스타일 */
+}
 
 /* Additional styles for code blocks */
 
