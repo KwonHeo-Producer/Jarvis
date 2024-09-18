@@ -57,6 +57,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // Loading spinner
             const loadingSpinnerDiv = document.createElement('div');
             loadingSpinnerDiv.className = 'loading-spinner';
+            loadingSpinnerDiv.style.height = '40px'; // 높이 40px
+            loadingSpinnerDiv.style.width = '40px'; // 너비 40px
             loadingSpinnerDiv.style.display = 'flex'; // flexbox 사용
             messagesDiv.appendChild(loadingSpinnerDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
