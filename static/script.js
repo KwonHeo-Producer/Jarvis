@@ -106,6 +106,16 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
+                // Append the copy button for the assistant message
+                const copyButton = document.createElement('button');
+                copyButton.textContent = 'Copy';
+                copyButton.className = 'copy-button';
+                copyButton.onclick = () => {
+                    const messageText = currentMessageDiv.innerText;
+                    copyToClipboard(messageText);
+                };
+                currentMessageDiv.appendChild(copyButton);
+
                 messagesDiv.appendChild(currentMessageDiv);
                 loadingParentDiv.remove(); // Remove parent div along with the spinner
 
@@ -137,7 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         navigator.clipboard.writeText(text)
             .then(() => {
                 console.log('Text successfully copied');
-                alert('Code copied to clipboard!');
+                alert('Text copied to clipboard!');
             })
             .catch(err => {
                 console.error('Failed to copy text: ', err);
