@@ -1,4 +1,4 @@
-        document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
@@ -14,23 +14,25 @@
         userInput.style.height = `${newHeight}px`;
     };
 
-    // Event listener for handling 'Enter' keypress in the textarea
     userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            if (isMobile) {
-                userInput.value += '\n';
+    if (event.key === 'Enter') {
+        event.preventDefault();
+        if (isMobile) {
+            userInput.value += '\n';
+            adjustTextareaHeight();
+        } else {
+            if (event.shiftKey) {
+                const { selectionStart, selectionEnd, value } = userInput;
+                // 텍스트와 텍스트 사이에서 줄바꿈 추가
+                userInput.value = value.substring(0, selectionStart) + '\n' + value.substring(selectionStart);
+                userInput.selectionStart = userInput.selectionEnd = selectionStart + 1; // 커서 위치를 줄바꿈 뒤로 이동
                 adjustTextareaHeight();
             } else {
-                if (event.shiftKey) {
-                    userInput.value += '\n';
-                    adjustTextareaHeight();
-                } else {
-                    sendMessage();
+                sendMessage();
+                    }
                 }
             }
-        }
-    });
+        });
 
     // Function to escape HTML
     const escapeHTML = (unsafe) => {
