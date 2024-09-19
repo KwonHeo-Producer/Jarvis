@@ -47,19 +47,23 @@ document.addEventListener('DOMContentLoaded', () => {
         const prompt = userInput.value.trim();
         if (prompt) {
             const formattedPrompt = escapeHTML(prompt).replace(/\n/g, '<br>');
-
-            // Append user message to the messages container
             messagesDiv.innerHTML += `<div class="message user-message">${formattedPrompt}</div>`;
             userInput.value = '';
             userInput.style.height = 'auto';
 
-            // Loading spinner
+            // Create a parent div for the loading spinner
+            const loadingParentDiv = document.createElement('div');
+            loadingParentDiv.className = 'loading-parent';
+            loadingParentDiv.style.height = '40px'; // Set height to provide space
+            messagesDiv.appendChild(loadingParentDiv);
+
+            // Create the loading spinner
             const loadingSpinnerDiv = document.createElement('div');
             loadingSpinnerDiv.className = 'loading-spinner';
-            loadingSpinnerDiv.style.height = '40px';
-            loadingSpinnerDiv.style.width = '40px';
-            loadingSpinnerDiv.style.display = 'flex';
-            messagesDiv.appendChild(loadingSpinnerDiv);
+            loadingSpinnerDiv.style.height = '40px'; // Height of spinner
+            loadingSpinnerDiv.style.width = '40px'; // Width of spinner
+            loadingSpinnerDiv.style.display = 'flex'; // Use flexbox
+            loadingParentDiv.appendChild(loadingSpinnerDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
             try {
@@ -83,20 +87,17 @@ document.addEventListener('DOMContentLoaded', () => {
                             codeBlocks.forEach((block) => {
                                 const codeBlockDiv = document.createElement('div');
                                 codeBlockDiv.className = 'code-block';
-
                                 const codeHeaderDiv = document.createElement('div');
                                 codeHeaderDiv.className = 'code-header';
-
                                 const language = block.className;
                                 const codeLabelDiv = document.createElement('div');
                                 codeLabelDiv.className = 'code-label';
                                 codeLabelDiv.textContent = language ? `${language}` : 'Code';
                                 codeHeaderDiv.appendChild(codeLabelDiv);
-
+                                codeBlockDiv.appendChild(codeHeaderDiv);
                                 const codePre = document.createElement('pre');
                                 codePre.appendChild(block.cloneNode(true));
                                 codeBlockDiv.appendChild(codePre);
-                                codeBlockDiv.appendChild(codeHeaderDiv);
                                 currentMessageDiv.appendChild(codeBlockDiv);
                             });
                         } else {
@@ -106,37 +107,27 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 messagesDiv.appendChild(currentMessageDiv);
-                loadingSpinnerDiv.remove(); // 로딩 스피너 제거
+                loadingParentDiv.remove(); // Remove parent div along with the spinner
 
                 document.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightElement(block);
                 });
 
-                // Add copy buttons after code blocks are added
                 addCopyButtons();
-
-                // 첫 번째 메시지 전송 후 스피너 추가
-                if (!isFirstMessageSent) {
-                    logoContainer.style.display = 'none';
-                    chatContainer.style.display = 'flex';
-                    messagesDiv.classList.add('expanded');
-                    isFirstMessageSent = true;
-
-                    const newLoadingSpinnerDiv = document.createElement('div');
-                    newLoadingSpinnerDiv.className = 'loading-spinner';
-                    newLoadingSpinnerDiv.style.height = '40px';
-                    newLoadingSpinnerDiv.style.width = '40px';
-                    newLoadingSpinnerDiv.style.display = 'flex';
-                    messagesDiv.appendChild(newLoadingSpinnerDiv);
-                    messagesDiv.scrollTop = messagesDiv.scrollHeight;
-                }
 
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
-                loadingSpinnerDiv.remove(); // 로딩 스피너 제거
+                loadingParentDiv.remove(); // Remove parent div on error
             }
+
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
+            if (!isFirstMessageSent) {
+                logoContainer.style.display = 'none';
+                chatContainer.style.display = 'flex';
+                messagesDiv.classList.add('expanded');
+                isFirstMessageSent = true;
+            }
             adjustTextareaHeight();
         }
     };
@@ -169,7 +160,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 const codeText = codeBlockDiv.querySelector('code').innerText;
                 copyToClipboard(codeText);
             };
-
             const codeHeader = codeBlockDiv.querySelector('.code-header');
             if (codeHeader) {
                 codeHeader.appendChild(copyButton);
