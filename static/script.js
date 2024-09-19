@@ -11,6 +11,9 @@ document.addEventListener('DOMContentLoaded', () => {
         userInput.style.height = 'auto';
         const newHeight = Math.max(userInput.scrollHeight, 40);
         userInput.style.height = `${newHeight}px`;
+
+        const chatContainerHeight = chatContainer.offsetHeight;
+        messagesDiv.style.height = `${chatContainerHeight - newHeight}px`;
     };
 
     userInput.addEventListener('keydown', (event) => {
