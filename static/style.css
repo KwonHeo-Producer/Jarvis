@@ -29,8 +29,8 @@ body {
   box-sizing: border-box;
   animation: rotation 1s linear infinite;
 }
-.loader::after,
-.loader::before {
+.logo::after,
+.logo::before {
   content: '';
   box-sizing: border-box;
   position: absolute;
@@ -48,7 +48,7 @@ body {
   animation: rotationBack 0.5s linear infinite;
   transform-origin: center center;
 }
-.loader::before {
+.logo::before {
   width: 32px;
   height: 32px;
   border-color: #BFFAFD #F9B490 transparent transparent;
