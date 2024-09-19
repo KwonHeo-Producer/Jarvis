@@ -9,11 +9,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const adjustTextareaHeight = () => {
         userInput.style.height = 'auto';
-        const newHeight = Math.max(userInput.scrollHeight, 40);
+        const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200);
         userInput.style.height = `${newHeight}px`;
+        adjustMessagesDivHeight();
+    };
 
-        const chatContainerHeight = chatContainer.offsetHeight;
-        messagesDiv.style.height = `${chatContainerHeight - newHeight}px`;
+    const adjustMessagesDivHeight = () => {
+        const totalHeight = window.innerHeight;
+        const inputHeight = userInput.offsetHeight;
+        messagesDiv.style.height = `${totalHeight - inputHeight - 20}px`; // 여백을 고려하여 20px 추가
     };
 
     userInput.addEventListener('keydown', (event) => {
@@ -25,7 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 if (event.shiftKey) {
                     const { selectionStart, selectionEnd, value } = userInput;
-                    userInput.value = value.substring(0, selectionStart) + '\n' + value.substring(selectionStart);
+                    userInput.value = value.substring(0, selectionStart) + '\n' + value.substring(selectionEnd);
                     userInput.selectionStart = userInput.selectionEnd = selectionStart + 1;
                     adjustTextareaHeight();
                 } else {
@@ -109,11 +113,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 copyButton.textContent = 'Copy';
                 copyButton.className = 'copy-button';
                 copyButton.onclick = () => {
-                    const messageHTML = currentMessageDiv.innerHTML; // HTML 내용 가져오기
+                    const messageHTML = currentMessageDiv.innerHTML; 
                     const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = messageHTML; // 임시 div에 추가하여 텍스트 추출
+                    tempDiv.innerHTML = messageHTML; 
 
-                    // 버튼을 제외한 텍스트 추출
                     const copyableContent = Array.from(tempDiv.childNodes)
                         .filter(node => node.tagName !== 'BUTTON')
                         .map(node => node.innerText)
@@ -189,14 +192,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     sendButton.addEventListener('click', sendMessage);
     userInput.addEventListener('input', adjustTextareaHeight);
-    window.addEventListener('resize', () => {
-        if (document.activeElement === userInput) {
-            messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        }
-    });
+    window.addEventListener('resize', adjustMessagesDivHeight);
     userInput.addEventListener('focus', () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
     adjustTextareaHeight();
+    adjustMessagesDivHeight(); // 초기 높이 조정
 });
