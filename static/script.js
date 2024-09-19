@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
@@ -111,8 +111,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 copyButton.textContent = 'Copy';
                 copyButton.className = 'copy-button';
                 copyButton.onclick = () => {
-                    const messageText = currentMessageDiv.innerText;
-                    copyToClipboard(messageText);
+                // 버튼을 제외한 내용만 복사
+                const messageText = currentMessageDiv.childNodes[0].innerText; // 메시지 본문 가져오기
+                copyToClipboard(messageText);
                 };
                 currentMessageDiv.appendChild(copyButton);
 
