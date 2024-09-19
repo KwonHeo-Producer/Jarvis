@@ -18,6 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const totalHeight = window.innerHeight;
         const inputHeight = userInput.offsetHeight;
         messagesDiv.style.height = `${totalHeight - inputHeight - 20}px`; // 여백을 고려하여 20px 추가
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
 
     userInput.addEventListener('keydown', (event) => {
