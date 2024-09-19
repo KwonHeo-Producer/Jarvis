@@ -1,4 +1,4 @@
- document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
@@ -7,7 +7,6 @@
     let isFirstMessageSent = false;
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-    // Adjust the textarea height based on its content
     const adjustTextareaHeight = () => {
         userInput.style.height = 'auto';
         const newHeight = Math.max(userInput.scrollHeight, 40);
@@ -15,26 +14,24 @@
     };
 
     userInput.addEventListener('keydown', (event) => {
-    if (event.key === 'Enter') {
-        event.preventDefault();
-        if (isMobile) {
-            userInput.value += '\n';
-            adjustTextareaHeight();
-        } else {
-            if (event.shiftKey) {
-                const { selectionStart, selectionEnd, value } = userInput;
-                // 텍스트와 텍스트 사이에서 줄바꿈 추가
-                userInput.value = value.substring(0, selectionStart) + '\n' + value.substring(selectionStart);
-                userInput.selectionStart = userInput.selectionEnd = selectionStart + 1; // 커서 위치를 줄바꿈 뒤로 이동
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (isMobile) {
+                userInput.value += '\n';
                 adjustTextareaHeight();
             } else {
-                sendMessage();
-                    }
+                if (event.shiftKey) {
+                    const { selectionStart, selectionEnd, value } = userInput;
+                    userInput.value = value.substring(0, selectionStart) + '\n' + value.substring(selectionStart);
+                    userInput.selectionStart = userInput.selectionEnd = selectionStart + 1;
+                    adjustTextareaHeight();
+                } else {
+                    sendMessage();
                 }
             }
-        });
+        }
+    });
 
-    // Function to escape HTML
     const escapeHTML = (unsafe) => {
         return unsafe
             .replace(/&/g, "&amp;")
@@ -44,7 +41,6 @@
             .replace(/'/g, "&#039;");
     };
 
-    // Function to send the message and handle response
     const sendMessage = async () => {
         const prompt = userInput.value.trim();
         if (prompt) {
@@ -53,18 +49,16 @@
             userInput.value = '';
             userInput.style.height = 'auto';
 
-            // Create a parent div for the loading spinner
             const loadingParentDiv = document.createElement('div');
             loadingParentDiv.className = 'loading-parent';
-            loadingParentDiv.style.height = '40px'; // Set height to provide space
+            loadingParentDiv.style.height = '40px';
             messagesDiv.appendChild(loadingParentDiv);
 
-            // Create the loading spinner
             const loadingSpinnerDiv = document.createElement('div');
             loadingSpinnerDiv.className = 'loading-spinner';
-            loadingSpinnerDiv.style.height = '40px'; // Height of spinner
-            loadingSpinnerDiv.style.width = '40px'; // Width of spinner
-            loadingSpinnerDiv.style.display = 'flex'; // Use flexbox
+            loadingSpinnerDiv.style.height = '40px';
+            loadingSpinnerDiv.style.width = '40px';
+            loadingSpinnerDiv.style.display = 'flex';
             loadingParentDiv.appendChild(loadingSpinnerDiv);
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
 
@@ -108,33 +102,21 @@
                     }
                 });
 
-                // Append the copy button for the assistant message
                 const copyButton = document.createElement('button');
                 copyButton.textContent = 'Copy';
                 copyButton.className = 'copy-button';
                 copyButton.onclick = () => {
-                    const messageText = Array.from(currentMessageDiv.childNodes)
-                    .filter(node => node.tagName !== 'BUTTON')
-                    .map(node => {
-                        if (node.querySelector('code')) {
-                            return node.querySelector('code').innerText;
-                        }
-                        return node.textContent;
-                    })
-                    .join('\n');
-    
-                copyToClipboard(messageText);
+                    const messageHTML = currentMessageDiv.innerHTML; // HTML 내용 가져오기
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = messageHTML; // 임시 div에 추가하여 텍스트 추출
+                    const messageText = tempDiv.innerText; // 텍스트로 변환
 
-                // 'Copied!' 메시지 표시
-                copyButton.textContent = 'Copied!';
-                setTimeout(() => {
-                    copyButton.textContent = 'Copy';
-                }, 1000); // 1초 후에 원래 텍스트로 복원
+                    copyToClipboard(messageText, copyButton);
                 };
                 currentMessageDiv.appendChild(copyButton);
 
                 messagesDiv.appendChild(currentMessageDiv);
-                loadingParentDiv.remove(); // Remove parent div along with the spinner
+                loadingParentDiv.remove();
 
                 document.querySelectorAll('pre code').forEach((block) => {
                     hljs.highlightElement(block);
@@ -145,7 +127,7 @@
             } catch (error) {
                 console.error('Error:', error);
                 messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`;
-                loadingParentDiv.remove(); // Remove parent div on error
+                loadingParentDiv.remove();
             }
 
             messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -159,19 +141,20 @@
         }
     };
 
-    // Function to copy text to clipboard using navigator.clipboard
-    const copyToClipboard = (text) => {
+    const copyToClipboard = (text, button) => {
         navigator.clipboard.writeText(text)
             .then(() => {
                 console.log('Text successfully copied');
-                alert('Text copied to clipboard!');
+                button.textContent = 'Copied!';
+                setTimeout(() => {
+                    button.textContent = 'Copy';
+                }, 1000);
             })
             .catch(err => {
                 console.error('Failed to copy text: ', err);
             });
     };
 
-    // Function to add copy buttons to all code blocks
     const addCopyButtons = () => {
         document.querySelectorAll('.code-block').forEach((codeBlockDiv) => {
             const existingButton = codeBlockDiv.querySelector('.copy-button');
@@ -185,7 +168,7 @@
 
             copyButton.onclick = () => {
                 const codeText = codeBlockDiv.querySelector('code').innerText;
-                copyToClipboard(codeText);
+                copyToClipboard(codeText, copyButton);
             };
             const codeHeader = codeBlockDiv.querySelector('.code-header');
             if (codeHeader) {
@@ -196,7 +179,6 @@
         });
     };
 
-    // Event listeners for sending messages and adjusting textarea
     sendButton.addEventListener('click', sendMessage);
     userInput.addEventListener('input', adjustTextareaHeight);
     window.addEventListener('resize', () => {
@@ -208,6 +190,5 @@
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     });
 
-    // Initial adjustment of textarea height
     adjustTextareaHeight();
 });
