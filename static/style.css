@@ -18,10 +18,59 @@ body {
     text-align: center;
     margin-top: 20px;
 }
-.logo-image {
-    width: 200px; /* 원하는 너비로 조절 */
-    height: auto; /* 비율을 유지하며 높이 자동 조절 */
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  border: 3px solid;
+  border-color: #06F9FC #0899F5 transparent transparent;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
 }
+.loader::after,
+.loader::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 3px solid;
+  border-color: transparent transparent #9878FF #F480FE;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: rotationBack 0.5s linear infinite;
+  transform-origin: center center;
+}
+.loader::before {
+  width: 32px;
+  height: 32px;
+  border-color: #BFFAFD #F9B490 transparent transparent;
+  animation: rotation 1.5s linear infinite;
+}
+    
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}    
 .logo-container h1 {
     color: #e0e0e0;
     margin: 10px 0; /* 위쪽과 아래쪽 여백을 동일하게 설정 */
