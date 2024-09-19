@@ -113,8 +113,17 @@ document.addEventListener('DOMContentLoaded', () => {
                 copyButton.textContent = 'Copy';
                 copyButton.className = 'copy-button';
                 copyButton.onclick = () => {
-                // 버튼을 제외한 내용만 복사
-                const messageText = currentMessageDiv.childNodes[0].innerText; // 메시지 본문 가져오기
+                // 버튼을 제외한 메시지 내용을 복사
+                const messageText = Array.from(currentMessageDiv.childNodes)
+                    .filter(node => node.tagName !== 'BUTTON') // 버튼 제외
+                    .map(node => {
+                        if (node.querySelector('code')) {
+                            // 코드 블록의 내용 가져오기
+                            return node.querySelector('code').innerText;
+                        }
+                        return node.innerText; // 일반 메시지 텍스트
+                    })
+                    .join('\n'); // 줄바꿈으로 구분
                 copyToClipboard(messageText);
                 };
                 currentMessageDiv.appendChild(copyButton);
