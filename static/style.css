@@ -27,7 +27,7 @@ body {
   border: 3px solid;
   border-color: #06F9FC #0899F5 transparent transparent;
   box-sizing: border-box;
-  animation: rotation 1s linear infinite;
+  animation: rotation 3s linear infinite;
 }
 .logo::after,
 .logo::before {
@@ -45,14 +45,14 @@ body {
   height: 40px;
   border-radius: 50%;
   box-sizing: border-box;
-  animation: rotationBack 0.5s linear infinite;
+  animation: rotationBack 1s linear infinite;
   transform-origin: center center;
 }
 .logo::before {
   width: 32px;
   height: 32px;
   border-color: #BFFAFD #F9B490 transparent transparent;
-  animation: rotation 1.5s linear infinite;
+  animation: rotation 2s linear infinite;
 }
     
 @keyframes rotation {
