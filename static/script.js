@@ -109,9 +109,14 @@ document.addEventListener('DOMContentLoaded', () => {
                     const messageHTML = currentMessageDiv.innerHTML; // HTML 내용 가져오기
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = messageHTML; // 임시 div에 추가하여 텍스트 추출
-                    const messageText = tempDiv.innerText; // 텍스트로 변환
 
-                    copyToClipboard(messageText, copyButton);
+                    // 버튼을 제외한 텍스트 추출
+                    const copyableContent = Array.from(tempDiv.childNodes)
+                        .filter(node => node.tagName !== 'BUTTON')
+                        .map(node => node.innerText)
+                        .join('\n');
+
+                    copyToClipboard(copyableContent, copyButton);
                 };
                 currentMessageDiv.appendChild(copyButton);
 
