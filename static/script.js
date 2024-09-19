@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', () => {
+ document.addEventListener('DOMContentLoaded', () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
@@ -113,18 +113,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 copyButton.textContent = 'Copy';
                 copyButton.className = 'copy-button';
                 copyButton.onclick = () => {
-                // 버튼을 제외한 메시지 내용을 복사
-                const messageText = Array.from(currentMessageDiv.childNodes)
-                    .filter(node => node.tagName !== 'BUTTON') // 버튼 제외
+                    const messageText = Array.from(currentMessageDiv.childNodes)
+                    .filter(node => node.tagName !== 'BUTTON')
                     .map(node => {
                         if (node.querySelector('code')) {
-                            // 코드 블록의 내용 가져오기
                             return node.querySelector('code').innerText;
                         }
-                        return node.innerText; // 일반 메시지 텍스트
+                        return node.textContent;
                     })
-                    .join('\n'); // 줄바꿈으로 구분
+                    .join('\n');
+    
                 copyToClipboard(messageText);
+
+                // 'Copied!' 메시지 표시
+                copyButton.textContent = 'Copied!';
+                setTimeout(() => {
+                    copyButton.textContent = 'Copy';
+                }, 1000); // 1초 후에 원래 텍스트로 복원
                 };
                 currentMessageDiv.appendChild(copyButton);
 
