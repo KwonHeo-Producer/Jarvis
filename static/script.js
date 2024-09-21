@@ -16,8 +16,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const adjustMessagesDivHeight = () => {
     const previousScrollHeight = messagesDiv.scrollHeight;
-    const totalHeight = window.innerHeight;
-    const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력창의 최대 높이 220px 적용
+    const totalHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight; // 뷰포트 높이 가져오기
+    const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력창의 최대 높이 200px 적용
     messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 여백을 고려하여 40px 추가
 
     const newScrollHeight = messagesDiv.scrollHeight;
