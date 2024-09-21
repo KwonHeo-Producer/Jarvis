@@ -7,5 +7,5 @@ document.addEventListener('DOMContentLoaded', () => {
     script.onload = () => {
         // chat.js 로드 후 실행할 코드
     };
-    document.head.appendChild(script);
+    document.body.appendChild(script);
 });
