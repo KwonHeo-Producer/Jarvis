@@ -15,14 +15,13 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const adjustMessagesDivHeight = () => {
-        // 현재 스크롤 위치 저장
-        const previousScrollHeight = messagesDiv.scrollHeight;
-        const totalHeight = window.innerHeight;
-        const inputHeight = userInput.offsetHeight;
-        messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 여백을 고려하여 20px 추가
-        // 새로운 메시지 추가 후 스크롤 조정
-        const newScrollHeight = messagesDiv.scrollHeight;
-        messagesDiv.scrollTop += newScrollHeight - previousScrollHeight; // 추가된 만큼 스크롤 조정
+    const previousScrollHeight = messagesDiv.scrollHeight;
+    const totalHeight = window.innerHeight;
+    const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력창의 최대 높이 220px 적용
+    messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 여백을 고려하여 40px 추가
+
+    const newScrollHeight = messagesDiv.scrollHeight;
+    messagesDiv.scrollTop += newScrollHeight - previousScrollHeight; // 추가된 만큼 스크롤 조정
     };
 
     userInput.addEventListener('keydown', (event) => {
