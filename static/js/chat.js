@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+// chat.js
+const initChat = () => {
     const sendButton = document.getElementById('send-button');
     const userInput = document.getElementById('user-input');
     const messagesDiv = document.getElementById('messages');
@@ -210,4 +211,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     adjustTextareaHeight();
     adjustMessagesDivHeight(); // 초기 높이 조정
-});
+};
+
+// Export the initChat function
+export default initChat;
