@@ -20,10 +20,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력창의 최대 높이 220px 적용
     messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 여백을 고려하여 40px 추가
 
-    const newScrollHeight = messagesDiv.scrollHeight;
-    messagesDiv.scrollTop += newScrollHeight - previousScrollHeight; // 추가된 만큼 스크롤 조정
-    };
-
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
             event.preventDefault();
