@@ -15,14 +15,19 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const adjustMessagesDivHeight = () => {
-    const previousScrollHeight = messagesDiv.scrollHeight;
-    const totalHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight; // 뷰포트 높이 가져오기
-    const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력창의 최대 높이 200px 적용
-    messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 여백을 고려하여 40px 추가
+        const previousScrollHeight = messagesDiv.scrollHeight;
+        const totalHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+        const inputHeight = Math.min(userInput.offsetHeight, 220);
+        messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`;
 
-    const newScrollHeight = messagesDiv.scrollHeight;
-    messagesDiv.scrollTop += newScrollHeight - previousScrollHeight; // 추가된 만큼 스크롤 조정
+        const newScrollHeight = messagesDiv.scrollHeight;
+        messagesDiv.scrollTop += newScrollHeight - previousScrollHeight;
     };
+
+    window.addEventListener('resize', adjustMessagesDivHeight); // 화면 크기 조정
+    userInput.addEventListener('focusout', () => {
+        setTimeout(adjustMessagesDivHeight, 300); // 키보드 닫힌 후 높이 조정
+    });
     
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') {
