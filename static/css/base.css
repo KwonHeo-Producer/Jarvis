@@ -157,7 +157,9 @@ body {
     border: none;
     border-radius: 40px;
     cursor: pointer;
-    font-size: 1.9rem;
+    font-size: 1.6rem;
+    padding-bottom: 4px;
+    padding-top: 0px;
 }
 #send-button:hover {
     background-color: #7f7f7f; /* 다크 보라색 */
