@@ -1,6 +1,4 @@
 // sendMessage.js
-import hljs from 'highlight.js'; // highlight.js 가져오기
-
 export const sendMessage = async (prompt, messagesDiv, userInput, fileInput, logoContainer, chatContainer) => {
     const formattedPrompt = escapeHTML(prompt).replace(/\n/g, '<br>');
     messagesDiv.innerHTML += `<div class="message user-message">${formattedPrompt}</div>`;
