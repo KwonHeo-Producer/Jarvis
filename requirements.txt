@@ -57,7 +57,6 @@ PyYAML==6.0.2
 requests==2.32.3
 requests-oauthlib==2.0.0
 rsa==4.9
-shutil
 sniffio==1.3.1
 SQLAlchemy==2.0.34
 starlette==0.38.5
