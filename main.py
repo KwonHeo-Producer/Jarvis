@@ -1,10 +1,9 @@
-from fastapi import FastAPI, Request, HTTPException, UploadFile, File
+from fastapi import FastAPI, Request, HTTPException
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from dotenv import load_dotenv
 from pydantic import BaseModel
 import os
-import shutil
 from service.stock.stock_service import GoogleSheetsService
 from chain_service import initialize_chat_chain
 import markdown
@@ -66,16 +65,3 @@ async def process_message(request: Request):
     except Exception as e:
         # 모든 예외를 포괄적으로 처리합니다.
         raise HTTPException(status_code=500, detail=str(e))
-
-@app.post("/upload_image/")
-async def upload_image(file: UploadFile = File(...)):
-    # 이미지를 저장할 경로 설정
-    upload_folder = "uploads/"
-    os.makedirs(upload_folder, exist_ok=True)
-    
-    # 파일 저장
-    file_location = f"{upload_folder}{file.filename}"
-    with open(file_location, "wb") as buffer:
-        shutil.copyfileobj(file.file, buffer)
-
-    return {"filename": file.filename}
