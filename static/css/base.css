@@ -1,0 +1,266 @@
+/* 기본 스타일 설정 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden; /* 수평 스크롤 방지 */
+}
+#main-page {
+    position: relative;
+    min-height: 100vh; /* 최소 높이 설정 */
+    display: flex;
+    flex-direction: column; /* 페이지의 콘텐츠가 세로로 나열되도록 설정 */
+}
+/* 로고 및 제목 스타일 */
+.logo-container {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 20%;
+}
+.logo {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+  border: 3px solid;
+  border-color: #06F9FC #0899F5 transparent transparent;
+  box-sizing: border-box;
+  animation: rotation 3s linear infinite;
+}
+.logo::after,
+.logo::before {
+  content: '';
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  margin: auto;
+  border: 3px solid;
+  border-color: transparent transparent #9878FF #F480FE;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  box-sizing: border-box;
+  animation: rotationBack 1s linear infinite;
+  transform-origin: center center;
+}
+.logo::before {
+  width: 32px;
+  height: 32px;
+  border-color: #BFFAFD #F9B490 transparent transparent;
+  animation: rotation 2s linear infinite;
+}
+    
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+} 
+@keyframes rotationBack {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(-360deg);
+  }
+}    
+.logo-container h1 {
+    color: #e0e0e0;
+    margin: 10px 0; /* 위쪽과 아래쪽 여백을 동일하게 설정 */
+}
+/* 채팅 컨테이너 스타일 */
+#chat-container {
+    flex: 1; /* 채팅 컨테이너가 남은 공간을 모두 차지하도록 설정 */
+    width: 80%;
+    max-width: 800px; /* 최대 너비 설정 */
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* 요소들 사이의 간격 설정 */
+}
+/* 초기 메시지 박스 크기 */
+#messages {
+    /* padding: 10px; */
+    height: 400px; /* 처음 화면에서의 기본 높이 */
+    overflow-y: auto;
+    background-color: transparent; /* 메시지 영역의 배경색 추가 */
+    border-radius: 8px; /* 테두리 둥글게 하기 */
+    color: #e0e0e0; /* 메시지 텍스트 색상 */
+    display: flex;
+    flex-direction: column;
+    gap: 5px; /* 메시지 간의 간격 */
+    transition: height 0.3s; /* 높이 변경 시 부드러운 전환 */
+}
+/* 메시지 박스 크기가 변경된 상태 */
+#messages.expanded {
+    height: calc(100vh - 120px); /* 입력 후 두 번째 화면에서의 높이 */
+}
+/* 입력 필드와 버튼을 페이지 하단에 고정시키는 스타일 */
+#input-container {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%); /* 가로 중앙 정렬 */
+    width: 800px; /* 입력 필드와 버튼이 페이지의 전체 너비를 차지하도록 설정 */
+    background-color: transparent; /* 배경색 설정 (필요에 따라 조정) */
+    padding: 10px; /* 여백 설정 (필요에 따라 조정) */
+    display: flex;
+    align-items: center; /* 입력 필드와 버튼을 수직 중앙에 맞춤 */
+    gap: 10px; /* 요소들 사이의 간격 설정 */
+    z-index: 1000; /* 요소가 다른 요소 위에 보이도록 설정 */
+}
+/* 입력 필드 및 버튼 래퍼 */
+#input-wrapper {
+    display: flex;
+    flex: 1; /* 입력 필드가 가능한 한 많이 차지하도록 설정 */
+    position: relative; /* 버튼을 입력 필드 안에 위치시키기 위한 설정 */
+    align-items: center;
+    background-color: #e0e0e0;
+    border-radius: 15px;
+}
+/* 입력 필드 스타일 */
+#user-input {
+    align-content: center;
+    width: 750px;
+    padding-inline-start: 10px;
+    border-radius: 15px; /* 입력 필드의 모서리 둥글게 하기 */
+    box-sizing: border-box; /* 패딩과 테두리를 포함한 너비 계산 */
+    font-size: 1rem; /* 모바일에서 확대 방지 */
+    max-height: 200px;
+    overflow-y: auto; /* 내용이 넘치면 스크롤바 표시 */
+    resize: none; /* 사용자가 크기 조정 불가 */
+    color: #000;
+    background-color: #e0e0e0;
+    border-color: #e0e0e0;
+}
+#user-input:focus {
+    border: none; /* 포커스 시 테두리 제거 */
+    outline: none; /* 기본 포커스 아웃라인 제거 */
+}
+/* 버튼 스타일 */
+#send-button {
+    position: fixed;
+    right: 15px;
+    bottom: 11px;
+    padding: 1px;
+    width: 38px; /* 버튼 너비 조정 */
+    background-color: #bbb; /* 보라색 */
+    color: #e0e0e0; /* 버튼 텍스트 색상 */
+    border: none;
+    border-radius: 40px;
+    cursor: pointer;
+    font-size: 1.9rem;
+}
+#send-button:hover {
+    background-color: #7f7f7f; /* 다크 보라색 */
+}
+
+.loading-spinner {
+    border: 8px solid #f3f3f3; /* Light grey */
+    border-top: 8px solid #999; /* Blue */
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    margin: 10px auto; /* Center the spinner */
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Chrome, Safari, and Opera */
+::-webkit-scrollbar {
+    width: 12px; /* 스크롤바 너비 */
+    height: 12px; /* 수평 스크롤바 높이 */
+}
+
+::-webkit-scrollbar-thumb {
+    background: #888; /* 스크롤바의 색 */
+    border-radius: 6px; /* 스크롤바 둥글게 */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #555; /* 마우스 오버 시 색상 변경 */
+}
+
+::-webkit-scrollbar-track {
+    background: transparent; /* 배경 색상 */
+}
+
+/* Firefox */
+* {
+    scrollbar-width: thin; /* 스크롤바 굵기 */
+    scrollbar-color: #888 transparent; /* 스크롤바 색상 */
+}
+
+/* Edge */
+@supports (-ms-overflow-style: auto) {
+    ::-ms-overflow-style: scrollbar; /* 기본 스크롤바 스타일 */
+}
+
+/* 메시지 스타일 */
+.message {
+    border-radius: 10px;
+    padding: 5px;
+    margin: 5px;
+    word-wrap: break-word;
+    max-width: 80%; /* 최대 너비 설정 */
+    align-self: flex-start; /* 메시지를 왼쪽 정렬 */
+}
+.user-message {
+    background-color: #333;
+    color: #e0e0e0;
+    align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
+    margin-left: auto;
+    padding: 10px;
+}
+.assistant-message {
+    background-color: transparent;
+    color: #e0e0e0;
+}
+
+/* 모바일 환경에서의 스타일 */
+@media (max-width: 768px) {
+    #chat-container {
+        width: 100%; /* 모바일에서는 너비를 좀 더 넓게 조정 */
+    }
+    #input-container {
+        width: 95%;
+    }
+    #send-button {
+        width: 38px;
+    }
+    #user-input {
+        font-size: 1rem; /* 모바일에서 글꼴 크기 조정 */
+        width: 88%;
+    }
+    .message {
+    border-radius: 10px;
+    /* padding: 10px; */
+    word-wrap: break-word;
+    max-width: 100%;
+    align-self: flex-start;
+    }
+    .user-message {
+        max-width: 80%;
+    }
+    .assistant-message {
+        width: 95%;
+    }
+}
+/* PC 환경에서의 스타일 */
+@media (min-width: 769px) {
+    #chat-container {
+        width: 80%;
+    }
+}
