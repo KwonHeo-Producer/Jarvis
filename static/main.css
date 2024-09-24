@@ -208,77 +208,6 @@ body {
     ::-ms-overflow-style: scrollbar; /* 기본 스크롤바 스타일 */
 }
 
-/* Additional styles for code blocks */
-
-/* 코드 헤더 스타일 */
-.code-header {
-    display: flex; /* 플렉스박스 사용 */
-    justify-content: space-between; /* 라벨과 버튼을 양 끝으로 배치 */
-    align-items: center; /* 수직 중앙 정렬 */
-    margin-bottom: 8px; /* 코드 블록과 코드 사이의 간격 */
-    margin: -10px;
-    background-color: #222;
-    border-bottom: 1px solid #ddd;
-    border-color:#FFF
-}
-
-.code-block {
-    border: 1px solid #e0e0e0;
-    border-radius: 4px;
-    padding: 10px;
-    background-color: #111;
-    position: relative;
-    margin-bottom: 20px;
-}
-
-.code-label {
-    position: relative;
-    /* top: -1px; */
-    left: 0;
-    background-color: transparent;
-    color: #e0e0e0;
-    padding: 5px;
-    /* font-weight: bold; */
-}
-
-.copy-button {
-    background-color: #333; /* 버튼 배경색 */
-    color: #bbb; /* 버튼 텍스트 색상 */
-    border: none; /* 버튼 테두리 제거 */
-    border-radius: 4px; /* 버튼 모서리 둥글게 */
-    padding: 6px 12px; /* 버튼 패딩 */
-    font-size: 14px; /* 버튼 텍스트 크기 */
-    cursor: pointer; /* 마우스 커서 포인터로 변경 */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 배경색 전환과 클릭 효과 */
-}
-
-h2,strong,p,li {
-    color: #e0e0e0;
-    padding: 10px;
-}
-
-textarea::placeholder {
-  color: ##888;
-  font-weight: bold;
-
-}
-
-/* 버튼 호버 시 스타일 */
-.copy-button:hover {
-    background-color: #333; /* 호버 시 배경색 변경 */
-}
-
-/* 버튼 클릭 시 스타일 */
-.copy-button:active {
-    background-color: #333; /* 클릭 시 배경색 변경 */
-    transform: scale(0.9); /* 클릭 시 버튼 살짝 작아지는 효과 */
-}
-
-pre {
-  position: relative;
-  overflow: visible;
-}
-
 /* 메시지 스타일 */
 .message {
     border-radius: 10px;
@@ -299,119 +228,7 @@ pre {
     background-color: transparent;
     color: #e0e0e0;
 }
-/* 코드 블록 기본 스타일 */
-pre, code.hljs {
-    display: block;
-    overflow-x: auto;
-    padding: 1em;
-    background: #111;
-    color: #e0e0e0;
-    border-radius: 8px; /* 테두리 둥글게 하기 */
-}
-/* 코드 블록 내부 패딩 */
-code.hljs {
-    padding: 3px 5px;
-}
-/* 하이라이팅 기본 스타일 */
-.hljs {
-    background: #2e2e2e;
-    color: #e0e0e0;
-}
-/* 주석 스타일 */
-.hljs-comment {
-    color: #909090;
-}
-/* 구문 및 태그 스타일 */
-.hljs-punctuation,
-.hljs-tag {
-    color: #e0e0e0;
-}
-/* 속성, 문서 태그, 키워드, 메타 데이터 스타일 */
- .hljs-attribute {
-     color: #00A67D;
- }
- .hljs-meta .hljs-keyword,
- .hljs-doctag,
- .hljs-name,
- .hljs-selector-tag {
-     color: #2ebbd1;
- }
- .hljs-selector-ID {
-     color: #e2bbd1;
- }
- .hljs-keyword,
- .hljs-tag .hljs-attr {
-     color: #f92672;
- }
 
-/* 삭제, 숫자, 인용, 클래스, 아이디, 문자열, 템플릿 태그, 타입 스타일 */
-.hljs-number {
-    color: #ae81ff;
-}
-.hljs-selector-class {
-    color: #e2e629;
-}
-.hljs-deletion,
-.hljs-quote,
-.hljs-string,
-.hljs-template-tag,
-.hljs-type {
-    color: #ae81ff;
-}
-/* 섹션 및 제목 스타일 */
-.hljs-section,
-.hljs-title {
-    color: #e6db74;
-}
-/* 링크, 연산자, 정규 표현식, 속성, 의사 클래스, 기호, 템플릿 변수, 변수 스타일 */
-.hljs-link,
-.hljs-operator,
-.hljs-regexp,
-.hljs-selector-attr,
-.hljs-selector-pseudo,
-.hljs-symbol,
-.hljs-template-variable,
-.hljs-variable {
-    color: #ab5656;
-}
-/* 리터럴 스타일 */
-.hljs-literal {
-    color: #695;
-}
-/* 추가, 내장, 총알, 코드 스타일 */
-.hljs-addition,
-.hljs-built_in,
-.hljs-bullet,
-.hljs-code {
-    color: #397300;
-}
-/* 메타 데이터 스타일 */
-.hljs-meta {
-    color: #05db17;
-}
-/* 메타 데이터 문자열 스타일 */
-.hljs-meta .hljs-string {
-    color: #38a;
-}
-/* 강조된 텍스트 스타일 */
-.hljs-emphasis {
-    font-style: italic; /* 이탤릭체 */
-}
-/* 굵은 텍스트 스타일 */
-.hljs-strong {
-    font-weight: 700; /* 굵게 표시 */
-}
-/* 코드 블록의 스크롤바 스타일 (선택 사항) */
-pre::-webkit-scrollbar {
-    width: 12px;
-}
-pre::-webkit-scrollbar-thumb {
-    background: #555;
-    border-radius: 6px;
-}
-pre::-webkit-scrollbar-track {
-    background: #333;
-}
 /* 모바일 환경에서의 스타일 */
 @media (max-width: 768px) {
     #chat-container {
@@ -427,9 +244,6 @@ pre::-webkit-scrollbar-track {
         font-size: 1rem; /* 모바일에서 글꼴 크기 조정 */
         width: 88%;
     }
-
-
-
     .message {
     border-radius: 10px;
     /* padding: 10px; */
