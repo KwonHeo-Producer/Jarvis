@@ -40,7 +40,7 @@
     transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 배경색 전환과 클릭 효과 */
 }
 
-h2,strong,p,li {
+h2,strong,p,li,a {
     color: #e0e0e0;
     padding: 10px;
 }
