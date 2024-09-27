@@ -14,6 +14,7 @@ const initChat = () => {
         const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200); // 최소 40, 최대 200으로 설정
         userInput.style.height = `${newHeight}px`; // 높이 적용
         adjustMessagesDivHeight(); // 메시지 영역 높이 조정
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
 
     // 메시지 영역 높이 조정 함수
