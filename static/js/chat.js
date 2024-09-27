@@ -24,6 +24,7 @@ const initChat = () => {
         messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 메시지 영역 높이 설정
         const newScrollHeight = messagesDiv.scrollHeight; // 새 스크롤 높이
         messagesDiv.scrollTop += newScrollHeight - previousScrollHeight; // 스크롤 위치 조정
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
 
     // 윈도우 리사이즈 시 메시지 영역 높이 조정
