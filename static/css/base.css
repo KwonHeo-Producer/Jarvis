@@ -82,6 +82,7 @@ body {
     width: 80%;
     max-width: 800px; /* 최대 너비 설정 */
     margin: 20px auto;
+    margin-bottom: 60px;
     display: flex;
     flex-direction: column;
     gap: 10px; /* 요소들 사이의 간격 설정 */
