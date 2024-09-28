@@ -7,11 +7,13 @@ const initChat = () => {
     const logoContainer = document.querySelector('.logo-container'); // 로고 컨테이너 가져오기
     let isFirstMessageSent = false; // 첫 메시지 전송 여부
     const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 여부 확인
+    let isKeyboardVisible = false; // 키보드 활성화 상태
 
     // 텍스트 영역 높이 조정 함수
     const adjustTextareaHeight = () => {
         userInput.style.height = 'auto'; // 높이를 자동으로 설정
-        const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200); // 최소 40, 최대 200으로 설정
+        const maxHeight = isMobile ? 150 : 200; // 모바일인 경우 최대 높이를 150으로 설정
+        const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), maxHeight); // 최소 40, 최대 maxHeight로 설정
         userInput.style.height = `${newHeight}px`; // 높이 적용
         adjustMessagesDivHeight(); // 메시지 영역 높이 조정
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -19,26 +21,28 @@ const initChat = () => {
 
     // 메시지 영역 높이 조정 함수
     const adjustMessagesDivHeight = () => {
-        const totalHeight = window.innerHeight; 
-        const inputHeight = Math.min(userInput.offsetHeight, 200);
+        const totalHeight = window.innerHeight;
+        const inputHeight = isMobile ? 150 : Math.min(userInput.offsetHeight, 200); // 모바일은 150, 그 외는 최대 200
         const logoContainerHeight = logoContainer ? logoContainer.offsetHeight : 0;
-        messagesDiv.style.height = `${totalHeight - inputHeight - logoContainerHeight - 60}px`;
+        const keyboardHeight = isKeyboardVisible ? (isMobile ? 300 : 0) : 0; // 모바일에서만 키보드 높이 적용
+
+        messagesDiv.style.height = `${totalHeight - inputHeight - logoContainerHeight - keyboardHeight - 60}px`;
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
+
     // 윈도우 리사이즈 시 메시지 영역 높이 조정
     window.addEventListener('resize', adjustMessagesDivHeight);
 
-    // 사용자 입력 요소 포커스 아웃 시 높이 조정
-    userInput.addEventListener('focusout', () => {
-        setTimeout(adjustMessagesDivHeight, 300); // 300ms 후 높이 조정
+    // 사용자 입력 요소 포커스 시 키보드 표시
+    userInput.addEventListener('focus', () => {
+        isKeyboardVisible = true; // 키보드 활성화 상태 업데이트
+        adjustMessagesDivHeight(); // 높이 조정
     });
 
-    // 사용자 입력 요소 블러 시 높이 조정
-    userInput.addEventListener('blur', adjustMessagesDivHeight);
-
-    // 사용자 입력 요소 포커스 시 메시지 영역 스크롤 조정
-    userInput.addEventListener('focus', () => {
-        messagesDiv.scrollTop = messagesDiv.scrollHeight; // 메시지 영역 하단으로 스크롤
+    // 사용자 입력 요소 블러 시 키보드 숨김
+    userInput.addEventListener('blur', () => {
+        isKeyboardVisible = false; // 키보드 비활성화 상태 업데이트
+        adjustMessagesDivHeight(); // 높이 조정
     });
 
     // 사용자 입력 요소에서 키다운 이벤트 처리
