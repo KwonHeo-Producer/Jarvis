@@ -154,13 +154,17 @@ body {
 #send-button {
     position: fixed;
     right: 15px;
-    bottom: 11px;
+    /* bottom: 11px; */
     width: 38px; /* 버튼 너비 조정 */
-    background-color: #bbb; /* 보라색 */
+    height: 38px; /* 버튼 높이 조정 */
+    background-color: #bbb; /* 배경색 설정 */
     color: #e0e0e0; /* 버튼 텍스트 색상 */
     border: none;
-    border-radius: 38px;
-    line-height: 35px;
+    border-radius: 50%; /* 둥근 버튼 */
+    display: flex; /* 내용 중앙 정렬을 위한 flex 사용 */
+    align-items: center; /* 수직 중앙 정렬 */
+    justify-content: center; /* 수평 중앙 정렬 */
+    line-height: normal; /* 줄 높이 기본값으로 설정 */
     cursor: pointer;
     font-size: 1.4rem;
 }
