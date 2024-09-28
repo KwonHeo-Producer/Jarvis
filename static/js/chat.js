@@ -16,13 +16,12 @@ const initChat = () => {
         adjustMessagesDivHeight(); // 메시지 영역 높이 조정
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
-
     // 메시지 영역 높이 조정 함수
     const adjustMessagesDivHeight = () => {
         const previousScrollHeight = messagesDiv.scrollHeight; // 이전 스크롤 높이 저장
         const totalHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight; // 전체 높이 계산
         const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력 영역 높이
-        messagesDiv.style.height = ${totalHeight - inputHeight - 40}px; // 메시지 영역 높이 설정
+        messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 메시지 영역 높이 설정
         const newScrollHeight = messagesDiv.scrollHeight; // 새 스크롤 높이
         messagesDiv.scrollTop += newScrollHeight - previousScrollHeight; // 스크롤 위치 조정
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
