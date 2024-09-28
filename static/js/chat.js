@@ -8,54 +8,6 @@ const initChat = () => {
     let isFirstMessageSent = false; // 첫 메시지 전송 여부
     const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 여부 확인
 
-    // 텍스트 영역 및 메시지 영역 높이 조정
-    const adjustTextareaHeight = () => {
-        userInput.style.height = 'auto'; // 높이를 자동으로 설정
-        const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200); // 최소 40, 최대 200으로 설정
-        userInput.style.height = `${newHeight}px`; // 높이 적용
-        adjustMessagesDivHeight(); // 메시지 영역 높이 조정
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    };
-
-    const adjustMessagesDivHeight = () => {
-        const totalHeight = window.innerHeight; 
-        const inputHeight = Math.min(userInput.offsetHeight, 200);
-        const logoContainerHeight = logoContainer ? logoContainer.offsetHeight : 0;
-        messagesDiv.style.height = `${totalHeight - inputHeight - logoContainerHeight - 60}px`;
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    };
-
-    // 이벤트 리스너
-    window.addEventListener('resize', adjustMessagesDivHeight);
-    userInput.addEventListener('focusout', () => {
-        setTimeout(adjustMessagesDivHeight, 300); // 300ms 후 높이 조정
-    });
-    userInput.addEventListener('blur', adjustMessagesDivHeight);
-    userInput.addEventListener('focus', () => {
-        messagesDiv.scrollTop = messagesDiv.scrollHeight; // 메시지 영역 하단으로 스크롤
-    });
-    userInput.addEventListener('input', adjustTextareaHeight); // 입력 시 높이 조정
-    sendButton.addEventListener('click', sendMessage); // 전송 버튼 클릭 시 메시지 전송
-
-    userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') { // Enter 키 눌렀을 때
-            event.preventDefault(); // 기본 동작 방지
-            if (isMobile) { // 모바일인 경우
-                userInput.value += '\n'; // 줄바꿈 추가
-                adjustTextareaHeight(); // 높이 조정
-            } else {
-                if (event.shiftKey) { // Shift + Enter인 경우
-                    const { selectionStart, selectionEnd, value } = userInput;
-                    userInput.value = value.substring(0, selectionStart) + '\n' + value.substring(selectionEnd);
-                    userInput.selectionStart = userInput.selectionEnd = selectionStart + 1; // 커서 위치 조정
-                    adjustTextareaHeight(); // 높이 조정
-                } else {
-                    sendMessage(); // 메시지 전송
-                }
-            }
-        }
-    });
-
     // 메시지 전송 함수
     const sendMessage = async () => {
         const prompt = userInput.value.trim(); // 입력값 가져오기
@@ -242,9 +194,12 @@ const initChat = () => {
         });
     };
 
-    // 초기 높이 조정
-    adjustTextareaHeight();
-    adjustMessagesDivHeight();
+    // 버튼 클릭 이벤트 리스너
+    sendButton.addEventListener('click', sendMessage); // 전송 버튼 클릭 시 메시지 전송
+    userInput.addEventListener('input', adjustTextareaHeight); // 입력 시 높이 조정
+
+    adjustTextareaHeight(); // 초기 높이 조정
+    adjustMessagesDivHeight(); // 초기 메시지 영역 높이 조정
 };
 
 // initChat 함수 내보내기
