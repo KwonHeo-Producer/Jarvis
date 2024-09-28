@@ -22,7 +22,8 @@ const initChat = () => {
         const previousScrollHeight = messagesDiv.scrollHeight; // 이전 스크롤 높이 저장
         const totalHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight; // 전체 높이 계산
         const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력 영역 높이
-        const logoContainerHeight = document.getElementById('logo-container').offsetHeight;
+        const logoContainer = document.querySelector('.logo-container'); // 클래스 선택자로 변경
+        const logoContainerHeight = logoContainer ? logoContainer.offsetHeight : 0; // 요소가 없으면 0으로 설정
         messagesDiv.style.height = `${totalHeight - inputHeight - logoContainerHeight - 40}px`; // 메시지 영역 높이 설정        
         const newScrollHeight = messagesDiv.scrollHeight; // 새 스크롤 높이      
         messagesDiv.scrollTop = newScrollHeight;
