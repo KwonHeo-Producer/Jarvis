@@ -248,6 +248,7 @@ body {
     }
     #send-button {
         width: 38px;
+        font-size: 1.4rem;
     }
     #user-input {
         font-size: 1rem; /* 모바일에서 글꼴 크기 조정 */
