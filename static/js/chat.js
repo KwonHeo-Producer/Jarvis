@@ -12,21 +12,21 @@ const initChat = () => {
     const adjustTextareaHeight = () => {
         userInput.style.height = 'auto'; // 높이를 자동으로 설정
         const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200); // 최소 40, 최대 200으로 설정
-        userInput.style.height = ${newHeight}px; // 높이 적용
+        userInput.style.height = `${newHeight}px`; // 높이 적용
         adjustMessagesDivHeight(); // 메시지 영역 높이 조정
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
+
     // 메시지 영역 높이 조정 함수
     const adjustMessagesDivHeight = () => {
         const previousScrollHeight = messagesDiv.scrollHeight; // 이전 스크롤 높이 저장
         const totalHeight = window.visualViewport ? window.visualViewport.height : window.innerHeight; // 전체 높이 계산
         const inputHeight = Math.min(userInput.offsetHeight, 200); // 입력 영역 높이
-        messagesDiv.style.height = `${totalHeight - inputHeight - 40}px`; // 메시지 영역 높이 설정
-        const newScrollHeight = messagesDiv.scrollHeight; // 새 스크롤 높이
-        messagesDiv.scrollTop += newScrollHeight - previousScrollHeight; // 스크롤 위치 조정
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        const logoContainerHeight = document.getElementById('logo-container').offsetHeight;
+        messagesDiv.style.height = `${totalHeight - inputHeight - logoContainerHeight - 40}px`; // 메시지 영역 높이 설정        
+        const newScrollHeight = messagesDiv.scrollHeight; // 새 스크롤 높이      
+        messagesDiv.scrollTop = newScrollHeight;
     };
-
     // 윈도우 리사이즈 시 메시지 영역 높이 조정
     window.addEventListener('resize', adjustMessagesDivHeight);
 
@@ -78,7 +78,7 @@ const initChat = () => {
         const prompt = userInput.value.trim(); // 입력값 가져오기
         if (prompt) {
             const formattedPrompt = escapeHTML(prompt).replace(/\n/g, '<br>'); // HTML 이스케이프 및 줄바꿈 처리
-            messagesDiv.innerHTML += <div class="message user-message">${formattedPrompt}</div>; // 사용자 메시지 추가
+            messagesDiv.innerHTML += `<div class="message user-message">${formattedPrompt}</div>`; // 사용자 메시지 추가
             userInput.value = ''; // 입력값 초기화
             userInput.style.height = 'auto'; // 텍스트 영역 높이 초기화
 
@@ -123,7 +123,7 @@ const initChat = () => {
                                 const language = block.className; // 언어 가져오기
                                 const codeLabelDiv = document.createElement('div'); // 코드 레이블 div 생성
                                 codeLabelDiv.className = 'code-label'; // 클래스 이름 설정
-                                codeLabelDiv.textContent = language ? ${language} : 'Code'; // 언어 또는 'Code' 레이블 설정
+                                codeLabelDiv.textContent = language ? `${language}` : 'Code'; // 언어 또는 'Code' 레이블 설정
                                 codeHeaderDiv.appendChild(codeLabelDiv); // 코드 헤더에 레이블 추가
                                 codeBlockDiv.appendChild(codeHeaderDiv); // 코드 블록에 헤더 추가
                                 const codePre = document.createElement('pre'); // pre 태그 생성
@@ -162,7 +162,7 @@ const initChat = () => {
                 addCopyButtons(); // 코드 블록에 복사 버튼 추가
             } catch (error) {
                 console.error('Error:', error); // 에러 로그
-                messagesDiv.innerHTML += <div class="message assistant-message">An error occurred. Please try again.</div>; // 에러 메시지 추가
+                messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`; // 에러 메시지 추가
                 loadingParentDiv.remove(); // 로딩 표시 제거
             }
 
@@ -224,4 +224,4 @@ const initChat = () => {
 };
 
 // initChat 함수 내보내기
-export default initChat; 
+export default initChat;
