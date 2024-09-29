@@ -94,21 +94,30 @@ const initChat = () => {
         });
     };
 
-    // 모든 메시지에 복사 버튼 추가하는 함수
-    const addCopyButtonsToMessages = () => {
-        document.querySelectorAll('.message').forEach((messageDiv) => {
-            // 기존 버튼을 제거하지 않고 새로운 버튼을 추가
-            const existingButton = messageDiv.querySelector('.copy-button');
-            if (!existingButton) { // 버튼이 없는 경우에만 추가
-                const copyButton = document.createElement('button'); // 복사 버튼 생성
-                copyButton.textContent = 'Copy'; // 버튼 텍스트 설정
-                copyButton.className = 'copy-button'; // 클래스 이름 설정
-                copyButton.onclick = () => { // 클릭 시 복사 기능
-                    const messageText = messageDiv.innerText; // 메시지 텍스트 가져오기
-                    copyToClipboard(messageText, copyButton); // 클립보드에 복사
-                };
-                messageDiv.appendChild(copyButton); // 현재 메시지 div에 복사 버튼 추가
+    
+    //복사 버튼 추가 함수
+    const addCopyButtons = () => {
+        document.querySelectorAll('.message.assistant-message').forEach((currentMessageDiv) => {
+            const existingButton = currentMessageDiv.querySelector('.copy-button'); // 기존 버튼 가져오기
+            if (existingButton) {
+                existingButton.remove(); // 기존 버튼 제거
             }
+    
+            const copyButton = document.createElement('button'); // 복사 버튼 생성
+            copyButton.textContent = 'Copy'; // 버튼 텍스트 설정
+            copyButton.className = 'copy-button'; // 클래스 이름 설정
+            copyButton.onclick = () => {
+                const messageHTML = currentMessageDiv.innerHTML; 
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = messageHTML; 
+                const copyableContent = Array.from(tempDiv.childNodes)
+                    .filter(node => node.tagName !== 'BUTTON') // 버튼 제외
+                    .map(node => node.innerText) // 텍스트만 가져오기
+                    .join('\n'); // 줄바꿈으로 연결
+                copyToClipboard(copyableContent, copyButton); // 클립보드에 복사
+            };
+    
+            currentMessageDiv.appendChild(copyButton); // 현재 메시지 div에 복사 버튼 추가
         });
     };
 
