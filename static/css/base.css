@@ -218,24 +218,26 @@ body {
 }
 
 /* 메시지 스타일 */
-.message {
+.message-user-message {
+    border-radius: 10px;
+    background-color: #333;
+    color: #e0e0e0;
+    align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
+    margin-left: auto;
+    margin: 5px;
+    word-wrap: break-word;
+    max-width: 80%; /* 최대 너비 설정 */
+    padding: 10px;
+}
+.message-assistant-message {
+    background-color: transparent;
+    color: #e0e0e0;
     border-radius: 10px;
     padding: 5px;
     margin: 5px;
     word-wrap: break-word;
     max-width: 80%; /* 최대 너비 설정 */
-    align-self: flex-start; /* 메시지를 왼쪽 정렬 */
-}
-.user-message {
-    background-color: #333;
-    color: #e0e0e0;
-    align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
-    margin-left: auto;
-    padding: 10px;
-}
-.assistant-message {
-    background-color: transparent;
-    color: #e0e0e0;
+    align-self: flex-start; /* 메시지를 왼쪽 정렬 */    
 }
 
 /* 모바일 환경에서의 스타일 */
@@ -254,18 +256,14 @@ body {
         font-size: 1rem; /* 모바일에서 글꼴 크기 조정 */
         width: 88%;
     }
-    .message {
-    border-radius: 10px;
-    /* padding: 10px; */
-    word-wrap: break-word;
-    max-width: 100%;
-    align-self: flex-start;
-    }
-    .user-message {
+    .message-user-message {
         max-width: 80%;
+        /* padding: 10px; */
     }
-    .assistant-message {
+    .message-assistant-message {
         width: 95%;
+        max-width: 100%;
+        /* padding: 10px; */
     }
 }
 /* PC 환경에서의 스타일 */
