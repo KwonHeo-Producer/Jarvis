@@ -219,19 +219,6 @@ const initChat = () => {
     // 윈도우 리사이즈 시 메시지 영역 높이 조정
     window.addEventListener('resize', adjustMessagesDivHeight);
 
-    // 사용자 입력 요소 포커스 아웃 시 높이 조정
-    userInput.addEventListener('focusout', () => {
-        setTimeout(adjustMessagesDivHeight, 300); // 300ms 후 높이 조정
-    });
-
-    // 사용자 입력 요소 블러 시 높이 조정
-    userInput.addEventListener('blur', adjustMessagesDivHeight);
-
-    // 사용자 입력 요소 포커스 시 메시지 영역 스크롤 조정
-    userInput.addEventListener('focus', () => {
-        messagesDiv.scrollTop = messagesDiv.scrollHeight; // 메시지 영역 하단으로 스크롤
-    });
-
     // 사용자 입력 요소에서 키다운 이벤트 처리
     userInput.addEventListener('keydown', (event) => {
         if (event.key === 'Enter') { // Enter 키 눌렀을 때
