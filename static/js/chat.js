@@ -96,7 +96,7 @@ const initChat = () => {
 
     
     const addCopyButton = () => {
-        document.querySelectorAll('.message.assistant-message, .code-block').forEach((element) => {
+        document.querySelectorAll('.message assistant-message, .code-block').forEach((element) => {
             const existingButton = element.querySelector('.copy-button'); // 기존 버튼 가져오기
             if (existingButton) {
                 existingButton.remove(); // 기존 버튼 제거
@@ -142,7 +142,7 @@ const initChat = () => {
         document.querySelectorAll('pre code').forEach((block) => {
             hljs.highlightElement(block); // 하이라이트 처리
         });
-        addCopyButtons(); // 코드 블록에 복사 버튼 추가
+        addCopyButton(); // 코드 블록에 복사 버튼 추가
     };
 
     // 첫 메시지 전송 처리 함수
