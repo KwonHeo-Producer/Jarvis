@@ -20,7 +20,7 @@ const initChat = () => {
 
     // 사용자 메시지 추가 함수
     const addUserMessage = (formattedPrompt) => {
-        messagesDiv.innerHTML += `<div class="message-user-message">${formattedPrompt}</div>`; // 사용자 메시지 추가
+        messagesDiv.innerHTML += `<div class="message user-message">${formattedPrompt}</div>`; // 사용자 메시지 추가
     };
 
     // 로딩 표시 생성 함수
@@ -56,7 +56,7 @@ const initChat = () => {
         const tempDiv = document.createElement('div'); // 임시 div 생성
         tempDiv.innerHTML = text; // 응답 텍스트를 HTML로 설정
         let currentMessageDiv = document.createElement('div'); // 현재 메시지 div 생성
-        currentMessageDiv.className = 'message-assistant-message'; // 클래스 이름 설정
+        currentMessageDiv.className = 'message assistant-message'; // 클래스 이름 설정
 
         // 응답의 각 노드를 처리
         tempDiv.childNodes.forEach(node => {
@@ -94,46 +94,50 @@ const initChat = () => {
         });
     };
 
+
+    // 복사 버튼을 생성하는 함수
+    const addCopyButton = (element) => {        
+        const createCopyButton = (parentElement) => {
+            const copyButton = document.createElement('button');
+            copyButton.textContent = 'Copy';
+            copyButton.className = 'copy-button';
     
-    const addCopyButton = () => {
-        document.querySelectorAll('.message-assistant-message, .code-block').forEach((element) => {
-            const existingButton = element.querySelector('.copy-button'); // 기존 버튼 가져오기
-            if (existingButton) {
-                existingButton.remove(); // 기존 버튼 제거
-            }
-    
-            const copyButton = document.createElement('button'); // 복사 버튼 생성
-            copyButton.textContent = 'Copy'; // 버튼 텍스트 설정
-            copyButton.className = 'copy-button'; // 클래스 이름 설정
-    
-            // 클릭 이벤트 설정
             copyButton.onclick = () => {
                 let copyableContent;
-    
-                if (element.classList.contains('message-assistant-message')) {
-                    const messageHTML = element.innerHTML; 
+                if (parentElement.classList.contains('code-block')) {
+                    // 코드 블록에서 텍스트 가져오기
+                    const codeText = parentElement.querySelector('code').innerText;
+                    copyableContent = codeText; // 클립보드에 복사할 내용 설정
+                } else {
+                    // 일반 메시지에서 텍스트 가져오기
+                    const messageHTML = parentElement.innerHTML; 
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = messageHTML; 
                     copyableContent = Array.from(tempDiv.childNodes)
                         .filter(node => node.tagName !== 'BUTTON') // 버튼 제외
                         .map(node => node.innerText) // 텍스트만 가져오기
                         .join('\n'); // 줄바꿈으로 연결
-                } else if (element.classList.contains('code-block')) {
-                    const codeText = element.querySelector('code').innerText; // 코드 텍스트 가져오기
-                    copyableContent = codeText; // 클립보드에 복사할 내용 설정
                 }
-    
-                copyToClipboard(copyableContent, copyButton); // 클립보드에 복사
+                copyToClipboard(copyableContent, copyButton);
             };
     
-            // 버튼을 적절한 위치에 추가
+            return copyButton;
+        };
+    
+        // 메시지에 복사 버튼 추가
+        if (element.classList.contains('message') && element.classList.contains('assistant-message')) {
+            const copyButton = createCopyButton(element);
+            element.appendChild(copyButton);
+        }
+    
+        // 코드 블록에 복사 버튼 추가
+        if (element.classList.contains('code-block')) {
+            const copyButton = createCopyButton(element);
             const header = element.querySelector('.code-header');
             if (header) {
-                header.appendChild(copyButton); // 코드 블록에 버튼 추가
-            } else {
-                element.appendChild(copyButton); // 메시지 div에 버튼 추가
+                header.appendChild(copyButton); // 코드 블록 헤더에 버튼 추가
             }
-        });
+        }
     };
 
 
@@ -173,7 +177,7 @@ const initChat = () => {
                 highlightCodeBlocks(); // 코드 블록 하이라이트
             } catch (error) {
                 console.error('Error:', error); // 에러 로그
-                messagesDiv.innerHTML += `<div class="message-assistant-message">An error occurred. Please try again.</div>`; // 에러 메시지 추가
+                messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`; // 에러 메시지 추가
                 loadingParentDiv.remove(); // 로딩 표시 제거
             }
 
