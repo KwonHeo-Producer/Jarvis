@@ -95,10 +95,9 @@ const initChat = () => {
     };
 
     
-    //복사 버튼 추가 함수
     const addCopyButtons = () => {
-        document.querySelectorAll('.message.assistant-message').forEach((currentMessageDiv) => {
-            const existingButton = currentMessageDiv.querySelector('.copy-button'); // 기존 버튼 가져오기
+        document.querySelectorAll('.message.assistant-message, .code-block').forEach((element) => {
+            const existingButton = element.querySelector('.copy-button'); // 기존 버튼 가져오기
             if (existingButton) {
                 existingButton.remove(); // 기존 버튼 제거
             }
@@ -106,20 +105,37 @@ const initChat = () => {
             const copyButton = document.createElement('button'); // 복사 버튼 생성
             copyButton.textContent = 'Copy'; // 버튼 텍스트 설정
             copyButton.className = 'copy-button'; // 클래스 이름 설정
+    
+            // 클릭 이벤트 설정
             copyButton.onclick = () => {
-                const messageHTML = currentMessageDiv.innerHTML; 
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = messageHTML; 
-                const copyableContent = Array.from(tempDiv.childNodes)
-                    .filter(node => node.tagName !== 'BUTTON') // 버튼 제외
-                    .map(node => node.innerText) // 텍스트만 가져오기
-                    .join('\n'); // 줄바꿈으로 연결
+                let copyableContent;
+    
+                if (element.classList.contains('message') || element.classList.contains('assistant-message')) {
+                    const messageHTML = element.innerHTML; 
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = messageHTML; 
+                    copyableContent = Array.from(tempDiv.childNodes)
+                        .filter(node => node.tagName !== 'BUTTON') // 버튼 제외
+                        .map(node => node.innerText) // 텍스트만 가져오기
+                        .join('\n'); // 줄바꿈으로 연결
+                } else if (element.classList.contains('code-block')) {
+                    const codeText = element.querySelector('code').innerText; // 코드 텍스트 가져오기
+                    copyableContent = codeText; // 클립보드에 복사할 내용 설정
+                }
+    
                 copyToClipboard(copyableContent, copyButton); // 클립보드에 복사
             };
     
-            currentMessageDiv.appendChild(copyButton); // 현재 메시지 div에 복사 버튼 추가
+            // 버튼을 적절한 위치에 추가
+            const header = element.querySelector('.code-header');
+            if (header) {
+                header.appendChild(copyButton); // 코드 블록에 버튼 추가
+            } else {
+                element.appendChild(copyButton); // 메시지 div에 버튼 추가
+            }
         });
     };
+
 
     // 코드 블록 하이라이트 함수
     const highlightCodeBlocks = () => {
@@ -180,30 +196,6 @@ const initChat = () => {
             .catch(err => {
                 console.error('Failed to copy text: ', err); // 복사 실패 로그
             });
-    };
-
-    // 코드 블록에 복사 버튼 추가하는 함수
-    const addCopyButtons = () => {
-        document.querySelectorAll('.code-block').forEach((codeBlockDiv) => {
-            const existingButton = codeBlockDiv.querySelector('.copy-button'); // 기존 버튼 가져오기
-            if (existingButton) {
-                existingButton.remove(); // 기존 버튼 제거
-            }
-
-            const copyButton = document.createElement('button'); // 복사 버튼 생성
-            copyButton.textContent = 'Copy'; // 버튼 텍스트 설정
-            copyButton.className = 'copy-button'; // 클래스 이름 설정
-            copyButton.onclick = () => { // 클릭 시 복사 기능
-                const codeText = codeBlockDiv.querySelector('code').innerText; // 코드 텍스트 가져오기
-                copyToClipboard(codeText, copyButton); // 클립보드에 복사
-            };
-            const codeHeader = codeBlockDiv.querySelector('.code-header'); // 코드 헤더 가져오기
-            if (codeHeader) {
-                codeHeader.appendChild(copyButton); // 코드 헤더에 복사 버튼 추가
-            } else {
-                codeBlockDiv.appendChild(copyButton); // 코드 블록에 복사 버튼 추가
-            }
-        });
     };
 
     // 텍스트 영역 높이 조정 함수
