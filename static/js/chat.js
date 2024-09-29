@@ -110,7 +110,7 @@ const initChat = () => {
             copyButton.onclick = () => {
                 let copyableContent;
     
-                if (element.classList.contains('message') || element.classList.contains('assistant-message')) {
+                if (element.classList.contains('message assistant-message')) {
                     const messageHTML = element.innerHTML; 
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = messageHTML; 
