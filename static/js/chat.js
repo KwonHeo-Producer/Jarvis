@@ -96,6 +96,11 @@ const initChat = () => {
 
     // 복사 버튼 추가 함수
     const addCopyButton = (currentMessageDiv) => {
+        const existingButton = currentMessageDiv.querySelector('.copy-button'); // 기존 버튼 가져오기
+        if (existingButton) {
+            existingButton.remove(); // 기존 버튼 제거
+        }
+    
         const copyButton = document.createElement('button');
         copyButton.textContent = 'Copy'; // 버튼 텍스트 설정
         copyButton.className = 'copy-button'; // 클래스 이름 설정
