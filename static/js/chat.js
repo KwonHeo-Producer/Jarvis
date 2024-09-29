@@ -95,7 +95,7 @@ const initChat = () => {
     };
 
     
-    const addCopyButtons = () => {
+    const addCopyButton = () => {
         document.querySelectorAll('.message.assistant-message, .code-block').forEach((element) => {
             const existingButton = element.querySelector('.copy-button'); // 기존 버튼 가져오기
             if (existingButton) {
