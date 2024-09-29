@@ -20,7 +20,7 @@ const initChat = () => {
 
     // 사용자 메시지 추가 함수
     const addUserMessage = (formattedPrompt) => {
-        messagesDiv.innerHTML += `<div class="message user-message">${formattedPrompt}</div>`; // 사용자 메시지 추가
+        messagesDiv.innerHTML += `<div class="message-user-message">${formattedPrompt}</div>`; // 사용자 메시지 추가
     };
 
     // 로딩 표시 생성 함수
@@ -56,7 +56,7 @@ const initChat = () => {
         const tempDiv = document.createElement('div'); // 임시 div 생성
         tempDiv.innerHTML = text; // 응답 텍스트를 HTML로 설정
         let currentMessageDiv = document.createElement('div'); // 현재 메시지 div 생성
-        currentMessageDiv.className = 'message assistant-message'; // 클래스 이름 설정
+        currentMessageDiv.className = 'message-assistant-message'; // 클래스 이름 설정
 
         // 응답의 각 노드를 처리
         tempDiv.childNodes.forEach(node => {
@@ -96,7 +96,7 @@ const initChat = () => {
 
     
     const addCopyButton = () => {
-        document.querySelectorAll('.message assistant-message, .code-block').forEach((element) => {
+        document.querySelectorAll('.message-assistant-message, .code-block').forEach((element) => {
             const existingButton = element.querySelector('.copy-button'); // 기존 버튼 가져오기
             if (existingButton) {
                 existingButton.remove(); // 기존 버튼 제거
@@ -110,7 +110,7 @@ const initChat = () => {
             copyButton.onclick = () => {
                 let copyableContent;
     
-                if (element.classList.contains('message assistant-message')) {
+                if (element.classList.contains('message-assistant-message')) {
                     const messageHTML = element.innerHTML; 
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = messageHTML; 
@@ -173,7 +173,7 @@ const initChat = () => {
                 highlightCodeBlocks(); // 코드 블록 하이라이트
             } catch (error) {
                 console.error('Error:', error); // 에러 로그
-                messagesDiv.innerHTML += `<div class="message assistant-message">An error occurred. Please try again.</div>`; // 에러 메시지 추가
+                messagesDiv.innerHTML += `<div class="message-assistant-message">An error occurred. Please try again.</div>`; // 에러 메시지 추가
                 loadingParentDiv.remove(); // 로딩 표시 제거
             }
 
