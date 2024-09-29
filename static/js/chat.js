@@ -20,8 +20,15 @@ const initChat = () => {
 
     // 사용자 메시지 추가 함수
     const addUserMessage = (formattedPrompt) => {
-        messagesDiv.innerHTML += `<div class="message-user-message">${formattedPrompt}</div>`; // 사용자 메시지 추가
+        const messageDiv = document.createElement('div'); // 새로운 메시지 div 생성
+        messageDiv.className = 'message-user-message'; // 클래스 이름 설정
+        messageDiv.innerHTML = formattedPrompt; // 사용자 메시지 추가
+    
+        createDeleteButton(messageDiv); // 삭제 버튼 추가
+    
+        messagesDiv.appendChild(messageDiv); // 메시지 영역에 추가
     };
+
 
     // 로딩 표시 생성 함수
     const createLoadingIndicator = () => {
@@ -70,6 +77,7 @@ const initChat = () => {
         });
 
         addCopyButton(currentMessageDiv); // 복사 버튼 추가
+        createDeleteButton(currentMessageDiv); // 삭제 버튼 추가
         return currentMessageDiv; // 어시스턴트 메시지 반환
     };
 
@@ -134,6 +142,20 @@ const initChat = () => {
                 element.appendChild(copyButton); // 메시지 div에 버튼 추가
             }
         });
+    };
+
+    //삭제 버튼 생성
+    const createDeleteButton = (messageDiv) => {
+        const deleteButton = document.createElement('button'); // 삭제 버튼 생성
+        deleteButton.textContent = '✘'; // 버튼 텍스트 설정
+        deleteButton.className = 'delete-button'; // 클래스 이름 설정
+    
+        // 삭제 버튼 클릭 이벤트 처리
+        deleteButton.onclick = () => {
+            messageDiv.remove(); // 메시지 삭제
+        };
+    
+        messageDiv.appendChild(deleteButton); // 메시지 div에 삭제 버튼 추가
     };
 
 
