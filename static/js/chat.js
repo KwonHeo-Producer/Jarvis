@@ -1,14 +1,13 @@
 // chat.js
 const initChat = () => {
-    const sendButton = document.getElementById('send-button'); // 전송 버튼 요소 가져오기
-    const userInput = document.getElementById('user-input'); // 사용자 입력 요소 가져오기
-    const messagesDiv = document.getElementById('messages'); // 메시지 표시 영역 가져오기
-    const chatContainer = document.getElementById('chat-container'); // 채팅 컨테이너 가져오기
-    const logoContainer = document.querySelector('.logo-container'); // 로고 컨테이너 가져오기
-    let isFirstMessageSent = false; // 첫 메시지 전송 여부
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent); // 모바일 여부 확인
+    const sendButton = document.getElementById('send-button'); 
+    const userInput = document.getElementById('user-input'); 
+    const messagesDiv = document.getElementById('messages'); 
+    const chatContainer = document.getElementById('chat-container'); 
+    const logoContainer = document.querySelector('.logo-container'); 
+    let isFirstMessageSent = false; 
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent); 
 
-    // HTML 이스케이프 처리 함수
     const escapeHTML = (unsafe) => {
         return unsafe
             .replace(/&/g, "&amp;")
@@ -18,103 +17,124 @@ const initChat = () => {
             .replace(/'/g, "&#039;");
     };
 
-    // 사용자 메시지 추가 함수
+    const createMenuButton = (messageDiv) => {
+        const menuButton = document.createElement('button'); 
+        menuButton.textContent = '⋮'; 
+        menuButton.className = 'menu-button'; 
+
+        const menu = document.createElement('div'); 
+        menu.className = 'menu'; 
+        const copyOption = document.createElement('div');
+        copyOption.textContent = 'Copy';
+        const deleteOption = document.createElement('div');
+        deleteOption.textContent = 'Delete';
+
+        copyOption.onclick = () => {
+            const content = messageDiv.innerText.replace('⋮', ''); 
+            copyToClipboard(content, menuButton); 
+            menu.style.display = 'none'; 
+        };
+
+        deleteOption.onclick = () => {
+            messageDiv.remove(); 
+            menu.style.display = 'none'; 
+        };
+
+        menu.appendChild(copyOption);
+        menu.appendChild(deleteOption);
+        menuButton.onclick = () => {
+            menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; 
+        };
+
+        messageDiv.appendChild(menuButton); 
+        messageDiv.appendChild(menu); 
+    };
+
     const addUserMessage = (formattedPrompt) => {
-        const messageDiv = document.createElement('div'); // 새로운 메시지 div 생성
-        messageDiv.className = 'message-user-message'; // 클래스 이름 설정
-        messageDiv.innerHTML = formattedPrompt; // 사용자 메시지 추가
-    
-        createDeleteButton(messageDiv); // 삭제 버튼 추가
-    
-        messagesDiv.appendChild(messageDiv); // 메시지 영역에 추가
+        const messageDiv = document.createElement('div'); 
+        messageDiv.className = 'message-user-message'; 
+        messageDiv.innerHTML = formattedPrompt; 
+        createMenuButton(messageDiv); 
+        messagesDiv.appendChild(messageDiv); 
     };
 
-
-    // 로딩 표시 생성 함수
     const createLoadingIndicator = () => {
-        const loadingParentDiv = document.createElement('div'); // 로딩 부모 div 생성
-        loadingParentDiv.className = 'loading-parent'; // 클래스 이름 설정
-        loadingParentDiv.style.height = '40px'; // 높이 설정
-        messagesDiv.appendChild(loadingParentDiv); // 메시지 영역에 추가
+        const loadingParentDiv = document.createElement('div'); 
+        loadingParentDiv.className = 'loading-parent'; 
+        loadingParentDiv.style.height = '40px'; 
+        messagesDiv.appendChild(loadingParentDiv); 
 
-        const loadingSpinnerDiv = document.createElement('div'); // 로딩 스피너 div 생성
-        loadingSpinnerDiv.className = 'loading-spinner'; // 클래스 이름 설정
-        loadingSpinnerDiv.style.height = '40px'; // 높이 설정
-        loadingSpinnerDiv.style.width = '40px'; // 너비 설정
-        loadingSpinnerDiv.style.display = 'flex'; // flex로 설정
-        loadingParentDiv.appendChild(loadingSpinnerDiv); // 부모 div에 추가
-        return loadingParentDiv; // 로딩 표시 반환
+        const loadingSpinnerDiv = document.createElement('div'); 
+        loadingSpinnerDiv.className = 'loading-spinner'; 
+        loadingSpinnerDiv.style.height = '40px'; 
+        loadingSpinnerDiv.style.width = '40px'; 
+        loadingSpinnerDiv.style.display = 'flex'; 
+        loadingParentDiv.appendChild(loadingSpinnerDiv); 
+        return loadingParentDiv; 
     };
 
-    // 서버에 메시지 전송 함수
     const fetchResponse = async (prompt) => {
         const response = await fetch('/process_message', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({ prompt }) // 입력값을 JSON 형태로 전송
+            body: JSON.stringify({ prompt }) 
         });
-        return response.text(); // 서버 응답 텍스트 반환
+        return response.text(); 
     };
 
-    // 어시스턴트 메시지 생성 함수
     const createAssistantMessage = (text) => {
-        const tempDiv = document.createElement('div'); // 임시 div 생성
-        tempDiv.innerHTML = text; // 응답 텍스트를 HTML로 설정
-        let currentMessageDiv = document.createElement('div'); // 현재 메시지 div 생성
-        currentMessageDiv.className = 'message-assistant-message'; // 클래스 이름 설정
+        const tempDiv = document.createElement('div'); 
+        tempDiv.innerHTML = text; 
+        let currentMessageDiv = document.createElement('div'); 
+        currentMessageDiv.className = 'message-assistant-message'; 
 
-        // 응답의 각 노드를 처리
         tempDiv.childNodes.forEach(node => {
             if (node.nodeType === Node.ELEMENT_NODE) {
-                if (node.querySelector('pre code')) { // 코드 블록이 있는 경우
-                    addCodeBlock(node, currentMessageDiv); // 코드 블록 추가
+                if (node.querySelector('pre code')) {
+                    addCodeBlock(node, currentMessageDiv); 
                 } else {
-                    currentMessageDiv.innerHTML += node.outerHTML; // 다른 노드는 HTML로 추가
+                    currentMessageDiv.innerHTML += node.outerHTML; 
                 }
             }
         });
 
-        addCopyButton(currentMessageDiv); // 복사 버튼 추가
-        createDeleteButton(currentMessageDiv); // 삭제 버튼 추가
-        return currentMessageDiv; // 어시스턴트 메시지 반환
+        createMenuButton(currentMessageDiv); 
+        return currentMessageDiv; 
     };
 
-    // 코드 블록 추가 함수
     const addCodeBlock = (node, currentMessageDiv) => {
         const codeBlocks = node.querySelectorAll('pre code');
         codeBlocks.forEach((block) => {
-            const codeBlockDiv = document.createElement('div'); // 코드 블록 div 생성
-            codeBlockDiv.className = 'code-block'; // 클래스 이름 설정
-            const codeHeaderDiv = document.createElement('div'); // 코드 헤더 div 생성
-            codeHeaderDiv.className = 'code-header'; // 클래스 이름 설정
-            const language = block.className; // 언어 가져오기
-            const codeLabelDiv = document.createElement('div'); // 코드 레이블 div 생성
-            codeLabelDiv.className = 'code-label'; // 클래스 이름 설정
-            codeLabelDiv.textContent = language ? `${language}` : 'Code'; // 언어 또는 'Code' 레이블 설정
-            codeHeaderDiv.appendChild(codeLabelDiv); // 코드 헤더에 레이블 추가
-            codeBlockDiv.appendChild(codeHeaderDiv); // 코드 블록에 헤더 추가
-            const codePre = document.createElement('pre'); // pre 태그 생성
-            codePre.appendChild(block.cloneNode(true)); // 코드 블록 복사하여 추가
-            codeBlockDiv.appendChild(codePre); // 코드 블록에 pre 추가
-            currentMessageDiv.appendChild(codeBlockDiv); // 현재 메시지 div에 코드 블록 추가
+            const codeBlockDiv = document.createElement('div'); 
+            codeBlockDiv.className = 'code-block'; 
+            const codeHeaderDiv = document.createElement('div'); 
+            codeHeaderDiv.className = 'code-header'; 
+            const language = block.className; 
+            const codeLabelDiv = document.createElement('div'); 
+            codeLabelDiv.className = 'code-label'; 
+            codeLabelDiv.textContent = language ? `${language}` : 'Code'; 
+            codeHeaderDiv.appendChild(codeLabelDiv); 
+            codeBlockDiv.appendChild(codeHeaderDiv); 
+            const codePre = document.createElement('pre'); 
+            codePre.appendChild(block.cloneNode(true)); 
+            codeBlockDiv.appendChild(codePre); 
+            currentMessageDiv.appendChild(codeBlockDiv); 
         });
     };
 
-
     const addCopyButton = () => {
         document.querySelectorAll('.message-assistant-message, .code-block').forEach((element) => {
-            const existingButton = element.querySelector('.copy-button'); // 기존 버튼 가져오기
+            const existingButton = element.querySelector('.copy-button'); 
             if (existingButton) {
-                existingButton.remove(); // 기존 버튼 제거
+                existingButton.remove(); 
             }
     
-            const copyButton = document.createElement('button'); // 복사 버튼 생성
-            copyButton.textContent = 'Copy'; // 버튼 텍스트 설정
-            copyButton.className = 'copy-button'; // 클래스 이름 설정
+            const copyButton = document.createElement('button'); 
+            copyButton.textContent = 'Copy'; 
+            copyButton.className = 'copy-button'; 
     
-            // 클릭 이벤트 설정
             copyButton.onclick = () => {
                 let copyableContent;
     
@@ -123,113 +143,103 @@ const initChat = () => {
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = messageHTML; 
                     copyableContent = Array.from(tempDiv.childNodes)
-                        .filter(node => node.tagName !== 'BUTTON') // 버튼 제외
-                        .map(node => node.innerText) // 텍스트만 가져오기
-                        .join('\n'); // 줄바꿈으로 연결
+                        .filter(node => node.tagName !== 'BUTTON') 
+                        .map(node => node.innerText) 
+                        .join('\n'); 
                 } else if (element.classList.contains('code-block')) {
-                    const codeText = element.querySelector('code').innerText; // 코드 텍스트 가져오기
-                    copyableContent = codeText; // 클립보드에 복사할 내용 설정
+                    const codeText = element.querySelector('code').innerText; 
+                    copyableContent = codeText; 
                 }
     
-                copyToClipboard(copyableContent, copyButton); // 클립보드에 복사
+                copyToClipboard(copyableContent, copyButton); 
             };
 
-            // 버튼을 적절한 위치에 추가
             const header = element.querySelector('.code-header');
             if (header) {
-                header.appendChild(copyButton); // 코드 블록에 버튼 추가
+                header.appendChild(copyButton); 
             } else {
-                element.appendChild(copyButton); // 메시지 div에 버튼 추가
+                element.appendChild(copyButton); 
             }
         });
     };
 
-    //삭제 버튼 생성
     const createDeleteButton = (messageDiv) => {
-        const deleteButton = document.createElement('button'); // 삭제 버튼 생성
-        deleteButton.textContent = '✘'; // 버튼 텍스트 설정
-        deleteButton.className = 'delete-button'; // 클래스 이름 설정
+        const deleteButton = document.createElement('button'); 
+        deleteButton.textContent = '✘'; 
+        deleteButton.className = 'delete-button'; 
     
-        // 삭제 버튼 클릭 이벤트 처리
         deleteButton.onclick = () => {
-            messageDiv.remove(); // 메시지 삭제
+            messageDiv.remove(); 
         };
     
-        messageDiv.appendChild(deleteButton); // 메시지 div에 삭제 버튼 추가
+        messageDiv.appendChild(deleteButton); 
     };
 
-
-    // 코드 블록 하이라이트 함수
     const highlightCodeBlocks = () => {
         document.querySelectorAll('pre code').forEach((block) => {
-            hljs.highlightElement(block); // 하이라이트 처리
+            hljs.highlightElement(block); 
         });
-        addCopyButton(); // 코드 블록에 복사 버튼 추가
+        addCopyButton(); 
     };
 
-    // 첫 메시지 전송 처리 함수
     const handleFirstMessageSent = () => {
-        logoContainer.style.display = 'none'; // 로고 숨기기
-        chatContainer.style.display = 'flex'; // 채팅 컨테이너 표시
-        messagesDiv.classList.add('expanded'); // 메시지 영역 확장
-        isFirstMessageSent = true; // 첫 메시지 전송 상태 업데이트
+        logoContainer.style.display = 'none'; 
+        chatContainer.style.display = 'flex'; 
+        messagesDiv.classList.add('expanded'); 
+        isFirstMessageSent = true; 
     };
 
-    // 메시지 전송 함수
     const sendMessage = async () => {
-        const prompt = userInput.value.trim(); // 입력값 가져오기
+        const prompt = userInput.value.trim(); 
         if (prompt) {
-            const formattedPrompt = escapeHTML(prompt).replace(/\n/g, '<br>'); // HTML 이스케이프 및 줄바꿈 처리
-            addUserMessage(formattedPrompt); // 사용자 메시지 추가
-            userInput.value = ''; // 입력값 초기화
-            userInput.style.height = 'auto'; // 텍스트 영역 높이 초기화
+            const formattedPrompt = escapeHTML(prompt).replace(/\n/g, '<br>'); 
+            addUserMessage(formattedPrompt); 
+            userInput.value = ''; 
+            userInput.style.height = 'auto'; 
 
-            const loadingParentDiv = createLoadingIndicator(); // 로딩 표시 생성
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; // 메시지 영역 하단으로 스크롤
+            const loadingParentDiv = createLoadingIndicator(); 
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; 
 
             try {
-                const text = await fetchResponse(prompt); // 서버에 메시지 전송
-                const currentMessageDiv = createAssistantMessage(text); // 어시스턴트 메시지 생성
-                messagesDiv.appendChild(currentMessageDiv); // 메시지 영역에 추가
-                loadingParentDiv.remove(); // 로딩 표시 제거
-                highlightCodeBlocks(); // 코드 블록 하이라이트
+                const text = await fetchResponse(prompt); 
+                const currentMessageDiv = createAssistantMessage(text); 
+                messagesDiv.appendChild(currentMessageDiv); 
+                loadingParentDiv.remove(); 
+                highlightCodeBlocks(); 
             } catch (error) {
-                console.error('Error:', error); // 에러 로그
-                messagesDiv.innerHTML += `<div class="message-assistant-message">An error occurred. Please try again.</div>`; // 에러 메시지 추가
-                loadingParentDiv.remove(); // 로딩 표시 제거
+                console.error('Error:', error); 
+                messagesDiv.innerHTML += `<div class="message-assistant-message">An error occurred. Please try again.</div>`; 
+                loadingParentDiv.remove(); 
             }
 
-            messagesDiv.scrollTop = messagesDiv.scrollHeight; // 메시지 영역 하단으로 스크롤
-            if (!isFirstMessageSent) handleFirstMessageSent(); // 첫 메시지 전송 처리
-            adjustTextareaHeight(); // 텍스트 영역 높이 조정
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; 
+            if (!isFirstMessageSent) handleFirstMessageSent(); 
+            adjustTextareaHeight(); 
         }
     };
 
-    // 클립보드에 복사하는 함수
     const copyToClipboard = (text, button) => {
         navigator.clipboard.writeText(text)
             .then(() => {
-                console.log('Text successfully copied'); // 복사 성공 로그
-                button.textContent = 'Copied!'; // 버튼 텍스트 변경
+                console.log('Text successfully copied'); 
+                button.textContent = 'Copied!'; 
                 setTimeout(() => {
-                    button.textContent = 'Copy'; // 1초 후 원래 텍스트로 변경
+                    button.textContent = 'Copy'; 
                 }, 1000);
             })
             .catch(err => {
-                console.error('Failed to copy text: ', err); // 복사 실패 로그
+                console.error('Failed to copy text: ', err); 
             });
     };
 
-    // 텍스트 영역 높이 조정 함수
     const adjustTextareaHeight = () => {
-        userInput.style.height = 'auto'; // 높이를 자동으로 설정
-        const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200); // 최소 40, 최대 200으로 설정
-        userInput.style.height = `${newHeight}px`; // 높이 적용
-        adjustMessagesDivHeight(); // 메시지 영역 높이 조정
+        userInput.style.height = 'auto'; 
+        const newHeight = Math.min(Math.max(userInput.scrollHeight, 40), 200); 
+        userInput.style.height = `${newHeight}px`; 
+        adjustMessagesDivHeight(); 
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
 
-    // 메시지 영역 높이 조정 함수
     const adjustMessagesDivHeight = () => {
         const totalHeight = window.innerHeight; 
         const inputHeight = Math.min(userInput.offsetHeight, 200);
@@ -238,34 +248,32 @@ const initChat = () => {
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
     };
 
-    // 윈도우 리사이즈 시 메시지 영역 높이 조정
     window.addEventListener('resize', adjustMessagesDivHeight);
 
-    // 사용자 입력 요소에서 키다운 이벤트 처리
     userInput.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') { // Enter 키 눌렀을 때
-            event.preventDefault(); // 기본 동작 방지
-            if (isMobile) { // 모바일인 경우
-                userInput.value += '\n'; // 줄바꿈 추가
-                adjustTextareaHeight(); // 높이 조정
+        if (event.key === 'Enter') { 
+            event.preventDefault(); 
+            if (isMobile) { 
+                userInput.value += '\n'; 
+                adjustTextareaHeight(); 
             } else {
-                if (event.shiftKey) { // Shift + Enter인 경우
+                if (event.shiftKey) { 
                     const { selectionStart, selectionEnd, value } = userInput;
                     userInput.value = value.substring(0, selectionStart) + '\n' + value.substring(selectionEnd);
-                    userInput.selectionStart = userInput.selectionEnd = selectionStart + 1; // 커서 위치 조정
-                    adjustTextareaHeight(); // 높이 조정
+                    userInput.selectionStart = userInput.selectionEnd = selectionStart + 1; 
+                    adjustTextareaHeight(); 
                 } else {
-                    sendMessage(); // 메시지 전송
+                    sendMessage(); 
                 }
             }
         }
     });
 
-    sendButton.addEventListener('click', sendMessage); // 전송 버튼 클릭 시 메시지 전송
-    userInput.addEventListener('input', adjustTextareaHeight); // 입력 시 높이 조정
+    sendButton.addEventListener('click', sendMessage); 
+    userInput.addEventListener('input', adjustTextareaHeight); 
 
-    adjustTextareaHeight(); // 초기 높이 조정
-    adjustMessagesDivHeight(); // 초기 메시지 영역 높이 조정
+    adjustTextareaHeight(); 
+    adjustMessagesDivHeight(); 
 };
 
 // initChat 함수 내보내기
