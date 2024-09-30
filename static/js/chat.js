@@ -157,9 +157,7 @@ const initChat = () => {
             const header = element.querySelector('.code-header');
             if (header) {
                 header.appendChild(copyButton); 
-            } else {
-                element.appendChild(copyButton); 
-            }
+            } 
         });
     };
 
