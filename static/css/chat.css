@@ -29,38 +29,31 @@
     /* font-weight: bold; */
 }
 
-.copy-button {
-    background-color: #333; /* 버튼 배경색 */
-    color: #bbb; /* 버튼 텍스트 색상 */
-    border: none; /* 버튼 테두리 제거 */
-    border-radius: 4px; /* 버튼 모서리 둥글게 */
-    padding: 6px 12px; /* 버튼 패딩 */
-    font-size: 14px; /* 버튼 텍스트 크기 */
-    cursor: pointer; /* 마우스 커서 포인터로 변경 */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 배경색 전환과 클릭 효과 */
+.menu {
+    display: none; /* 기본적으로 메뉴 숨기기 */
+    position: absolute; /* 위치 설정 */
+    background: #333;
+    color: #F0F0F0/* 배경 색상 */
+    border: 1px solid #ccc; /* 테두리 설정 */
+    border-radius: 4px;
+    z-index: 1000; /* 위에 표시되도록 설정 */
 }
 
-/* 복사 버튼 클릭 시 스타일 */
-.copy-button:active {
-    background-color: #333; /* 클릭 시 배경색 변경 */
-    transform: scale(0.9); /* 클릭 시 버튼 살짝 작아지는 효과 */
+.menu-button {
+    font-size:1.2rem;
+    background: none;
+    color: #bbb;
+    border: none;
+    cursor: pointer;
 }
 
-.delete-button {
-    background-color: #333; /* 버튼 배경색 */
-    color: #bbb; /* 버튼 텍스트 색상 */
-    border: none; /* 버튼 테두리 제거 */
-    border-radius: 4px; /* 버튼 모서리 둥글게 */
-    padding: 6px 12px; /* 버튼 패딩 */
-    font-size: 14px; /* 버튼 텍스트 크기 */
-    cursor: pointer; /* 마우스 커서 포인터로 변경 */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* 부드러운 배경색 전환과 클릭 효과 */
+.menu div {
+    padding: 8px 12px; /* 항목 여백 */
+    cursor: pointer;
 }
 
-/* 삭제 버튼 클릭 시 스타일 */
-.delete-button:active {
-    background-color: #333; /* 클릭 시 배경색 변경 */
-    transform: scale(0.9); /* 클릭 시 버튼 살짝 작아지는 효과 */
+.menu div:hover {
+    background: #111; /* 호버 시 배경 색상 변경 */
 }
 
 h2,strong,p,li,a {
