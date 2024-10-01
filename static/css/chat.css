@@ -29,6 +29,11 @@
     /* font-weight: bold; */
 }
 
+.copy-button {
+    color: #111;
+    border-radius: 4px;
+}
+
 .menu {
     display: none; /* 기본적으로 메뉴 숨기기 */
     position: absolute; /* 위치 설정 */
@@ -59,6 +64,10 @@
 
 .menu div:hover {
     background: #111; /* 호버 시 배경 색상 변경 */
+}
+
+ul {
+    font-size: 1rem;
 }
 
 h2,strong,p,li,a {
