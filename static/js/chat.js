@@ -156,7 +156,7 @@ const initChat = () => {
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = messageHTML; 
                     copyableContent = Array.from(tempDiv.childNodes)
-                        .filter(node => node.tagName !== 'BUTTON') 
+                        .filter(node => node.tagName !== 'BUTTON' && node.tagName !== 'DIV') 
                         .map(node => node.innerText) 
                         .join('\n'); 
                 } else if (element.classList.contains('code-block')) {
