@@ -158,7 +158,9 @@ const initChat = () => {
                     copyableContent = Array.from(tempDiv.childNodes)
                         .filter(node => 
                         node.nodeType === Node.ELEMENT_NODE && 
-                        !node.classList.contains('menu'))
+                        node.tagName !== 'DIV' && 
+                        !node.classList.contains('menu') &&
+                        !node.classList.contains('menu-button'))
                         .map(node => node.innerText) 
                         .join('\n'); 
                 } else if (element.classList.contains('code-block')) {
