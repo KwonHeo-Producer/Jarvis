@@ -19,7 +19,7 @@ const initChat = () => {
 
     const createMenuButton = (messageDiv) => {
         const menuButton = document.createElement('button'); 
-        menuButton.textContent = '⋮'; 
+        menuButton.textContent = '☰'; 
         menuButton.className = 'menu-button'; 
 
         const menu = document.createElement('div'); 
@@ -30,7 +30,7 @@ const initChat = () => {
         deleteOption.textContent = 'Delete';
 
         copyOption.onclick = () => {
-            const content = messageDiv.innerText.replace('⋮', ''); 
+            const content = messageDiv.innerText.replace('☰', ''); 
             copyToClipboard(content, menuButton); 
             menu.style.display = 'none'; 
         };
@@ -222,7 +222,7 @@ const initChat = () => {
                 console.log('Text successfully copied'); 
                 button.textContent = 'Copied!'; 
                 setTimeout(() => {
-                    button.textContent = 'Copy'; 
+                    button.textContent = '☰'; 
                 }, 1000);
             })
             .catch(err => {
