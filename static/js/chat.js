@@ -17,35 +17,48 @@ const initChat = () => {
             .replace(/'/g, "&#039;");
     };
 
-    const createMenuButton = (messageDiv) => {
+     const createMenuButton = (messageDiv) => {
         const menuButton = document.createElement('button'); 
         menuButton.textContent = '☰'; 
         menuButton.className = 'menu-button'; 
-
+    
         const menu = document.createElement('div'); 
         menu.className = 'menu'; 
+        menu.style.display = 'none'; // 초기 상태에서 메뉴를 숨김
+    
         const copyOption = document.createElement('div');
         copyOption.textContent = 'Copy';
         const deleteOption = document.createElement('div');
         deleteOption.textContent = 'Delete';
-
+    
         copyOption.onclick = () => {
             const content = messageDiv.innerText.replace('☰', ''); 
             copyToClipboard(content, menuButton); 
             menu.style.display = 'none'; 
         };
-
+    
         deleteOption.onclick = () => {
             messageDiv.remove(); 
             menu.style.display = 'none'; 
         };
-
+    
         menu.appendChild(copyOption);
         menu.appendChild(deleteOption);
-        menuButton.onclick = () => {
+    
+        menuButton.onclick = (event) => {
+            // 버튼 클릭 시 메뉴 토글
             menu.style.display = menu.style.display === 'block' ? 'none' : 'block'; 
+            event.stopPropagation(); // 이벤트 전파 중단
         };
-
+    
+        // 문서 클릭 이벤트 추가
+        document.addEventListener('click', (event) => {
+            // 메뉴가 열려있고 클릭한 요소가 버튼이나 메뉴가 아닐 경우
+            if (menu.style.display === 'block' && !menuButton.contains(event.target) && !menu.contains(event.target)) {
+                menu.style.display = 'none'; 
+            }
+        });
+    
         messageDiv.appendChild(menuButton); 
         messageDiv.appendChild(menu); 
     };
