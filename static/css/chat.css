@@ -48,6 +48,10 @@
     cursor: pointer;
 }
 
+.menu-button:active {
+    transform: scale(0.8); /* 클릭 시 95% 크기로 줄어듭니다 */
+}
+
 .menu div {
     padding: 8px 12px; /* 항목 여백 */
     cursor: pointer;
