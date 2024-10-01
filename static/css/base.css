@@ -221,23 +221,23 @@ body {
 .message-user-message {
     border-radius: 10px;
     background-color: #333;
-    color: #e0e0e0;
     align-self: flex-end; /* 사용자의 메시지를 오른쪽 정렬 */
-    margin-left: auto;
-    margin: 5px;
-    word-wrap: break-word;
-    max-width: 80%; /* 최대 너비 설정 */
+    margin-left: auto;    
     padding: 10px;
 }
 .message-assistant-message {
-    background-color: transparent;
-    color: #e0e0e0;
+    background-color: transparent;    
     border-radius: 10px;
-    padding: 5px;
-    margin: 5px;
-    word-wrap: break-word;
-    max-width: 80%; /* 최대 너비 설정 */
+    padding: 5px;   
     align-self: flex-start; /* 메시지를 왼쪽 정렬 */    
+}
+
+.message-user-message, .message-assistant-message {
+    position: relative;
+    color: #e0e0e0;
+    margin: 5px;
+    max-width: 80%;
+    word-wrap: break-word;
 }
 
 /* 모바일 환경에서의 스타일 */
