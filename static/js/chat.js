@@ -180,7 +180,56 @@ const initChat = () => {
     const createDeleteButton = (messageDiv) => {
         const deleteButton = document.createElement('button'); 
         deleteButton.textContent = '✘'; 
-        deleteBut✓
+        deleteButton.className = 'delete-button'; 
+    
+        deleteButton.onclick = () => {
+            messageDiv.remove(); 
+        };
+    
+        messageDiv.appendChild(deleteButton); 
+    };
+    const highlightCodeBlocks = () => {
+        document.querySelectorAll('pre code').forEach((block) => {
+            hljs.highlightElement(block); 
+        });
+        addCopyButton(); 
+    };
+    const handleFirstMessageSent = () => {
+        logoContainer.style.display = 'none'; 
+        chatContainer.style.display = 'flex'; 
+        messagesDiv.classList.add('expanded'); 
+        isFirstMessageSent = true; 
+    };
+    const sendMessage = async () => {
+        const prompt = userInput.value.trim(); 
+        if (prompt) {
+            const formattedPrompt = escapeHTML(prompt).replace(/\n/g, '<br>'); 
+            addUserMessage(formattedPrompt); 
+            userInput.value = ''; 
+            userInput.style.height = 'auto'; 
+            const loadingParentDiv = createLoadingIndicator(); 
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; 
+            try {
+                const text = await fetchResponse(prompt); 
+                const currentMessageDiv = createAssistantMessage(text); 
+                messagesDiv.appendChild(currentMessageDiv); 
+                loadingParentDiv.remove(); 
+                highlightCodeBlocks(); 
+            } catch (error) {
+                console.error('Error:', error); 
+                messagesDiv.innerHTML += `<div class="message-assistant-message">An error occurred. Please try again.</div>`; 
+                loadingParentDiv.remove(); 
+            }
+            messagesDiv.scrollTop = messagesDiv.scrollHeight; 
+            if (!isFirstMessageSent) handleFirstMessageSent(); 
+            adjustTextareaHeight(); 
+        }
+    };
+    const copyToClipboard = (text, button) => {
+        navigator.clipboard.writeText(text)
+            .then(() => {
+                console.log('Text successfully copied'); 
+                button.textContent = '✓'; 
                 setTimeout(() => {
                     button.textContent = '☰'; 
                 }, 1000);
