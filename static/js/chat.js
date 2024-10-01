@@ -32,9 +32,17 @@ const initChat = () => {
         deleteOption.textContent = 'Delete';
     
         copyOption.onclick = () => {
-            const content = messageDiv.innerText.replace('☰', ''); 
-            copyToClipboard(content, menuButton); 
-            menu.style.display = 'none'; 
+        const content = Array.from(messageDiv.childNodes)
+            .filter(node => 
+                node.nodeType === Node.TEXT_NODE || 
+                (node.nodeType === Node.ELEMENT_NODE && 
+                 !node.classList.contains('menu') && 
+                 !node.classList.contains('menu-button'))
+            )
+            .map(node => node.innerText.trim())
+            .join('\n');
+        copyToClipboard(content, menuButton);
+        menu.style.display = 'none';
         };
     
         deleteOption.onclick = () => {
@@ -138,7 +146,7 @@ const initChat = () => {
     };
 
     const addCopyButton = () => {
-        document.querySelectorAll('.message-assistant-message, .code-block').forEach((element) => {
+        document.querySelectorAll('.code-block').forEach((element) => {
             const existingButton = element.querySelector('.copy-button'); 
             if (existingButton) {
                 existingButton.remove(); 
@@ -149,28 +157,10 @@ const initChat = () => {
             copyButton.className = 'copy-button'; 
     
             copyButton.onclick = () => {
-                let copyableContent;
-    
-                if (element.classList.contains('message-assistant-message')) {
-                    const messageHTML = element.innerHTML; 
-                    const tempDiv = document.createElement('div');
-                    tempDiv.innerHTML = messageHTML; 
-                    copyableContent = Array.from(tempDiv.childNodes)
-                        .filter(node => 
-                        node.nodeType === Node.ELEMENT_NODE && 
-                        node.tagName !== 'DIV' && 
-                        !node.classList.contains('menu') &&
-                        !node.classList.contains('menu-button'))
-                        .map(node => node.innerText) 
-                        .join('\n'); 
-                } else if (element.classList.contains('code-block')) {
-                    const codeText = element.querySelector('code').innerText; 
-                    copyableContent = codeText; 
-                }
-    
-                copyToClipboard(copyableContent, copyButton); 
+                const codeText = element.querySelector('code').innerText; 
+                copyToClipboard(codeText, copyButton); 
             };
-
+    
             const header = element.querySelector('.code-header');
             if (header) {
                 header.appendChild(copyButton); 
@@ -227,12 +217,13 @@ const initChat = () => {
         }
     };
     const copyToClipboard = (text, button) => {
+        const originalText = button.textContent; // 원래 텍스트 저장
         navigator.clipboard.writeText(text)
             .then(() => {
-                console.log('Text successfully copied'); 
-                button.textContent = '✓'; 
+                console.log('Text successfully copied');
+                button.textContent = '✓'; // 복사 성공 메시지
                 setTimeout(() => {
-                    button.textContent = '☰'; 
+                    button.textContent = originalText; // 원래 텍스트로 복원
                 }, 1000);
             })
             .catch(err => {
