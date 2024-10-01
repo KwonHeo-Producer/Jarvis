@@ -40,6 +40,7 @@
 }
 
 .menu-button {
+    position: relative;
     font-size:1.2rem;
     background: none;
     color: #bbb;
