@@ -2,29 +2,39 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Jarvis-Gemini</title>
-    <link rel="stylesheet" href="/static/main.css">   
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI 비서 챗봇</title>
+    <link rel="stylesheet" href="static/css/index.css">
+    <link rel="stylesheet" href="static/css/chat.css">
 </head>
 <body>
-    <div id="main-page">
-        <div class="logo-container">
-            <div class="logo">
-            </div>
-            <h1>Jarvis-Gemini</h1>
+
+    <div class="container">
+        <!-- 기능 탭 (왼쪽) -->
+        <nav class="sidebar">
+            <ul>
+                <li><a href="index.html" class="active">💬 챗봇</a></li>
+                <li><a href="schedule.html">📅 일정 관리</a></li>
+            </ul>
+        </nav>
+
+        <!-- 챗봇 영역 -->
+    <div class="chat-container">
+        <div class="chat-box" id="chat-box"></div>
+
+        <!-- 입력창 -->
+        <div class="input-container">
+            <button id="image-upload-button">➕</button>
+            <input type="file" id="image-input" accept="image/*" style="display: none;">
+            <input type="text" id="user-input" placeholder="메시지를 입력하세요">
+            <button id="send-button">📤</button>
         </div>
-        <div id="chat-container">
-            <div id="messages"></div>
-            <div id="input-container">
-                <div id="input-wrapper">
-                    <textarea id="user-input" placeholder="Please ask"></textarea>
-                    <button id="send-button">➤</button>
-                </div>
-            </div>
-        </div>
+
+        <!-- 이미지 미리보기 -->
+        <div id="image-preview"></div>
     </div>
-    <script type="module" src="/static/main.js"></script>
-    <!-- Highlight.js CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.5.1/highlight.min.js"></script>    
+
+    <script src="static/js/script.js"></script>
+
 </body>
 </html>
